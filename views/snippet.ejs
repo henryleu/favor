@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%=settings.title%></title>
+    <link rel="stylesheet" href="./public/bootstrap/css/bootstrap.css">
+
+    <script src="./public/jquery/jquery-1.10.0.js"></script>
+    <script src="./public/bootstrap/js/bootstrap.js"></script>
+    <script src="./public/jquery/jquery.timer.js"></script>
+    <script src="./public/tomatodo/js/timer0.js"></script>
+    <script src="./public/tomatodo/js/crysto.js"></script>
+    <script src="./public/tomatodo/js/clock.js"></script>
+    <script src="./public/tomatodo/js/countdown.js"></script>
+    <script src="./public/tomatodo/js/snippet.js"></script>
+    <script>
+        $(document).ready(function(){
+/*
+            var Timer = window.tl['timer'];
+            var timer = new Timer({
+                id: 'testimer',
+                interval: '200',
+                timeout: '10s',
+                step: '2s',
+
+                resetCallback: function(){
+                    $('.timer .action').html( this.getLastAction() );
+                    $('.timer .status').html( this.getStatus() );
+                    $('.timer .passed').html( this.getPassed() );
+                    $('.timer .left').html( this.getLeft() );
+                    $('.timer .progress1').html( ''+this.getProgress() );
+                    $('.timer .leftHours').html( ''+this.getLeftHours() );
+                    $('.timer .leftMinutes').html( ''+this.getLeftMinutes() );
+                    $('.timer .leftSeconds').html( ''+this.getLeftSeconds() );
+                    $('.timer .stepCount').html( ''+this.getStepCount() );
+                    $('.timer .stepTotal').html( ''+this.stepTotal );
+                },
+                moveCallback: function(){
+                    $('.timer .action').html( this.getLastAction() );
+                    $('.timer .status').html( this.getStatus() );
+                    $('.timer .passed').html( this.getPassed() );
+                    $('.timer .left').html( this.getLeft() );
+                    $('.timer .progress1').html( ''+this.getProgress() );
+                },
+                stepCallback: function(){
+                    $('.timer .stepCount').html( ''+this.getStepCount() );
+                },
+                startCallback: function(){
+                    $('.timer .action').html( this.getLastAction() );
+                    $('.timer .status').html( this.getStatus() );
+//                    $('#workBtn').removeAttr("disabled").html('停止快跑');
+//                    $('#breakBtn').attr('disabled',"true");
+                },
+                finishCallback: function(){
+                    $('.timer .action').html( this.getLastAction() );
+                    $('.timer .status').html( this.getStatus() );
+                },
+                killCallback: function(){
+                    $('.timer .action').html( this.getLastAction() );
+                    $('.timer .status').html( this.getStatus() );
+                },
+                hourBeatCallback: function(){
+                    $('.timer .leftHours').html( ''+this.getLeftHours() );
+                },
+                minuteBeatCallback: function(){
+                    $('.timer .leftMinutes').html( ''+this.getLeftMinutes() );
+                },
+                secondBeatCallback: function(){
+                    $('.timer .leftSeconds').html( ''+this.getLeftSeconds() );
+                }
+            });
+
+            //start stop pause resume kill
+            $('.timer .start').on('click', function(e){
+                timer.start();
+            });
+            $('.timer .stop').on('click', function(e){
+                timer.stop();
+            });
+            $('.timer .pause').on('click', function(e){
+                timer.pause();
+            });
+            $('.timer .resume').on('click', function(e){
+                timer.resume();
+            });
+            $('.timer .kill').on('click', function(e){
+                timer.kill();
+            });
+            $('.timer .reset').on('click', function(e){
+                timer.reset();
+            });
+            $('.timer .access').on('click', function(e){
+                $('.timer .action').html( timer.getLastAction() );
+                $('.timer .status').html( timer.getStatus() );
+            });
+*/
+            var Crysto = window.tl['crysto'];
+            var crysto = new Crysto({
+                interval: 200,
+                startCallback: function(){
+                    console.log(  'startTime: \t'+ this.startTime);
+                    $('.crysto .startTime').html( this.startTime );
+                },
+                stopCallback: function(){
+                    console.log(  'endTime: \t'+ this.endTime);
+                    $('.crysto .endTime').html( this.endTime );
+                }
+            });
+            crysto.setIntervalCallback('log', function(){
+                console.log(  'intervalRounds: \t'+ this.intervalRounds + '\t passedTime: \t'+ this.passedTime +  '\t passedOffset: \t'+ this.passedOffset);
+                $('.crysto .intervalRounds').html( this.intervalRounds );
+                $('.crysto .passedTime').html( this.passedTime );
+                $('.crysto .passedOffset').html( this.passedOffset );
+            }, crysto);
+            crysto.setIntervalCallback('calc', function(){
+                console.log(  'calc...: \t');
+            });
+            crysto.showIntervalCallbacks();
+
+            crysto.disableIntervalCallback('existedkey');
+            crysto.disableIntervalCallback('log');
+            crysto.disableIntervalCallback('calc');
+            crysto.showIntervalCallbacks();
+
+            crysto.enableIntervalCallback('log');
+            crysto.showIntervalCallbacks();
+
+            crysto.unsetIntervalCallback('calc');
+            crysto.showIntervalCallbacks();
+
+            $('.crysto .start').on('click', function(e){
+                crysto.start();
+            });
+            $('.crysto .stop').on('click', function(e){
+                crysto.stop();
+            });
+            $('.crysto .addcallback').on('click', function(e){
+                if(!window.newcallbackindex) window.newcallbackindex=1;
+                else newcallbackindex++;
+                var newcallbackname = 'new' + newcallbackindex;
+                crysto.setIntervalCallback(newcallbackname, function(){
+                    console.info( newcallbackname + ' run');
+                });
+                crysto.showIntervalCallbacks();
+            });
+            $('.crysto .reset').on('click', function(e){
+                crysto.reset();
+            });
+            $('.crysto .state').on('click', function(e){
+            });
+
+            var Clock = window.tl['clock'];
+            var clock = new Clock({
+                engineInterval: 200,
+                //engine: crysto,
+                startCallback: function(){
+                    console.log(  'Clock startTime: \t'+ this.startTime);
+                },
+                stopCallback: function(){
+                    console.log(  'Clock endTime: \t'+ this.endTime);
+                },
+                secondCallback: function(){
+                    $('.clock .seconds').html( this.second );
+                },
+                minuteCallback: function(){
+                    $('.clock .minutes').html( this.minute );
+                },
+                hourCallback: function(){
+                    $('.clock .hours').html( this.hour );
+                }
+            });
+            $('.clock .start').on('click', function(e){
+                clock.start();
+            });
+            $('.clock .stop').on('click', function(e){
+                clock.stop();
+            });
+            $('.clock .reset').on('click', function(e){
+                clock.reset();
+            });
+            $('.clock .test').on('click', function(e){
+                var timeout = '1h10m10s';
+                var timeoutMilliseconds = 0;
+                var _parseHMStoMillis = function(hmsTimeString){
+                    var milliseconds = 0;
+                    var units = ['h','m','s'];
+                    var unitMap = { 's': 1000,  'm': 60000, 'h': 3600000 };
+                    for(var i = 0, timeExpr = hmsTimeString; i < units.length && timeExpr.length!=0; i++){
+                        var index = timeExpr.indexOf(units[i]);
+                        if(index!=-1){
+                            var digit = timeExpr.slice(0,index);
+                            timeExpr = timeExpr.slice(index+1);
+                            milliseconds += parseInt(digit, 10) * unitMap[units[i]];
+                        }
+                    }
+                    return milliseconds;
+                };
+                timeoutMilliseconds = _parseHMStoMillis(timeout);
+                console.log( timeout + ' ' + timeoutMilliseconds );
+            });
+
+            var Countdown = window.tl['countdown'];
+            var countdown = new Countdown({
+                engineInterval: 200,
+                timeout: '10s',
+                //engine: crysto,
+                startCallback: function(){
+                    console.log(  'Countdown startTime: \t'+ this.startTime);
+                },
+                stopCallback: function(){
+                    console.log(  'Countdown endTime: \t'+ this.endTime);
+                },
+                secondCallback: function(){
+                    $('.countdown .seconds').html( this.second );
+                },
+                minuteCallback: function(){
+                    $('.countdown .minutes').html( this.minute );
+                },
+                hourCallback: function(){
+                    $('.countdown .hours').html( this.hour );
+                }
+            });
+            $('.countdown .start').on('click', function(e){
+                $('.countdown .seconds').html(countdown.second);
+                $('.countdown .minutes').html(countdown.minute);
+                $('.countdown .hours').html(countdown.hour);
+                countdown.start();
+            });
+            $('.countdown .stop').on('click', function(e){
+                countdown.stop();
+            });
+            $('.countdown .reset').on('click', function(e){
+                countdown.reset();
+                $('.countdown .seconds').html(countdown.second);
+                $('.countdown .minutes').html(countdown.minute);
+                $('.countdown .hours').html(countdown.hour);
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+
+<div class="container-fluid">
+<!--
+    <div class="row-fluid">
+        <div class="offset2 span8 timer">
+            <button class="btn start">start</button>
+            <button class="btn pause">pause</button>
+            <button class="btn resume">resume</button>
+            <button class="btn stop">stop</button>
+            <button class="btn kill">kill</button>
+            <button class="btn reset">reset</button>
+            <button class="btn access">access</button>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 timer">
+            <div class="span2">action:</div><div class="action span2"></div>
+            <div class="span2">status:</div><div class="status span2"></div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 timer">
+            <div class="span2">passed:</div><div class="passed span2"></div>
+            <div class="span2">left:</div><div class="left span2"></div>
+            <div class="span2">progress:</div><div class="progress1 span2"></div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 timer">
+            <div class="span2">leftHours:</div><div class="leftHours span2"></div>
+            <div class="span2">leftMinutes:</div><div class="leftMinutes span2"></div>
+            <div class="span2">leftSeconds:</div><div class="leftSeconds span2"></div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 timer">
+            <div class="span2">stepCount:</div><div class="stepCount span2"></div>
+            <div class="span2">stepTotal:</div><div class="stepTotal span2"></div>
+        </div>
+    </div>
+-->
+
+    <div class="row-fluid">
+        <div class="offset2 span8 crysto">
+            <button class="btn start">start</button>
+            <button class="btn stop">stop</button>
+            <button class="btn addcallback">addcallback</button>
+            <button class="btn reset">reset</button>
+            <button class="btn state">state</button>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 crysto">
+            <div class="span2">intervalRounds:</div><div class="intervalRounds span2"></div>
+            <div class="span2">passedTime:</div><div class="passedTime span2"></div>
+            <div class="span2">passedOffset:</div><div class="passedOffset span2"></div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 crysto">
+            <div class="span2">startTime:</div><div class="startTime span2"></div>
+            <div class="span2">endTime:</div><div class="endTime span2"></div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="row-fluid">
+        <div class="offset2 span8 clock">
+            <button class="btn start">start</button>
+            <button class="btn stop">stop</button>
+            <button class="btn reset">reset</button>
+            <button class="btn state">state</button>
+            <button class="btn test">test</button>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="offset2 span8 clock">
+            <div class="span2">Hours:</div><div class="hours span2"></div>
+            <div class="span2">Minutes:</div><div class="minutes span2"></div>
+            <div class="span2">Seconds:</div><div class="seconds span2"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div class="row-fluid">
+    <div class="offset2 span8 countdown">
+        <button class="btn start">start</button>
+        <button class="btn pause">pause</button>
+        <button class="btn resume">resume</button>
+        <button class="btn stop">stop</button>
+        <button class="btn kill">kill</button>
+        <button class="btn reset">reset</button>
+        <button class="btn access">access</button>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span8 countdown">
+        <div class="span2">action:</div><div class="action span2"></div>
+        <div class="span2">status:</div><div class="status span2"></div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span8 countdown">
+        <div class="span2">passed:</div><div class="passed span2"></div>
+        <div class="span2">left:</div><div class="left span2"></div>
+        <div class="span2">progress:</div><div class="progress1 span2"></div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span8 countdown">
+        <div class="span2">Hours:</div><div class="hours span2"></div>
+        <div class="span2">Minutes:</div><div class="minutes span2"></div>
+        <div class="span2">Seconds:</div><div class="seconds span2"></div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="offset2 span8 countdown">
+        <div class="span2">stepCount:</div><div class="stepCount span2"></div>
+        <div class="span2">stepTotal:</div><div class="stepTotal span2"></div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%=settings.title%></title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="./public/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./public/bootstrap/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="./public/tomatodo/css/tomatodo.css">
+    <%-stylesheets%>
+    <style type="text/css">
+
+    </style>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="./public/jquery/jquery-1.10.0.js"></script>
+    <script src="./public/bootstrap/js/bootstrap.js"></script>
+    <script src="./public/tomatodo/js/tomatodo.js"></script>
+    <%-scripts%>
+    <script>
+        $(document).ready(function(){
+        });
+    </script>
+</head>
+<body>
+<div>
+
+    <header>
+        <div class="navbar navbar-inverse1 navbar-fixed-top"><div class="navbar-inner"><div class="container">
+
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".head-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="#">
+                <div class="r-beta">BETA</div>
+                <div style="color: #000000;font-weight: bold;"><%=settings.name%></div>
+            </a>
+
+            <div class="nav-collapse head-collapse">
+                <ul class="nav">
+                    <li class="dropdown">
+                        <!--<button class="btn btn-warning btn-small">北京</button>-->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #00B88A;font-weight: 15px; font-weight: bold;" >北京 <b class="caret"></b></a>
+                        <ul class="dropdown-menu" >
+                            <li>
+                                <a href="javascript:"> 北京</a>
+                            </li>
+                            <li>
+                                <a href="javascript:"> 天津</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="">
+                        <a href="javascript:" class="r-link">番茄</a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:" class="r-link">TODO</a>
+                    </li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li>
+                        <a href="#" class="r-link-small"><i class="icon-heart"></i> 收藏</a>
+                    </li>
+                    <li>
+                        <a href="#" class="r-link-small"><i class="icon-envelope"></i> 消息 <span class="badge r-badge-small">2</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle r-link-small"><i class="icon-asterisk"></i> 设置 <b class="caret"></b></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle r-link-small" data-toggle="dropdown"><i class="icon-user"></i>  <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:"> 个人中心</a>
+                            </li>
+                            <li>
+                                <a href="javascript:"> 修改密码</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript:">注册</a>
+                            </li>
+                            <li>
+                                <a href="javascript:">找回密码</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript:">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <!--
+                         -->
+                        <button class="btn btn-primary btn-small signup-button" href="javascript:" target="_self">注册</button>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+
+        </div></div></div>
+    </header>
+
+    <section>
+        <br><br><br><br><br><br><br><br>
+        <div class="offset6 span2 text-error"> <%=error%></div>
+    </section>
+
+    <footer>
+        <div class="navbar navbar-fixed-bottom" ><div class="navbar-inner"><div class="container">
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".foot-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="nav-collapse foot-collapse">
+                <ul class="nav">
+                    <li>
+                        <a href="javascript:">&copy; 2012 RealPaaS</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" ><%=creator%></a>
+                    </li>
+                    <li>
+                        <a href="javascript:" >服务条款</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" >隐私条款</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" >网站地图</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" >ICP</a>
+                    </li>
+                    <li>
+                    </li>
+                    <li style="width: 5%;">
+                    </li>
+                </ul>
+            </div>
+
+        </div></div></div>
+    </footer>
+</div><!-- top container -->
+</body>
+</html>
