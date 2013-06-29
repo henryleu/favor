@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title><%=settings.title%></title>
+    <title><%=appTitle%></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="./public/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./public/bootstrap/css/bootstrap-responsive.css">
     <link rel="stylesheet" href="./public/tomatodo/css/tomatodo.css">
-    <%-stylesheets%>
     <style type="text/css">
 
     </style>
@@ -22,7 +21,6 @@
     <script src="./public/jquery/jquery-1.10.0.js"></script>
     <script src="./public/bootstrap/js/bootstrap.js"></script>
     <script src="./public/tomatodo/js/tomatodo.js"></script>
-    <%-scripts%>
     <script>
         $(document).ready(function(){
         });
@@ -42,7 +40,7 @@
             </a>
             <a class="brand" href="#">
                 <div class="r-beta">BETA</div>
-                <div style="color: #000000;font-weight: bold;"><%=settings.name%></div>
+                <div style="color: #000000;font-weight: bold;"><%=appName%></div>
             </a>
 
             <div class="nav-collapse head-collapse">
@@ -113,7 +111,7 @@
 
     <section>
         <br><br><br><br><br><br><br><br>
-        <div class="offset6 span2 text-error"> <%=error%></div>
+        <div class="offset6 span2 text-error"> <%=errorUnknown%></div>
     </section>
 
     <footer>
@@ -131,7 +129,7 @@
                         <a href="javascript:">&copy; 2012 RealPaaS</a>
                     </li>
                     <li>
-                        <a href="javascript:" ><%=creator%></a>
+                        <a href="javascript:" ><%=appCreator%></a>
                     </li>
                     <li>
                         <a href="javascript:" >服务条款</a>

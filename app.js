@@ -2,6 +2,7 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , engine = require('ejs-locals')
+//    , engine = require('ejs').renderFile
     , settings = require('./settings')
     , db = require('./db');
 
@@ -20,15 +21,7 @@ else if(settings.session.storeType == 'redis'){
 app.enable('trust proxy');
 
 // all environments
-app.set('name', '百变娇娃');
-app.set('title', '百变娇娃 -- 就是猜我不透!');
-app.set('creator', '番茄实验室');
-app.locals({
-    'name': '百变娇娃',
-    'title': '百变娇娃 -- 就是猜我不透！',
-    'creator': '番茄实验室'
-});
-
+app.locals(settings.resources);
 app.set('port', process.env.PORT || 3020);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -67,11 +60,7 @@ app.use(function (err, req, res, next) { //Handle XHR errors
 });
 app.use(function (err, req, res, next) { //Handle XHR errors
     res.status(500);
-    res.render('error',
-        {
-            error: 'TODO:真不好意思，程序出错了!'
-        }
-    );
+    res.render('error');
 });
 
 // development only
