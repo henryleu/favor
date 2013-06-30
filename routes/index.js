@@ -32,23 +32,29 @@ module.exports = function(app) {
         });
         req.session.user = {name: 'henryleu', signinStatus: true};
 */
-        res.render('index',    {}
-        );
+        res.render('index',{} );
     });
-    app.get('/clock', function(req, res) {
+    app.get('/home', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});
     });
-    app.get('/history', function(req, res) {
+    app.get('/my', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});
     });
-
-    app.get('/settings', function(req, res) {
+    app.get('/catalog', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});
     });
-    app.get('/intro', function(req, res) {
+    app.get('/profile', function(req, res) {
+        checkUserToken(req, res);
+        res.render('index', {});
+    });
+    app.get('/forum', function(req, res) {
+        checkUserToken(req, res);
+        res.render('index', {});
+    });
+    app.get('/about', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});
     });
