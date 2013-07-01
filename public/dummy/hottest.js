@@ -10,17 +10,6 @@
         imageUrl: 'http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small'
     }
 },{
-    id: 2,
-    imageUrl: "http://making-photos.b0.upaiyun.com/photos/6e37c7916d91e32ceaac3f7a8996bdd5.jpeg!normal",
-    title: "Fitbit Aria - 无线电子体重秤——全家的健康管家",
-    likes: 14,
-    views: 15,
-    reporter:{
-        id: 101,
-        displayName: 'SXZZ',
-        imageUrl: 'http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small'
-    }
-},{
     id: 3,
     imageUrl: "http://making-photos.b0.upaiyun.com/photos/c9a2921d256c8e2ac5b3e531d3e91759.jpg!normal",
     title: "能量刀锋 Power Blade - 最薄的大容量移动电源 没有之一",
@@ -30,5 +19,16 @@
         id: 102,
         displayName: '亿觅创意',
         imageUrl: 'http://making-photos.b0.upaiyun.com/users/ec635f22ff7d0ff229947a66a92f05fc.jpg!small'
+    }
+},{
+    id: 4,
+    imageUrl: "http://making-photos.b0.upaiyun.com/photos/9cee0c3f3c7ad6abc7b71491bed358f2.png!normal",
+    title: "Pebble - 为 iPhone 和 Android 设计的电子墨水手表",
+    likes: 160,
+    views: 204,
+    reporter:{
+        id: 101,
+        displayName: 'SXZZ',
+        imageUrl: 'http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small'
     }
 }];
