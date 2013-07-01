@@ -6,8 +6,8 @@
     views: 101,
     reporter:{
         id: 101,
-        displayName: 'SXZZ',
-        imageUrl: 'http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small'
+        displayName: "SXZZ",
+        imageUrl: "http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small"
     }
 },{
     id: 2,
@@ -17,8 +17,8 @@
     views: 15,
     reporter:{
         id: 101,
-        displayName: 'SXZZ',
-        imageUrl: 'http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small'
+        displayName: "SXZZ",
+        imageUrl: "http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small"
     }
 },{
     id: 3,
@@ -28,7 +28,7 @@
     views: 102,
     reporter:{
         id: 102,
-        displayName: '亿觅创意',
-        imageUrl: 'http://making-photos.b0.upaiyun.com/users/ec635f22ff7d0ff229947a66a92f05fc.jpg!small'
+        displayName: "亿觅创意",
+        imageUrl: "http://making-photos.b0.upaiyun.com/users/ec635f22ff7d0ff229947a66a92f05fc.jpg!small"
     }
-}];
+}]
