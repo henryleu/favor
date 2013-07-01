@@ -43,6 +43,7 @@ app.use(express.session({
 // routing
 require('./routes')(app);
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
 /*
     Error Handling

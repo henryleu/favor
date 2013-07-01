@@ -46,6 +46,19 @@ module.exports = function(app) {
         checkUserToken(req, res);
         res.render('index', {});
     });
+    app.get('/catalog-newest', function(req, res) {
+        checkUserToken(req, res);
+        res.render('index', {});
+    });
+    app.get('/catalog-hottest', function(req, res) {
+        checkUserToken(req, res);
+        res.render('index', {});
+    });
+    app.get('/catalog-selfrun', function(req, res) {
+        checkUserToken(req, res);
+        res.render('index', {});
+    });
+
     app.get('/profile', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});

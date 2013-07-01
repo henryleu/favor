@@ -1,6 +1,7 @@
 html {
   overflow: auto;
   height: 100%;
+  margin-top: 40px;
 }
 body {
   height: 100%;
@@ -94,6 +95,10 @@ body > div > section > div {
 .vpad {
   padding-top: 30px;
 }
+.vp1 {
+    padding-top: 0px;
+}
+
 .hpad {
   padding-left: 20px;
 }
@@ -641,4 +646,32 @@ button:focus.cystal-button img {
 .row-fluid .hsp1 {
   width: 6.382978723404255%;
   *width: 6.329787234042553%;
+}
+.box {
+    background: white;
+    padding: 1em 20px;
+    margin: 0 auto;
+}
+.large-item{
+    background: #ccc;
+    display: table-cell;
+    width: 450px;
+    height: 450px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 20px;
+}
+.large-item img{
+    1width: 450px;
+    1height: 450px;
+}
+.box, .large-item {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
+    -moz-box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
+    box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
 }
