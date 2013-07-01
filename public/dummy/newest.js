@@ -31,4 +31,4 @@
         displayName: '亿觅创意',
         imageUrl: 'http://making-photos.b0.upaiyun.com/users/ec635f22ff7d0ff229947a66a92f05fc.jpg!small'
     }
-}];
+}]

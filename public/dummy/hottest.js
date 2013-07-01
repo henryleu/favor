@@ -31,4 +31,4 @@
         displayName: 'SXZZ',
         imageUrl: 'http://making-photos.b0.upaiyun.com/users/542dfcef2c3a87f22930c1ad586e2492.jpeg!small'
     }
-}];
+}]
