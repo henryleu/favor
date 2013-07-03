@@ -190,7 +190,7 @@ var Workspace = Backbone.Router.extend({
 */
     },
     catalog: function(viewName){
-        $.getJSON('public/dummy/hottest.js',{}, function(list, textStatus){
+        $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
             view = new LargeIconsView({model:{list: list}});
             var content = '[set="'+viewName+'"].view .content';
             $(content).html( view.render().el );
