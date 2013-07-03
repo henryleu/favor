@@ -38,11 +38,11 @@ module.exports = function(app) {
         checkUserToken(req, res);
         res.render('index', {});
     });
-    app.get('/my', function(req, res) {
+    app.get('/share', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});
     });
-    app.get('/catalog', function(req, res) {
+    app.get('/find', function(req, res) {
         checkUserToken(req, res);
         res.render('index', {});
     });

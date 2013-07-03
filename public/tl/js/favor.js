@@ -126,9 +126,8 @@ var Workspace = Backbone.Router.extend({
         "catalog-selfrun": "catalogSelfrun",
         "*view(/:id)": "switchView",
         "home": "home",
-        "my": "my",
-        "catalog": "catalog",
-        "profile": "profile",
+        "share": "share",
+        "find": "find",
         "forum": "forum",
         "about": "about"
     },
@@ -176,7 +175,7 @@ var Workspace = Backbone.Router.extend({
         }
 */
     },
-    my: function(viewName){
+    share: function(viewName){
 /*
         var view = this.views[viewName];
         if(!view){
@@ -189,7 +188,7 @@ var Workspace = Backbone.Router.extend({
         }
 */
     },
-    catalog: function(viewName){
+    find: function(viewName){
         $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
             view = new LargeIconsView({model:{list: list}});
             var content = '[set="'+viewName+'"].view .content';
@@ -199,11 +198,6 @@ var Workspace = Backbone.Router.extend({
     catalogNewest: function(viewName){
         viewName = 'catalog';
         this.switchView(viewName);
-//        $.ajaxSetup({"error":function(XMLHttpRequest,textStatus, errorThrown) {
-//            alert(textStatus);
-//            alert(errorThrown);
-//            alert(XMLHttpRequest.responseText);
-//        }});
         $.getJSON('public/dummy/newest.js',{}, function(data, textStatus){
             var list = data;//eval(data);
             view = new LargeIconsView({model:{list: list}});
@@ -212,14 +206,6 @@ var Workspace = Backbone.Router.extend({
             var content = '[set="'+viewName+'"].view .content';
             $(content).html( view.render().$el.html() );
         });
-
-//        $.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?',{
-//            tags: "mount rainier",
-//            tagmode: "any",
-//            format: "json"
-//        }, function(data, textStatus){
-//            alert('baidu');
-//        });
     },
     catalogHottest: function(viewName){
         viewName = 'catalog';
@@ -238,8 +224,6 @@ var Workspace = Backbone.Router.extend({
             var content = '[set="'+viewName+'"].view .content';
             $(content).html( view.render().el );
         });
-    },
-    profile: function(viewName){
     },
     forum: function(viewName){
     },
