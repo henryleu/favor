@@ -196,7 +196,7 @@ var Workspace = Backbone.Router.extend({
         });
     },
     catalogNewest: function(viewName){
-        viewName = 'catalog';
+        viewName = 'find';
         this.switchView(viewName);
         $.getJSON('public/dummy/newest.js',{}, function(data, textStatus){
             var list = data;//eval(data);
@@ -208,7 +208,7 @@ var Workspace = Backbone.Router.extend({
         });
     },
     catalogHottest: function(viewName){
-        viewName = 'catalog';
+        viewName = 'find';
         this.switchView(viewName);
         $.getJSON('public/dummy/hottest.js',{}, function(list, textStatus){
             view = new LargeIconsView({model:{list: list}});
@@ -217,7 +217,7 @@ var Workspace = Backbone.Router.extend({
         });
     },
     catalogSelfrun: function(viewName){
-        viewName = 'catalog';
+        viewName = 'find';
         this.switchView(viewName);
         $.getJSON('public/dummy/selfrun.js',{}, function(list, textStatus){
             view = new LargeIconsView({model:{list: list}});
