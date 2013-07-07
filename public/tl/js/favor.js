@@ -119,6 +119,19 @@ var MediumIconsView = Backbone.View.extend({
     selfrun: function() {
     }
 });
+var ShareSubjectView = Backbone.View.extend({
+    templateName: 'share-subject',
+    initialize: function() {
+
+    },
+    render: function() {
+        if(!this.template){
+            this.template = _.template(tm.get(this.templateName));
+        }
+        $(this.el).html(this.template(this.model));
+        return this;
+    }
+});
 var Workspace = Backbone.Router.extend({
     routes: {
         "catalog-newest": "catalogNewest",
@@ -187,6 +200,9 @@ var Workspace = Backbone.Router.extend({
             console.info('Use runtime-cached template ['+ viewName + '] for view rendering.');
         }
 */
+        view = new ShareSubjectView({model:{imagePath: 'uploads'}});
+        var content = '[set="'+viewName+'"].view .content';
+        $(content).html( view.render().el );
     },
     find: function(viewName){
         $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
@@ -233,7 +249,7 @@ var Workspace = Backbone.Router.extend({
 
 $(document).ready(function(){
     var workspace = null;
-    tm.loadTemplates(['large-icons', 'medium-icons', 'list-items'], function() {
+    tm.loadTemplates(['large-icons', 'medium-icons', 'list-items', 'share-subject'], function() {
         workspace = new Workspace();
         Backbone.history.start({pushState: true, hashChange: true});
     });
