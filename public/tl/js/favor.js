@@ -203,6 +203,25 @@ var Workspace = Backbone.Router.extend({
         view = new ShareSubjectView({model:{imagePath: 'uploads'}});
         var content = '[set="'+viewName+'"].view .content';
         $(content).html( view.render().el );
+/*
+        $('#imageFile').change(function() {
+            alert('file changed.');
+            $(this).uploadimage('http://localhost:8888', function(res) {
+                alert('File uploaded');
+                console.log(res);
+            }, 'json');
+        });
+*/
+        $('#imageFile').fileupload({
+            url: 'http://localhost:8888',
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo('#fileName');
+                });
+            }
+        }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
     },
     find: function(viewName){
         $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){

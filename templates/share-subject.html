@@ -1,18 +1,30 @@
 <div class="span6">
+    <h4 class="offset3 span8">效果预览：</h4>
     <ul class="thumbnails">
         <li class="offset3 span8">
-            <a href="#" class="thumbnail">
+            <div class="thumbnail">
                 <img src="/public/uploads/tmptest.jpg" class="img-rounded" width="600" height="800">
-            </a>
+                <h4 class="text-center" data-placement="bottom" data-toggle="tooltip">简短概括</h4>
+                <p data-placement="bottom" data-toggle="tooltip">更多描述</p>
+            </div>
         </li>
     </ul>
 </div>
 <div class="span6">
+    <h4>信息详情：</h4>
+    <br>
     <form class="form-horizontal">
         <div class="control-group">
             <label class="control-label span2" for="imageFile">分享图片</label>
             <div class="controls span9">
-                <input class="span11" id="imageFile" type="file">
+                <span class="btn btn-success fileinput-button span11">
+<!--
+                    <i class="icon-picture icon-white"></i>
+-->
+                    <span id="fileName">选择文件...</span>
+                    <!-- The file input field used as target for the file upload widget -->
+                    <input id="imageFile" type="file" name="files[]" multiple>
+                </span>
             </div>
         </div>
         <div class="control-group">
