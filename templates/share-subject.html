@@ -3,9 +3,9 @@
     <ul class="thumbnails">
         <li class="offset3 span8">
             <div class="thumbnail">
-                <img src="/public/uploads/tmptest.jpg" class="img-rounded" width="600" height="800">
-                <h4 class="text-center" data-placement="bottom" data-toggle="tooltip">简短概括</h4>
-                <p data-placement="bottom" data-toggle="tooltip">更多描述</p>
+                <img id="previewImg" src="#" class="img-rounded" width="600" height="800">
+                <h4 id="previewSDes" class="text-center" data-placement="bottom" data-toggle="tooltip">简短概括</h4>
+                <p id="previewLDes" data-placement="bottom" data-toggle="tooltip">更多描述</p>
             </div>
         </li>
     </ul>
@@ -23,7 +23,7 @@
 -->
                     <span id="fileName">选择文件...</span>
                     <!-- The file input field used as target for the file upload widget -->
-                    <input id="imageFile" type="file" name="files[]" multiple>
+                    <input id="imageFile" type="file" name="files[]">
                 </span>
             </div>
         </div>

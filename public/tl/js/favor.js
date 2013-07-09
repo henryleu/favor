@@ -203,25 +203,24 @@ var Workspace = Backbone.Router.extend({
         view = new ShareSubjectView({model:{imagePath: 'uploads'}});
         var content = '[set="'+viewName+'"].view .content';
         $(content).html( view.render().el );
-/*
-        $('#imageFile').change(function() {
-            alert('file changed.');
-            $(this).uploadimage('http://localhost:8888', function(res) {
-                alert('File uploaded');
-                console.log(res);
-            }, 'json');
-        });
-*/
         $('#imageFile').fileupload({
-            url: 'http://localhost:8888',
+            url: '/files/',
             dataType: 'json',
+            add: function (e, data) {
+                $('#fileName').html(data.files[0].name);
+                data.submit();
+            },
             done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').text(file.name).appendTo('#fileName');
-                });
+                $('#previewImg').attr('src', '/files/' + data.files[0].name);
             }
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        $('#shortDes').bind('change keyup', function() {
+            $('#previewSDes').html($('#shortDes').val());
+        }).change();
+        $('#longDes').bind('change keyup', function() {
+            $('#previewLDes').html($('#longDes').val());
+        }).change();
     },
     find: function(viewName){
         $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
