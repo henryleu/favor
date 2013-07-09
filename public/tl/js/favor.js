@@ -191,7 +191,7 @@ var Workspace = Backbone.Router.extend({
     share: function(viewName){
         var view = this.views[viewName];
         if(!view){
-             view = new ShareSubjectView({model:{imagePath: 'uploads'}});
+             view = new ShareSubjectView();
              var content = '[set="'+viewName+'"].view .content';
              $(content).html( view.render().el );
              this.views[viewName] = view;

@@ -18,36 +18,45 @@
     <form class="form-horizontal">
         <div class="control-group">
             <label class="control-label span2" for="imageFile">分享图片</label>
-            <div class="controls span9">
-                <span class="btn btn-success fileinput-button span11">
-                    <span id="fileName">选择文件...</span>
-                    <!-- The file input field used as target for the file upload widget -->
-                    <input id="imageFile" type="file" name="files[]">
-                </span>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label span2" for="imageLink">图片链接</label>
-            <div class="controls span9">
-                <input class="span11" id="imageLink" type="text" placeholder="商品来源网站的完整链接">
+            <div class="controls span8">
+                <div class="btn-group span12">
+                    <button class="btn fileinput-button span12">
+                        <span id="fileName">选择本地图片...</span>
+                        <!-- The file input field used as target for the file upload widget -->
+                        <input id="imageFile" type="file" name="files[]">
+                    </button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li class="span12"><a tabindex="-1" href="/share">添加远程图片链接...</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label span2" for="shortDes">简短概括</label>
-            <div class="controls span9">
-                <input class="span11" id="shortDes" type="text" placeholder="简单概括下发布的商品">
+            <div class="controls span8">
+                <input class="span12" id="shortDes" type="text" placeholder="简单概括下发布的商品">
             </div>
         </div>
         <div class="control-group">
             <label class="control-label span2" for="longDes">更多描述</label>
-            <div class="controls span9">
-                <textarea class="span11" rows="5" id="longDes" placeholder="还有什么额外的信息可以帮助别人快速了解商品？"></textarea>
+            <div class="controls span8">
+                <textarea class="span12" rows="5" id="longDes" placeholder="还有什么额外的信息可以帮助别人快速了解商品？"></textarea>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label span2" for="imageLink">商品链接</label>
+            <div class="controls span8">
+                <input class="span12" id="imageLink" type="text" placeholder="商品来源网站的完整链接">
             </div>
         </div>
         <hr>
         <div class="control-group">
-            <div class="controls offset2 span9">
-                <button type="submit" class="btn btn-primary">发布分享</button>
+            <div class="controls offset2 span8">
+                <button type="submit" class="btn btn-primary">公开分享信息</button>
+                <button class="btn">清空信息</button>
             </div>
         </div>
     </form>
