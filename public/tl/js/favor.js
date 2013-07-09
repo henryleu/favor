@@ -189,20 +189,16 @@ var Workspace = Backbone.Router.extend({
 */
     },
     share: function(viewName){
-/*
         var view = this.views[viewName];
         if(!view){
-            view = new MediumIconsView({model:{list:[]}});
-            this.views[viewName] = view;
-            $('[set="'+viewName+'"].view').html(view.render().el);
+             view = new ShareSubjectView({model:{imagePath: 'uploads'}});
+             var content = '[set="'+viewName+'"].view .content';
+             $(content).html( view.render().el );
+             this.views[viewName] = view;
         }
         else{
             console.info('Use runtime-cached template ['+ viewName + '] for view rendering.');
         }
-*/
-        view = new ShareSubjectView({model:{imagePath: 'uploads'}});
-        var content = '[set="'+viewName+'"].view .content';
-        $(content).html( view.render().el );
         $('#imageFile').fileupload({
             url: '/files/',
             dataType: 'json',
@@ -215,6 +211,14 @@ var Workspace = Backbone.Router.extend({
             }
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        $('#imageLink').bind('change', function() {
+            var url = $('#imageLink').val();
+            if (url.length > 0) {
+                $('#productLink').attr('href', 'javascript: window.open(\'' + url + '\');');
+            } else {
+                $('#productLink').attr('href', '/share');
+            }
+        }).change();
         $('#shortDes').bind('change keyup', function() {
             $('#previewSDes').html($('#shortDes').val());
         }).change();

@@ -3,9 +3,11 @@
     <ul class="thumbnails">
         <li class="offset3 span8">
             <div class="thumbnail">
+                <a href="/share" id="productLink">
                 <img id="previewImg" src="#" class="img-rounded" width="600" height="800">
                 <h4 id="previewSDes" class="text-center" data-placement="bottom" data-toggle="tooltip">简短概括</h4>
                 <p id="previewLDes" data-placement="bottom" data-toggle="tooltip">更多描述</p>
+                </a>
             </div>
         </li>
     </ul>
@@ -18,9 +20,6 @@
             <label class="control-label span2" for="imageFile">分享图片</label>
             <div class="controls span9">
                 <span class="btn btn-success fileinput-button span11">
-<!--
-                    <i class="icon-picture icon-white"></i>
--->
                     <span id="fileName">选择文件...</span>
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="imageFile" type="file" name="files[]">
