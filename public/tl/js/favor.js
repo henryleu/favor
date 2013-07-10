@@ -211,12 +211,12 @@ var Workspace = Backbone.Router.extend({
             }
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
-        $('#imageLink').bind('change', function() {
-            var url = $('#imageLink').val();
+        $('#productLink').bind('change', function() {
+            var url = $('#productLink').val();
             if (url.length > 0) {
-                $('#productLink').attr('href', 'javascript: window.open(\'' + url + '\');');
+                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
             } else {
-                $('#productLink').attr('href', '/share');
+                $('#previewLink').attr('href', '/share');
             }
         }).change();
         $('#shortDes').bind('change keyup', function() {

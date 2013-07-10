@@ -3,7 +3,7 @@
     <ul class="thumbnails">
         <li class="offset3 span8">
             <div class="thumbnail">
-                <a href="/share" id="productLink">
+                <a href="/share" id="previewLink">
                 <img id="previewImg" src="#" class="img-rounded" width="600" height="800">
                 <h4 id="previewSDes" class="text-center" data-placement="bottom" data-toggle="tooltip">简短概括</h4>
                 <p id="previewLDes" data-placement="bottom" data-toggle="tooltip">更多描述</p>
@@ -14,42 +14,40 @@
 </div>
 <div class="span6">
     <h4>信息详情：</h4>
-    <br>
+    <hr>
     <form class="form-horizontal">
         <div class="control-group">
-            <label class="control-label span2" for="imageFile">分享图片</label>
-            <div class="controls span8">
-                <div class="btn-group span12">
-                    <button class="btn fileinput-button span12">
-                        <span id="fileName">选择本地图片...</span>
-                        <!-- The file input field used as target for the file upload widget -->
-                        <input id="imageFile" type="file" name="files[]">
-                    </button>
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right">
-                        <li class="span12"><a tabindex="-1" href="/share">添加远程图片链接...</a></li>
-                    </ul>
-                </div>
+            <label class="control-label span2" for="imageFile">商品图片</label>
+            <div class="controls btn-group span8">
+                <span class="btn fileinput-button span12">
+                    <span id="fileName">选择本地图片...</span>
+                    <!-- The file input field used as target for the file upload widget -->
+                    <input id="imageFile" type="file" name="files[]">
+                </span>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li><a tabindex="-1" href="javascript: $('#myModal').modal('show');" data-toggle="modal">使用远程图片链接...</a></li>
+                </ul>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label span2" for="shortDes">简短概括</label>
             <div class="controls span8">
-                <input class="span12" id="shortDes" type="text" placeholder="简单概括下发布的商品">
+                <input class="span12" id="shortDes" type="text" placeholder="简单概括下商品">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label span2" for="longDes">更多描述</label>
+            <label class="control-label span2" for="longDes">推荐理由</label>
             <div class="controls span8">
-                <textarea class="span12" rows="5" id="longDes" placeholder="还有什么额外的信息可以帮助别人快速了解商品？"></textarea>
+                <textarea class="span12" rows="5" id="longDes" placeholder="说说为什么推荐这个商品吧～～"></textarea>
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label span2" for="imageLink">商品链接</label>
+            <label class="control-label span2" for="productLink">商品链接</label>
             <div class="controls span8">
-                <input class="span12" id="imageLink" type="text" placeholder="商品来源网站的完整链接">
+                <input class="span12" id="productLink" type="text" placeholder="商品来源网站的完整链接">
             </div>
         </div>
         <hr>
