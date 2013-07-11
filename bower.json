@@ -1,0 +1,14 @@
+{
+  "name": "favor",
+  "version": "0.0.1",
+  "main": [],
+  "dependencies": {
+    "underscore": "~1.4.4",
+    "jquery": "~1.10.2",
+    "backbone": "~1.0.0",
+    "bootstrap": "~2.3.2",
+    "requirejs": "~2.1.8",
+    "animate.css": "latest",
+    "font-awesome": "~v3.2.1"
+  }
+}
