@@ -1,19 +1,19 @@
 
     <div class="offset2 span1">
-        <a class="carousel-control left" href="#myCarousel" data-slide="prev" data-bypass>&lsaquo;</a>
+        <a class="carousel-control left" href="#carousel_<%=id%>" data-slide="prev" data-bypass>&lsaquo;</a>
     </div>
     <div class="span6">
-        <div id="myCarousel" class="carousel slide">
+        <div id="carousel_<%=id%>" class="carousel slide">
             <div class="row-fluid">
                 <ol class="carousel-indicators">
-                    <% _.each(list, function(item, index) { %>
-                    <li data-target="#myCarousel" data-slide-to="<%=index%>" class="<%=index==0?'active':''%>"></li>
+                    <% _.each(input, function(item, index) { %>
+                    <li data-target="#carousel_<%=id%>" data-slide-to="<%=index%>" class="<%=index==0?'active':''%>"></li>
                     <% }); %>
                 </ol>
 
                 <!-- Carousel items -->
                 <div class="carousel-inner">
-                    <% _.each(list, function(item, index) { %>
+                    <% _.each(input, function(item, index) { %>
                     <div class="<%=index==0?'active':''%> item">
                         <li class="large-item">
                             <a target="_blank"><img alt="<%=item.title%>" src="<%=item.imageUrl%>"></a>
@@ -32,5 +32,5 @@
         </div>
     </div>
     <div class="span1">
-        <a class="carousel-control right" href="#myCarousel" data-slide="next" data-bypass>&rsaquo;</a>
+        <a class="carousel-control right" href="#carousel_<%=id%>" data-slide="next" data-bypass>&rsaquo;</a>
     </div>

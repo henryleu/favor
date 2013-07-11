@@ -71,7 +71,6 @@ module.exports = function(app) {
         checkUserToken(req, res);
         res.render('index', {});
     });
-
     app.get('/test', function(req, res) {
         throw new Error('test error handling');
     });

@@ -6,14 +6,14 @@
     <div id="myCarousel" class="carousel slide">
         <div class="row-fluid">
             <ol class="carousel-indicators">
-                <% _.each(list, function(item, index) { %>
+                <% _.each(input, function(item, index) { %>
                 <li data-target="#myCarousel" data-slide-to="<%=index%>" class="<%=index==0?'active':''%>"></li>
                 <% }); %>
             </ol>
 
             <!-- Carousel items -->
             <div class="carousel-inner">
-                <% _.each(list, function(item, index) { %>
+                <% _.each(input, function(item, index) { %>
                 <div class="<%=index==0?'active':''%> item">
                     <li class="large-item">
                         <a target="_blank"><img alt="<%=item.title%>" src="<%=item.imageUrl%>"></a>

@@ -2,7 +2,6 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , engine = require('ejs-locals')
-//    , engine = require('ejs').renderFile
     , settings = require('./settings')
     , db = require('./db');
 
