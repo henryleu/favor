@@ -225,6 +225,14 @@ var Workspace = Backbone.Router.extend({
         $('#longDes').bind('change keyup', function() {
             $('#previewLDes').html($('#longDes').val());
         }).change();
+        $('#saveImageLink').bind('click', function() {
+            var imageLink = $('#imageLink').val();
+            if (imageLink.length > 0) {
+                $('#fileName').html($('#imageLink').val());
+                $('#previewImg').attr('src', $('#imageLink').val());
+                $('#myModal').modal('hide');
+            }
+        }).click();
     },
     find: function(viewName){
         $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
