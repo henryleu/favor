@@ -281,7 +281,7 @@ var ShareSubjectView = Backbone.View.extend({
     },
     render: function() {
         if(!this.template){
-            this.template = _.template(tm.get(this.templateName));
+            this.template = _.template(favor.tm.get(this.templateName));
         }
         $(this.el).html(this.template(this.model));
         return this;
