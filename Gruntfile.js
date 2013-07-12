@@ -16,6 +16,7 @@ module.exports = function(grunt) {
                 },
                 src: [
                     'public/components/jquery/jquery.js',
+                    'public/components/jquery.cookie/jquery.cookie.js',
                     'public/components/underscore/underscore.js',
                     'public/components/backbone/backbone.js'
                 ],
@@ -26,7 +27,7 @@ module.exports = function(grunt) {
                     banner: '/*! tomato labs webapp mainjs */\n'
                 },
                 src: [
-                    'public/tl/js/util.js',
+                    'public/tl/js/tomato-spa.js',
                     'public/tl/js/favor.js'
                 ],
                 dest: 'public/tl/js/main.js'
