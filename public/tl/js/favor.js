@@ -181,7 +181,7 @@ var Favor = tl.spa.extend({
         }).click();
     },
     find: function(viewName){
-        this.ensureCatalogView(viewName).show();
+        this.ensureCatalogView(viewName).show().catalogHottest();
 /*
         $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
             view = new LargeIconsView({model:{input: list, id: 'newest'}});

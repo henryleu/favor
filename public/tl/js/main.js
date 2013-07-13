@@ -1,4 +1,4 @@
-/*! tomato labs webapp mainjs */
+/*! Tomato Labs webapp main js */
 /**
  * Created with JetBrains WebStorm.
  * User: henryleu
@@ -290,7 +290,7 @@ var CatalogView = tl.spa.View.extend({
 });
 
 var Favor = tl.spa.extend({
-    templates: ['catalog', 'large-icons', 'medium-icons', 'list-items'],
+    templates: ['catalog', 'large-icons', 'medium-icons', 'list-items', 'share-subject'],
     routes: {
         "catalog-newest": "catalogNewest",
         "catalog-hottest": "catalogHottest",
@@ -353,6 +353,50 @@ var Favor = tl.spa.extend({
     home: function(viewName){
     },
     share: function(viewName){
+        var view = this.views[viewName];
+        if(!view){
+             view = new ShareSubjectView();
+             var content = '[set="'+viewName+'"].view .content';
+             $(content).html( view.render().el );
+             this.views[viewName] = view;
+        }
+        else{
+            console.info('Use runtime-cached template ['+ viewName + '] for view rendering.');
+        }
+        $('#imageFile').fileupload({
+            url: '/files/',
+            dataType: 'json',
+            add: function (e, data) {
+                $('#fileName').html(data.files[0].name);
+                data.submit();
+            },
+            done: function (e, data) {
+                $('#previewImg').attr('src', '/files/' + data.files[0].name);
+            }
+        }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        $('#productLink').bind('change', function() {
+            var url = $('#productLink').val();
+            if (url.length > 0) {
+                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
+            } else {
+                $('#previewLink').attr('href', '/share');
+            }
+        }).change();
+        $('#shortDes').bind('change keyup', function() {
+            $('#previewSDes').html($('#shortDes').val());
+        }).change();
+        $('#longDes').bind('change keyup', function() {
+            $('#previewLDes').html($('#longDes').val());
+        }).change();
+        $('#saveImageLink').bind('click', function() {
+            var imageLink = $('#imageLink').val();
+            if (imageLink.length > 0) {
+                $('#fileName').html($('#imageLink').val());
+                $('#previewImg').attr('src', $('#imageLink').val());
+                $('#myModal').modal('hide');
+            }
+        }).click();
     },
     find: function(viewName){
         this.ensureCatalogView(viewName).show();
@@ -446,6 +490,19 @@ var MediumIconsView = Backbone.View.extend({
     goHottest: function() {
     },
     selfrun: function() {
+    }
+});
+var ShareSubjectView = Backbone.View.extend({
+    templateName: 'share-subject',
+    initialize: function() {
+
+    },
+    render: function() {
+        if(!this.template){
+            this.template = _.template(favor.tm.get(this.templateName));
+        }
+        $(this.el).html(this.template(this.model));
+        return this;
     }
 });
 $(document).ready(function(){
