@@ -1,6 +1,6 @@
 this["JST"] = this["JST"] || {};
 
-this["JST"]["templates/catalog.html"] = function(obj) {
+this["JST"]["catalog"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -10,7 +10,7 @@ __p += '<div class="row-fluid btn-toolbar "><nav>\r\n    <div class="btn-group p
 return __p
 };
 
-this["JST"]["templates/large-icons.html"] = function(obj) {
+this["JST"]["large-icons"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -57,7 +57,7 @@ __p += '\r\n                <!-- Carousel nav -->\r\n            </div>\r\n     
 return __p
 };
 
-this["JST"]["templates/list-items.html"] = function(obj) {
+this["JST"]["list-items"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -96,7 +96,7 @@ __p += '\r\n                <!-- Carousel nav -->\r\n            </div>\r\n     
 return __p
 };
 
-this["JST"]["templates/medium-icons.html"] = function(obj) {
+this["JST"]["medium-icons"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -135,7 +135,7 @@ __p += '\r\n                <!-- Carousel nav -->\r\n            </div>\r\n     
 return __p
 };
 
-this["JST"]["templates/share-subject.html"] = function(obj) {
+this["JST"]["share-subject"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {

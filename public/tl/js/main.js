@@ -48,10 +48,10 @@
         configure: function(){},
         startup: function(){
             var me = this;
-            this.tm.loadTemplates(this.templates, function(){
-                me.navigate();
-                bb.history.start({pushState: true, hashChange: true});
-            });
+            me.navigate();
+            bb.history.start({pushState: true, hashChange: true});
+//            this.tm.loadTemplates(this.templates, function(){
+//            });
         },
         shutdown: function(){
             //TODO
@@ -89,12 +89,13 @@
     });
 //    Collection.extend = bb.Collection.extend;
 
-    var viewOptions = ['spa', 'hidden', 'prerendered', 'templateName', 'vid' ];
+    var viewOptions = ['spa', 'hidden', 'modelDriven', 'prerendered', 'templateName', 'vid' ];
     var View = spa.View = bb.View.extend({
         //spa: null, //spa: the central application object
         //children: null, //child registry
         //parent: null,
         //hidden: false,
+        //modelDriven: true,
         //prerendered: false,
         //rendered: false,
         //templateName: null, //template name
@@ -106,6 +107,7 @@
                 children: {},
                 parent: null,
                 hidden: false,
+                modelDriven: true,
                 prerendered: true,
                 rendered: false,
                 templateName: '',
@@ -149,6 +151,10 @@
         doRender: function(){
             this.ensureTemplate();
             var model = _.result(this, 'model');
+//alert(this.modelDriven + ' ' + this.fetched);
+//            if(this.modelDriven && !model.fetched){
+//                return this;
+//            }
             var json = {};
             if(model.toJSON){
                 json = model.toJSON();
@@ -164,7 +170,8 @@
         },
         ensureTemplate: function(){
             if(!this.template){
-                this.template = _.template(this.spa.tm.get(this.templateName));
+//                this.template = _.template(this.spa.tm.get(this.templateName));
+                this.template = this.spa.tm.get(this.templateName);
             }
         },
         renderChildren: function(){
@@ -186,6 +193,7 @@
             _.extend(this.o, options);
             _.extend(this, _.pick(this.o, 'prefix'));
         }
+        _.extend(this.templates, window['JST']);
     };
     _.extend( TemplateManager.prototype, {
         prefix: 'templates',
@@ -205,7 +213,6 @@
                     }
                 });
             }
-
             loadTemplate(0);
         },
 
@@ -244,11 +251,6 @@ var CatalogView = tl.spa.View.extend({
         'mouseup [href="catalog-hottest"]': 'catalogHottest',
         'mouseup [href="catalog-selfrun"]': 'catalogSelfrun'
     },
-//    events:{
-//        "catalog-newest?view=large-icons": "catalogNewest",
-//        "catalog-hottest?view=large-icons": "catalogHottest",
-//        "catalog-selfrun?view=large-icons": "catalogSelfrun"
-//    },
     configure: function(){
         this.newestLargeIconsView = new CatalogListLargeIconsView({
             vid: 'catalog-newest',
@@ -276,6 +278,8 @@ var CatalogView = tl.spa.View.extend({
         _.each(this.children, function(v, id){
             v.hide();
         });
+        //alert(view.model.fetched);
+        view.doRender();
         view.show();
     },
     catalogNewest: function(){
@@ -290,7 +294,7 @@ var CatalogView = tl.spa.View.extend({
 });
 
 var Favor = tl.spa.extend({
-    templates: ['catalog', 'large-icons', 'medium-icons', 'list-items', 'share-subject'],
+    //templates: ['catalog', 'large-icons', 'medium-icons', 'list-items', 'share-subject'],
     routes: {
         "catalog-newest": "catalogNewest",
         "catalog-hottest": "catalogHottest",
@@ -306,22 +310,28 @@ var Favor = tl.spa.extend({
     defaultUri: 'home',
     configure: function(){
         this.models['catalog'] = {
+            fetched: true,
             newest: null,
             hottest: null,
             selfrun: null
         };
-        var col;
-        col = new NewestCatalog({});
-        col.fetch();
-        this.models['catalog'].newest = col;
+        var newestCatalog = new NewestCatalog({});
+        newestCatalog.fetch(function(){
+            newestCatalog.fetched = true;
+        });
+        this.models['catalog'].newest = newestCatalog;
 
-        col = new HottestCatalog({});
-        col.fetch();
-        this.models['catalog'].hottest = col;
+        var hottestCatalog = new HottestCatalog({});
+        hottestCatalog.fetch(function(){
+            hottestCatalog.fetched = true;
+        });
+        this.models['catalog'].hottest = hottestCatalog;
 
-        col = new SelfrunCatalog({});
-        col.fetch();
-        this.models['catalog'].selfrun = col;
+        var selfrunCatalog = new SelfrunCatalog({});
+        selfrunCatalog.fetch(function(){
+            selfrunCatalog.fetched = true;
+        });
+        this.models['catalog'].selfrun = selfrunCatalog;
     },
     switchView: function(view, id){
         console.log(view + ' - ' + id);
@@ -353,16 +363,25 @@ var Favor = tl.spa.extend({
     home: function(viewName){
     },
     share: function(viewName){
+//        var view = this.views[viewName];
+//        if(!view){
+//             view = new ShareSubjectView();
+//             var content = '[set="'+viewName+'"].view .content';
+//             $(content).html( view.render().el );
+//             this.views[viewName] = view;
+//        }
+//        else{
+//            console.info('Use runtime-cached template ['+ viewName + '] for view rendering.');
+//        }
         var view = this.views[viewName];
         if(!view){
-             view = new ShareSubjectView();
-             var content = '[set="'+viewName+'"].view .content';
-             $(content).html( view.render().el );
-             this.views[viewName] = view;
+            view = new ShareSubjectView({spa: this, model:{}, modelDriven: false});
+            this.views[viewName] = view;
+            var content = '[set="'+viewName+'"].view';
+            $(content).html( view.el );
         }
-        else{
-            console.info('Use runtime-cached template ['+ viewName + '] for view rendering.');
-        }
+
+
         $('#imageFile').fileupload({
             url: '/files/',
             dataType: 'json',
@@ -399,26 +418,55 @@ var Favor = tl.spa.extend({
         }).click();
     },
     find: function(viewName){
-        this.ensureCatalogView(viewName).show();
-/*
-        $.getJSON('public/dummy/newest.js',{}, function(list, textStatus){
-            view = new LargeIconsView({model:{input: list, id: 'newest'}});
-            var content = '[set="'+viewName+'"].view .content';
-            $(content).html( view.render().el );
-        });
-*/
+        this.ensureCatalogView(viewName).show().catalogHottest(true);
     },
     catalogNewest: function(viewName){
-        this.switchView('find');
-        this.ensureCatalogView(viewName).show().catalogNewest();
+        if(this.models['catalog'].newest.fetched){
+            this.switchView('find');
+            this.ensureCatalogView('find').show().catalogNewest();
+        }
+        else{
+            var me = this;
+            this.models['catalog'].newest.fetch({
+                success: function(){
+                    me.models['catalog'].newest.fetched = true;
+                    me.switchView('find');
+                    me.ensureCatalogView('find').show().catalogNewest();
+                }
+            });
+        }
     },
     catalogHottest: function(viewName){
-        this.switchView('find');
-        this.ensureCatalogView(viewName).show().catalogHottest();
+        if(this.models['catalog'].hottest.fetched){
+            this.switchView('find');
+            this.ensureCatalogView('find').show().catalogHottest();
+        }
+        else{
+            var me = this;
+            this.models['catalog'].hottest.fetch({
+                success:function(){
+                    me.models['catalog'].hottest.fetched = true;
+                    me.switchView('find');
+                    me.ensureCatalogView('find').show().catalogHottest();
+                }
+            });
+        }
     },
     catalogSelfrun: function(viewName){
-        this.switchView('find');
-        this.ensureCatalogView(viewName).show().catalogSelfrun();
+        if(this.models['catalog'].selfrun.fetched){
+            this.switchView('find');
+            this.ensureCatalogView('find').show().catalogSelfrun();
+        }
+        else{
+            var me = this;
+            this.models['catalog'].selfrun.fetch({
+                success:function(){
+                    me.models['catalog'].selfrun.fetched = true;
+                    me.switchView('find');
+                    me.ensureCatalogView('find').show().catalogSelfrun();
+                }
+            });
+        }
     },
     forum: function(viewName){
 
@@ -427,7 +475,7 @@ var Favor = tl.spa.extend({
     ensureCatalogView: function(viewName){
         var view = this.views['catalog'];
         if(!view){
-            view = new CatalogView({spa: this, model:this.models['catalog']});
+            view = new CatalogView({spa: this, model:this.models['catalog'], modelDriven: false});
             this.views['catalog'] = view;
             var content = '[set="'+viewName+'"].view';
             $(content).html( view.el );
@@ -441,69 +489,18 @@ var CatalogListLargeIconsView = tl.spa.View.extend({
     templateName: 'large-icons'
 });
 
-//var tm = new TemplateManager();
-var LargeIconsView = Backbone.View.extend({
-    templateName: 'large-icons',
-    events: {
-        "change #newest":          "goNewest",
-        "change #hottest":          "goHottest",
-        "change #selfrun":          "goSelfrun"
-    },
-    initialize: function() {
-    },
-    render: function() {
+var ShareSubjectView = tl.spa.View.extend({
+    templateName: 'share-subject'
+//    initialize: function() {
+//
+//    },
+//    render: function() {
 //        if(!this.template){
-//            var rawTemplate = $('#' + this.templateName + '-tpl').html();
-//            this.template = _.template(rawTemplate);
+//            this.template = _.template(favor.tm.get(this.templateName));
 //        }
-        if(!this.template){
-            this.template = _.template(favor.tm.get(this.templateName));
-        }
-        $(this.el).html(this.template(this.model));
-        return this;
-    },
-    goNewest: function() {
-    },
-    goHottest: function() {
-    },
-    selfrun: function() {
-    }
-});
-var MediumIconsView = Backbone.View.extend({
-    templateName: 'medium-icons',
-    events: {
-        "change #newest":          "goNewest",
-        "change #hottest":          "goHottest",
-        "change #selfrun":          "goSelfrun"
-    },
-    initialize: function() {
-    },
-    render: function() {
-        if(!this.template){
-            this.template = _.template(favor.tm.get(this.templateName));
-        }
-        $(this.el).html(this.template(this.model));
-        return this;
-    },
-    goNewest: function() {
-    },
-    goHottest: function() {
-    },
-    selfrun: function() {
-    }
-});
-var ShareSubjectView = Backbone.View.extend({
-    templateName: 'share-subject',
-    initialize: function() {
-
-    },
-    render: function() {
-        if(!this.template){
-            this.template = _.template(favor.tm.get(this.templateName));
-        }
-        $(this.el).html(this.template(this.model));
-        return this;
-    }
+//        $(this.el).html(this.template(this.model));
+//        return this;
+//    }
 });
 $(document).ready(function(){
     favor = new Favor({

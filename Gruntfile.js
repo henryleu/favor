@@ -87,6 +87,9 @@ module.exports = function(grunt) {
         jst: {
             compile: {
                 options: {
+                    processName: function(filename) {
+                        return filename.substring('templates/'.length, filename.indexOf('.htm'));
+                    },
                     templateSettings: {
                         interpolate : /<%=([\s\S]+?)%>/g
                     }
