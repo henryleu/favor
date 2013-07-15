@@ -47,10 +47,10 @@
         configure: function(){},
         startup: function(){
             var me = this;
-            this.tm.loadTemplates(this.templates, function(){
-                me.navigate();
-                bb.history.start({pushState: true, hashChange: true});
-            });
+            me.navigate();
+            bb.history.start({pushState: true, hashChange: true});
+//            this.tm.loadTemplates(this.templates, function(){
+//            });
         },
         shutdown: function(){
             //TODO
@@ -88,12 +88,13 @@
     });
 //    Collection.extend = bb.Collection.extend;
 
-    var viewOptions = ['spa', 'hidden', 'prerendered', 'templateName', 'vid' ];
+    var viewOptions = ['spa', 'hidden', 'modelDriven', 'prerendered', 'templateName', 'vid' ];
     var View = spa.View = bb.View.extend({
         //spa: null, //spa: the central application object
         //children: null, //child registry
         //parent: null,
         //hidden: false,
+        //modelDriven: true,
         //prerendered: false,
         //rendered: false,
         //templateName: null, //template name
@@ -105,6 +106,7 @@
                 children: {},
                 parent: null,
                 hidden: false,
+                modelDriven: true,
                 prerendered: true,
                 rendered: false,
                 templateName: '',
@@ -148,6 +150,10 @@
         doRender: function(){
             this.ensureTemplate();
             var model = _.result(this, 'model');
+//alert(this.modelDriven + ' ' + this.fetched);
+//            if(this.modelDriven && !model.fetched){
+//                return this;
+//            }
             var json = {};
             if(model.toJSON){
                 json = model.toJSON();
@@ -163,7 +169,8 @@
         },
         ensureTemplate: function(){
             if(!this.template){
-                this.template = _.template(this.spa.tm.get(this.templateName));
+//                this.template = _.template(this.spa.tm.get(this.templateName));
+                this.template = this.spa.tm.get(this.templateName);
             }
         },
         renderChildren: function(){
@@ -185,6 +192,7 @@
             _.extend(this.o, options);
             _.extend(this, _.pick(this.o, 'prefix'));
         }
+        _.extend(this.templates, window['JST']);
     };
     _.extend( TemplateManager.prototype, {
         prefix: 'templates',
@@ -204,7 +212,6 @@
                     }
                 });
             }
-
             loadTemplate(0);
         },
 
