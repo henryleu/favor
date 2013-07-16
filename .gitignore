@@ -16,5 +16,8 @@ node_modules
 
 .idea
 public/components
+public/tl/css/main.*
+public/tl/js/main.*
+public/tl/js/templates.*
 
 .DS_store
