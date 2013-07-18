@@ -1,7 +1,7 @@
 var tl = window.tl;
 
 var Product = tl.spa.Model.extend({
-    urlRoot: 'product'
+    urlRoot: 'deal'
 });
 
 var NewestCatalog = tl.spa.Collection.extend({
@@ -48,6 +48,10 @@ var CatalogView = tl.spa.View.extend({
         this.addChild(this.newestLargeIconsView);
         this.addChild(this.hottestLargeIconsView);
         this.addChild(this.selfrunLargeIconsView);
+    },
+    afterRender: function(){
+    },
+    afterRenderChildren: function(){
     },
     switchView: function(view){
         _.each(this.children, function(v, id){
