@@ -159,17 +159,19 @@
                 json = model.toJSON();
             }
             $(this.el).html(this.template( {input: json, id: this.getId()} )); //TODO: try to use $el
+
+            this.afterRender();
             this.rendered = true;
 
             if(this.hidden) this.hide();
             else this.show();
 
             this.renderChildren();
+            this.afterRenderChildren();
             return this;
         },
         ensureTemplate: function(){
             if(!this.template){
-//                this.template = _.template(this.spa.tm.get(this.templateName));
                 this.template = this.spa.tm.get(this.templateName);
             }
         },
@@ -178,6 +180,8 @@
                 this.$('[data-view-id="' + id + '"]').replaceWith(view.el);
             }, this);
         },
+        afterRender: function(){},
+        afterRenderChildren: function(){},
         show: function(){this.$el.show();this.hidden = false;return this;},
         hide: function(){this.$el.hide();this.hidden = true;return this;},
         isRendered: function(){return this.rendered;},
