@@ -1,20 +1,8 @@
-/**
- * Created with JetBrains WebStorm.
- * User: henryleu
- * Date: 13-7-3
- * Time: 下午5:48
- * To change this template use File | Settings | File Templates.
- */
-(function(_, bb, $){
+define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
     window.tl = window.tl || {};
     var noop = function(){};
-    console = console || {
-        log: noop,
-        info: noop,
-        warn: noop,
-        debug: noop,
-        error: noop
-    }
+    console = console || {log: noop, info: noop, warn: noop, debug: noop, error: noop};
+
     _apply = function(t, s) {
         for (var k in s) {
             if(!t[k]){
@@ -49,8 +37,6 @@
             var me = this;
             me.navigate();
             bb.history.start({pushState: true, hashChange: true});
-//            this.tm.loadTemplates(this.templates, function(){
-//            });
         },
         shutdown: function(){
             //TODO
@@ -73,11 +59,9 @@
             });
         }
     });
-//    spa.extend = bb.Router.extend;
 
     var Model = spa.Model = bb.Model.extend({
     });
-//    Model.extend = bb.Model.extend;
 
     var Collection = spa.Collection = bb.Collection.extend({
         initialize: function(){
@@ -86,7 +70,6 @@
         },
         configure: function(){}
     });
-//    Collection.extend = bb.Collection.extend;
 
     var viewOptions = ['spa', 'hidden', 'modelDriven', 'prerendered', 'templateName', 'vid' ];
     var View = spa.View = bb.View.extend({
@@ -187,7 +170,6 @@
         isRendered: function(){return this.rendered;},
         isHidden: function(){return this.hidden;}
     });
-    View.extend = bb.View.extend;
 
     var TemplateManager = window.tl.spa.TemplateManager = function(options){
         this.templates = {};
@@ -196,7 +178,8 @@
             _.extend(this.o, options);
             _.extend(this, _.pick(this.o, 'prefix'));
         }
-        _.extend(this.templates, window['JST']);
+//        _.extend(this.templates, window['JST']);
+        _.extend(this.templates, JST);
     };
     _.extend( TemplateManager.prototype, {
         prefix: 'templates',
@@ -225,4 +208,5 @@
         }
     });
 
-})(_, Backbone, jQuery);
+    return spa;
+});
