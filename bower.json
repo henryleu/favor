@@ -7,9 +7,10 @@
     "jquery": "~1.10.2",
     "jquery.cookie": "~1.3.1",
     "backbone": "~1.0.0",
-    "bootstrap-tl": "2.3.23",
+    "bootstrap-tl": "2.3.24",
     "requirejs": "~2.1.8",
     "animate.css": "latest",
-    "font-awesome": "~3.2.1"
+    "font-awesome": "~3.2.1",
+    "jquery-file-upload": "~8.6.1"
   }
 }
