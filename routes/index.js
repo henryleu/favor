@@ -1,5 +1,6 @@
 var store = require('../db');
 var logger = require('../logging').logger;
+var util = require('../lib/util');
 var redis = store.redis;
 var mongodb = store.mongodb;
 
@@ -7,7 +8,7 @@ module.exports = function(app) {
     var checkUserToken = function(req, res, next) {
         var userToken = req.cookies.userToken;
         if(userToken){
-            logger.info(userToken);
+            logger.info('uid: ' + userToken);
         }
         else{
             userToken = new Date().getTime();
@@ -32,44 +33,64 @@ module.exports = function(app) {
         });
         req.session.user = {name: 'henryleu', signinStatus: true};
 */
-        res.render('index',{} );
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/home', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/share', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/find', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/catalog-newest', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/catalog-hottest', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/catalog-selfrun', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
 
     app.get('/profile', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/forum', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/about', function(req, res) {
         checkUserToken(req, res);
-        res.render('index', {});
+        var input = {};
+        util.apply(input, req.asset || {});
+        res.render('index', input);
     });
     app.get('/test', function(req, res) {
         throw new Error('test error handling');
