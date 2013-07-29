@@ -74,7 +74,7 @@ module.exports = function(grunt) {
                     out: "public/build/main.js"
                 }
             },
-            css: {
+            css_prd: {
                 options: {
                     baseUrl: 'web/css',
                     cssIn: "web/css/main.css",
@@ -82,12 +82,21 @@ module.exports = function(grunt) {
                     cssImportIgnore: null,
                     optimizeCss: 'default'
                 }
+            },
+            css_dev: {
+                options: {
+                    baseUrl: 'web/css',
+                    cssIn: "web/css/main.css",
+                    out: "web/build/main.css",
+                    cssImportIgnore: null,
+                    optimizeCss: 'standard.keepComments.keepLines'
+                }
             }
         },
         watch: {
             img: {
                 files: ['web/img/*'],
-                tasks: ['requirejs:css'],
+                tasks: ['requirejs:css_prd', 'requirejs:css_dev'],
                 options: {
                     nospawn: true,
                     interrupt: false
@@ -95,13 +104,13 @@ module.exports = function(grunt) {
             },
             css: {
                 files: ['web/css/*.css'],
-                tasks: ['requirejs:css'],
+                tasks: ['requirejs:css_prd', 'requirejs:css_dev'],
                 options: {
                     nospawn: true,
                     interrupt: false
                 }
             },
-            templates: {
+            template: {
                 files: ['web/template/*.html'],
                 tasks: ['jst'],
                 options: {
@@ -137,5 +146,5 @@ module.exports = function(grunt) {
 	//grunt.registerTask('default', ['jshint', 'requirejs', 'hashres']);
 //    grunt.registerTask('default', ['copy',  'jst', 'concat', 'recess','uglify']);
     grunt.registerTask('default', ['jst', 'requirejs']);
-    grunt.registerTask('wat', ['watch']);
+    grunt.registerTask('dev', ['watch']);
 };

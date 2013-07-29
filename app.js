@@ -53,7 +53,6 @@ if ('production' == mode) {
 // routing
 require('./routes')(app);
 app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use('/web', express.static(path.join(__dirname, 'web')));
 
 /*
  *  Error Handling
