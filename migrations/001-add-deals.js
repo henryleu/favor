@@ -1,3 +1,4 @@
+var store = require('../db');
 
 exports.up = function(next){
   next();
