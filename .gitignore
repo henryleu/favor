@@ -18,5 +18,6 @@ node_modules
 public/components
 public/build
 web/build
+migrations/.migrate
 
 .DS_store
