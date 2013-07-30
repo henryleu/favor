@@ -3,6 +3,7 @@ var express = require('express')
     , path = require('path')
     , engine = require('ejs-locals')
     , settings = require('./settings')
+    , asseton = require('./lib/asseton')
     , db = require('./db');
 
 var app = module.exports = express();
@@ -39,19 +40,29 @@ app.use(express.session({
     store: sessionStore
 }));
 
+var mode = app.get('env') || 'development';
+if ('development' == mode) {
+    app.use(asseton.development());
+    app.use(express.errorHandler());
+}
+if ('production' == mode) {
+    app.use(asseton.production());
+    app.use(express.errorHandler());
+}
+
 // routing
 require('./routes')(app);
 app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
 /*
-    Error Handling
+ *  Error Handling
  */
 app.use(function (err, req, res, next) { //Log errors
     logger.error(err.stack);
     next(err);
 });
 app.use(function (err, req, res, next) { //Handle XHR errors
+    logger.error( err );
     if (req.xhr) {
         res.send(500,{error: 'TODO:真不好意思，程序出错了!'});
     } else {
@@ -63,11 +74,6 @@ app.use(function (err, req, res, next) { //Handle XHR errors
     res.render('error');
 });
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
-
-http.createServer(app).listen(app.get('port'),'127.0.0.1', function(){
-    logger.info('Tomatodo server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), '127.0.0.1', function(){
+    logger.info('Favor server listening on port ' + app.get('port')) + ' in ' + mode;
 });
