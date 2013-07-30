@@ -1,18 +1,18 @@
 define(['Spa', 'jQuery'], function(spa, $) {
-    var Product = spa.Model.extend({
+    var Deal = spa.Model.extend({
         urlRoot: 'deal'
     });
 
     var NewestCatalog = spa.Collection.extend({
-        model: Product,
+        model: Deal,
         url: 'public/dummy/newest.js'
     });
     var HottestCatalog = spa.Collection.extend({
-        model: Product,
+        model: Deal,
         url: 'public/dummy/hottest.js'
     });
     var SelfrunCatalog = spa.Collection.extend({
-        model: Product,
+        model: Deal,
         url: 'public/dummy/selfrun.js'
     });
 
@@ -147,59 +147,14 @@ define(['Spa', 'jQuery'], function(spa, $) {
         home: function(viewName){
         },
         share: function(viewName){
-            //        var view = this.views[viewName];
-            //        if(!view){
-            //             view = new ShareSubjectView();
-            //             var content = '[set="'+viewName+'"].view .content';
-            //             $(content).html( view.render().el );
-            //             this.views[viewName] = view;
-            //        }
-            //        else{
-            //            console.info('Use runtime-cached template ['+ viewName + '] for view rendering.');
-            //        }
             var view = this.views[viewName];
             if(!view){
-                view = new ShareSubjectView({spa: this, model:{}, modelDriven: false});
+                var deal = new Deal();
+                view = new ShareSubjectView({spa: this, model:deal, modelDriven: false});
                 this.views[viewName] = view;
-                var content = '[set="'+viewName+'"].view';
-                $(content).html( view.el );
+                var content = '[set="' + viewName + '"].view';
+                $(content).html(view.el);
             }
-
-
-            $('#imageFile').fileupload({
-                url: '/files/',
-                dataType: 'json',
-                add: function (e, data) {
-                    $('#fileName').html(data.files[0].name);
-                    data.submit();
-                },
-                done: function (e, data) {
-                    $('#previewImg').attr('src', '/files/' + data.files[0].name);
-                }
-            }).prop('disabled', !$.support.fileInput)
-                .parent().addClass($.support.fileInput ? undefined : 'disabled');
-            $('#productLink').bind('change', function() {
-                var url = $('#productLink').val();
-                if (url.length > 0) {
-                    $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
-                } else {
-                    $('#previewLink').attr('href', '/share');
-                }
-            }).change();
-            $('#shortDes').bind('change keyup', function() {
-                $('#previewSDes').html($('#shortDes').val());
-            }).change();
-            $('#longDes').bind('change keyup', function() {
-                $('#previewLDes').html($('#longDes').val());
-            }).change();
-            $('#saveImageLink').bind('click', function() {
-                var imageLink = $('#imageLink').val();
-                if (imageLink.length > 0) {
-                    $('#fileName').html($('#imageLink').val());
-                    $('#previewImg').attr('src', $('#imageLink').val());
-                    $('#myModal').modal('hide');
-                }
-            }).click();
         },
         find: function(viewName){
             this.ensureCatalogView(viewName).show().catalogNewest();
@@ -273,17 +228,75 @@ define(['Spa', 'jQuery'], function(spa, $) {
     });
 
     var ShareSubjectView = spa.View.extend({
-        templateName: 'share-subject'
-        //    initialize: function() {
-        //
-        //    },
-        //    render: function() {
-        //        if(!this.template){
-        //            this.template = _.template(favor.tm.get(this.templateName));
-        //        }
-        //        $(this.el).html(this.template(this.model));
-        //        return this;
-        //    }
+        templateName: 'share-subject',
+        events: {
+            'change #dealLink': 'changeDealLink',
+            'change #shortDes': 'changeShortDes',
+            'change #longDes': 'changeLongDes',
+            'keyup #shortDes': 'changeShortDes',
+            'keyup #longDes': 'changeLongDes',
+            'click #saveImageLinkSetting': 'saveImageLinkSetting',
+            'click #publishDealInfo': 'publishDealInfo',
+            'click #clearDealInfo': 'clearDealInfo'
+        },
+        afterRender: function() {
+            var model = this.model;
+            //Initialize file upload plugin
+            this.$('#imageFile').fileupload({
+                url: '/files/',
+                dataType: 'json',
+                add: function (e, data) {
+                    $('#fileName').html(data.files[0].name);
+                    data.submit();
+                },
+                done: function (e, data) {
+                    var imageURL = '/files/' + data.files[0].name;
+                    $('#previewImg').attr('src', imageURL);
+                    console.log("model content: " + JSON.stringify(model));
+                    model.set("image", imageURL);
+                }
+            }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        },
+        changeDealLink: function() {
+            var url = $('#dealLink').val();
+            if (url.length > 0) {
+                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
+            } else {
+                $('#previewLink').attr('href', '/share');
+            }
+            this.model.set("dUrl", url);
+        },
+        saveImageLinkSetting: function() {
+            var imageLink = $('#imageLink').val();
+            if (imageLink.length > 0) {
+                $('#fileName').html(imageLink);
+                $('#previewImg').attr('src', imageLink);
+                $('#myModal').modal('hide');
+                this.model.set("image", imageLink);
+            }
+        },
+        changeShortDes: function() {
+            var sDesc = $('#shortDes').val();
+            $('#previewSDes').html(sDesc);
+            this.model.set("sDesc", sDesc);
+        },
+        changeLongDes: function() {
+            var lDesc = $('#longDes').val();
+            $('#previewLDes').html(lDesc);
+            this.model.set("lDesc", lDesc);
+        },
+        publishDealInfo: function() {
+            console.log(JSON.stringify(this.model));
+            this.model.save({error: function(model, xhr, options) {
+                console.log(JSON.stringify(model));
+                console.log(xhr);
+            }});
+            this.clearDealInfo();
+        },
+        clearDealInfo: function() {
+
+        }
     });
 
     return Favor;

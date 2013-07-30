@@ -44,6 +44,7 @@ var mode = app.get('env') || 'development';
 if ('development' == mode) {
     app.use(asseton.development());
     app.use(express.errorHandler());
+    app.use('/web', express.static(path.join(__dirname, 'web')));
 }
 if ('production' == mode) {
     app.use(asseton.production());
