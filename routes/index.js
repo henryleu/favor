@@ -99,4 +99,10 @@ module.exports = function(app) {
         res.render('snippet', {});
     });
 
+    app.post('/deal', function(req, res) {
+        logger.debug(req.body);
+        var deal = JSON.parse(JSON.stringify(req.body));
+        logger.debug(deal);
+    });
+
 };
