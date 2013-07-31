@@ -1,4 +1,4 @@
-var store = require('../db');
+var store = require('../lib/db');
 
 exports.up = function(next){
     console.info("set up and configure mongodb...");

@@ -4,7 +4,7 @@ var express = require('express')
     , engine = require('ejs-locals')
     , settings = require('./settings')
     , asseton = require('./lib/asseton')
-    , db = require('./db');
+    , db = require('./lib/db');
 
 var app = module.exports = express();
 var sessionStore = null;
@@ -27,7 +27,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 
-var logging = require('./logging');
+var logging = require('./lib/logging');
 var logger = logging.logger;
 app.use(logging.applogger);
 app.use(express.compress());
@@ -75,5 +75,5 @@ app.use(function (err, req, res, next) { //Handle XHR errors
 });
 
 http.createServer(app).listen(app.get('port'), '127.0.0.1', function(){
-    logger.info('Favor server listening on port ' + app.get('port')) + ' in ' + mode;
+    logger.info('Favor server listening on port ' + app.get('port') + ' in ' + mode );
 });
