@@ -4,6 +4,35 @@ var util = require('../lib/util');
 var redis = store.redis;
 var mongodb = store.mongodb;
 
+//Start of temp part for store deal post info to mongodb
+var settings = require('../settings');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://' + settings.mongo.host + ':' + settings.mongo.port + '/' + settings.mongo.db + '?auto_reconnect=true&poolSize=2');
+var Schema = mongoose.Schema;
+var dealSchema = new Schema({
+    id : String,
+    mv : { type: Number, default: 0 },
+    dv : { type: Number, default: 0 },
+    image : String,
+    images : [String],
+    dUrl: { type: String, default: '' },
+    dSite: { type: String, default: '' },
+    sDesc: { type: String, default: '' },
+    pSum: { type: String, default: '' },
+    lDesc: { type: String, default: '' },
+    views : { type: Number, default: 0 },
+    likes : { type: Number, default: 0 },
+    owns : { type: Number, default: 0 },
+    deals : { type: Number, default: 0 },
+    reporter : {
+        id: String,
+        name: String,
+        img: String
+    }
+});
+var DealModel = mongoose.model('Deal', dealSchema);
+//End of temp part for store deal post info to mongodb
+
 module.exports = function(app) {
     var checkUserToken = function(req, res, next) {
         var userToken = req.cookies.userToken;
@@ -100,8 +129,14 @@ module.exports = function(app) {
     });
 
     app.post('/deal', function(req, res) {
-        logger.debug(req.body);
-        var deal = JSON.parse(JSON.stringify(req.body));
+        var dealJson = JSON.parse(JSON.stringify(req.body));
+        logger.debug(dealJson);
+        var deal = new DealModel();
+        deal.id = Date.now().toString();
+        deal.sDesc = dealJson.sDesc;
+        deal.lDesc = dealJson.lDesc;
+        deal.image = dealJson.image;
+        deal.save();
         logger.debug(deal);
     });
 

@@ -21,3 +21,4 @@ web/build
 migrations/.migrate
 
 .DS_store
+dump.rdb
