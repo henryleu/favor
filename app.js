@@ -4,7 +4,7 @@ var express = require('express')
     , engine = require('ejs-locals')
     , settings = require('./settings')
     , asseton = require('./lib/asseton')
-    , db = require('./db');
+    , db = require('./lib/db');
 
 var app = module.exports = express();
 var sessionStore = null;
@@ -27,7 +27,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 
-var logging = require('./logging');
+var logging = require('./lib/logging');
 var logger = logging.logger;
 app.use(logging.applogger);
 app.use(express.compress());
@@ -40,24 +40,23 @@ app.use(express.session({
     store: sessionStore
 }));
 
+// routing
+app.use('/public', express.static(path.join(__dirname, 'public')));
 var mode = app.get('env') || 'development';
 if ('development' == mode) {
-    app.use(asseton.development());
-    app.use(express.errorHandler());
     app.use('/web', express.static(path.join(__dirname, 'web')));
+    app.use(asseton.development());
 }
 if ('production' == mode) {
     app.use(asseton.production());
-    app.use(express.errorHandler());
 }
-
-// routing
 require('./routes')(app);
-app.use('/public', express.static(path.join(__dirname, 'public')));
+
 
 /*
  *  Error Handling
  */
+app.use(express.errorHandler()); //TODO: figure out what it really does when error hapens
 app.use(function (err, req, res, next) { //Log errors
     logger.error(err.stack);
     next(err);
@@ -76,5 +75,5 @@ app.use(function (err, req, res, next) { //Handle XHR errors
 });
 
 http.createServer(app).listen(app.get('port'), '127.0.0.1', function(){
-    logger.info('Favor server listening on port ' + app.get('port')) + ' in ' + mode;
+    logger.info('Favor server listening on port ' + app.get('port') + ' in ' + mode );
 });

@@ -1,5 +1,5 @@
-var store = require('../db');
-var logger = require('../logging').logger;
+var store = require('../lib/db');
+var logger = require('../lib/logging').logger;
 var util = require('../lib/util');
 var redis = store.redis;
 var mongodb = store.mongodb;
