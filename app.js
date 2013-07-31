@@ -40,24 +40,23 @@ app.use(express.session({
     store: sessionStore
 }));
 
+// routing
+app.use('/public', express.static(path.join(__dirname, 'public')));
 var mode = app.get('env') || 'development';
 if ('development' == mode) {
-    app.use(asseton.development());
-    app.use(express.errorHandler());
     app.use('/web', express.static(path.join(__dirname, 'web')));
+    app.use(asseton.development());
 }
 if ('production' == mode) {
     app.use(asseton.production());
-    app.use(express.errorHandler());
 }
-
-// routing
 require('./routes')(app);
-app.use('/public', express.static(path.join(__dirname, 'public')));
+
 
 /*
  *  Error Handling
  */
+app.use(express.errorHandler()); //TODO: figure out what it really does when error hapens
 app.use(function (err, req, res, next) { //Log errors
     logger.error(err.stack);
     next(err);
