@@ -269,11 +269,16 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         saveImageLinkSetting: function() {
             var imageLink = $('#imageLink').val();
+            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
             if (imageLink.length > 0) {
-                $('#fileName').html(imageLink);
-                $('#previewImg').attr('src', imageLink);
-                $('#myModal').modal('hide');
-                this.model.set("image", imageLink);
+                if (reg.test(imageLink)) {
+                    $('#fileName').html(imageLink);
+                    $('#previewImg').attr('src', imageLink);
+                    $('#myModal').modal('hide');
+                    this.model.set("image", imageLink);
+                } else {
+                    //Todo: need to show some message to users.
+                }
             }
         },
         changeShortDes: function() {
