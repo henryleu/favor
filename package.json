@@ -17,6 +17,7 @@
     "mongoose": "~3.6.15"
   },
   "devDependencies": {
+    "nodeunit": "~0.8.1",
     "grunt": "latest",
     "grunt-contrib-copy": "latest",
     "grunt-contrib-concat": "latest",
