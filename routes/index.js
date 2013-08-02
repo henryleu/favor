@@ -1,8 +1,6 @@
-var store = require('../lib/db');
 var logger = require('../lib/logging').logger;
 var util = require('../lib/util');
-var redis = store.redis;
-var mongodb = store.mongodb;
+var redis = require('../lib/redis');
 
 module.exports = function(app) {
     var checkUserToken = function(req, res, next) {
@@ -96,6 +94,7 @@ module.exports = function(app) {
         throw new Error('test error handling');
     });
     app.get('/snippet', function(req, res) {
+        req.session.lastAccessTime = new Date();
         res.render('snippet', {});
     });
 
