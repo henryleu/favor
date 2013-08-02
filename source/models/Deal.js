@@ -46,4 +46,4 @@ var DealSchema = new Schema({
 
 var Deal = mongoose.model('Deal', DealSchema);
 
-module.exports.Deal = Deal;
+module.exports = Deal;
