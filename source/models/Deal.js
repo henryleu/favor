@@ -1,4 +1,4 @@
-var mongoose = require('../../lib/mongoose').mongoose;
+var mongoose = require('../../lib/mongoose');
 
 var Schema = mongoose.Schema
     , ObjectId = Schema.ObjectId;
