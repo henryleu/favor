@@ -6,8 +6,8 @@ var Schema = mongoose.Schema
 var DealSchema = new Schema({
     "id":         Number
 
-    , "mv":     Number //document model version: the structure's version
-    , "dv":     Number //document version: the record's version
+    , "mv":     {type: Number, default: 0} //document model version: the structure's version
+    , "dv":     {type: Number, default: 0} //document version: the record's version
 
     //main image url
     , "image": String //"http://making-photos.b0.upaiyun.com/photos/2a7343fa66062c66c31586473124f009.jpg!normal",
@@ -32,10 +32,10 @@ var DealSchema = new Schema({
 
     //highly-frequently changed information which will be maintained in redis
     ///////////////////////////
-    , "views":  Number //"101"
-    , "likes":  Number //"96"
-    , "owns":   Number //"96"
-    , "deals":  Number //"2"
+    , "views":  {type: Number, default: 0} //"101"
+    , "likes":  {type: Number, default: 0} //"96"
+    , "owns":   {type: Number, default: 0} //"96"
+    , "deals":  {type: Number, default: 0} //"2"
     ///////////////////////////
 
     , createdBy:    { type: Number, ref: 'User' }

@@ -1,6 +1,7 @@
 var logger = require('../lib/logging').logger;
 var util = require('../lib/util');
 var redis = require('../lib/redis');
+var Deal = require('../source/models/Deal');
 
 module.exports = function(app) {
     var checkUserToken = function(req, res, next) {
@@ -99,8 +100,15 @@ module.exports = function(app) {
     });
 
     app.post('/deal', function(req, res) {
-        logger.debug(req.body);
-        var deal = JSON.parse(JSON.stringify(req.body));
+        var dealJson = JSON.parse(JSON.stringify(req.body));
+        logger.debug(dealJson);
+        var deal = new Deal();
+        deal.id = Date.now().toString();
+        deal.sDesc = dealJson.sDesc;
+        deal.lDesc = dealJson.lDesc;
+        deal.image = dealJson.image;
+        deal.createdOn = Date.now();
+        deal.save();
         logger.debug(deal);
     });
 
