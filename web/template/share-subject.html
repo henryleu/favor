@@ -23,8 +23,8 @@
         <div class="span12">
         <h4>信息详情：</h4>
         <hr>
-        <div class="row-fluid">
-            <label class="control-label span2 text-right" for="imageFile">商品图片</label>
+        <div class="row-fluid" id="localImageContainer">
+            <label class="control-label span2 text-right" for="imageFile">本地图片</label>
             <div class="span10">
                 <span class="btn fileinput-button span12">
                     <span id="fileName">选择本地图片...</span>
@@ -33,9 +33,23 @@
                 </span>
             </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid" id="useRemoteImageLink">
             <ul class="nav nav-list offset2 span10">
-                <li><a href="javascript: $('#myModal').modal('show');"><i class="icon-external-link"></i>使用远程图片...</a></li>
+                <li><a href="/share" id="useRemoteImage"><i class="icon-external-link"></i>使用图片链接...</a></li>
+            </ul>
+        </div>
+        <div class="row-fluid" id="remoteImageLinkContainer" hidden="true">
+            <label class="control-label span2 text-right" for="imageExtLink">图片链接</label>
+            <div class="span10">
+                <input class="span12" id="imageExtLink" type="text" placeholder="远程图片链接">
+            </div>
+            <div class="offset2 span10">
+                <small class="text-warning">-- 如果左侧的效果预览中没有正常显示你指定的图片，那么你指定的图片链接可能有问题。</small>
+            </div>
+        </div>
+        <div class="row-fluid" id="useLocalImageLink" hidden="true">
+            <ul class="nav nav-list offset2 span10">
+                <li><a href="/share" id="useLocalImage"><i class="icon-picture"></i>使用本地图片...</a></li>
             </ul>
         </div>
         <div class="row-fluid">
@@ -65,20 +79,4 @@
         </div>
     </div>
 </div>
-</div>
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-body">
-        <div class="row-fluid">
-        <h4 id="myModalLabel" class="control-label span12" for="imageLink">远程图片链接地址：</h4>
-        </div>
-        <div class="row-fluid">
-        <input class="span12" id="imageLink" type="text" placeholder="远程图片的完整链接">
-        </div>
-        <div class="row-fluid">
-        <div class="controls text-right">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-            <button id="saveImageLinkSetting" class="btn btn-primary">保存链接</button>
-        </div>
-        </div>
-    </div>
 </div>

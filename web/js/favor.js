@@ -230,11 +230,15 @@ define(['Spa', 'jQuery'], function(spa, $) {
     var ShareSubjectView = spa.View.extend({
         templateName: 'share-subject',
         events: {
+            'change #imageExtLink': 'changeImageExtLink',
             'change #dealLink': 'changeDealLink',
             'change #shortDes': 'changeShortDes',
             'change #longDes': 'changeLongDes',
+            'keyup #imageExtLink': 'changeImageExtLink',
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
+            'click #useRemoteImage': 'useRemoteImage',
+            'click #useLocalImage': 'useLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
             'click #clearDealInfo': 'clearDealInfo'
@@ -267,19 +271,22 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }
             this.model.set("dUrl", url);
         },
-        saveImageLinkSetting: function() {
-            var imageLink = $('#imageLink').val();
-            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
-            if (imageLink.length > 0) {
-                if (reg.test(imageLink)) {
-                    $('#fileName').html(imageLink);
-                    $('#previewImg').attr('src', imageLink);
-                    $('#myModal').modal('hide');
-                    this.model.set("image", imageLink);
-                } else {
-                    //Todo: need to show some message to users.
-                }
-            }
+        useRemoteImage: function() {
+            $('#remoteImageLinkContainer').show();
+            $('#useRemoteImageLink').hide();
+            $('#localImageContainer').hide();
+            $('#useLocalImageLink').show();
+        },
+        useLocalImage: function() {
+            $('#remoteImageLinkContainer').hide();
+            $('#useRemoteImageLink').show();
+            $('#localImageContainer').show();
+            $('#useLocalImageLink').hide();
+        },
+        changeImageExtLink: function() {
+            var imageURL = $('#imageExtLink').val();
+            $('#previewImg').attr('src', imageURL);
+            this.model.set("image", imageURL);
         },
         changeShortDes: function() {
             var sDesc = $('#shortDes').val();
