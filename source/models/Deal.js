@@ -1,9 +1,10 @@
 var mongoose = require('../../lib/mongoose');
-
+var Common = require('./Common');
 var Schema = mongoose.Schema
     , ObjectId = Schema.ObjectId;
 
-var DealSchema = new Schema({
+var schemeDef = Common.BS;
+var schema = new Schema({
     "id":         Number
 
     , "mv":     {type: Number, default: 0} //document model version: the structure's version
@@ -44,6 +45,6 @@ var DealSchema = new Schema({
 
 });
 
-var Deal = mongoose.model('Deal', DealSchema);
+var Model = mongoose.model('Deal', schema);
 
-module.exports = Deal;
+module.exports = Model;
