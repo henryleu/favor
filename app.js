@@ -13,7 +13,7 @@ app.enable('trust proxy');
 // all environments
 app.locals(settings.resources);
 app.set('port', process.env.PORT || 3020);
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/source/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 
@@ -36,7 +36,7 @@ if ('development' == mode) {
 if ('production' == mode) {
     app.use(asseton.production());
 }
-require('./routes')(app);
+require('./source/routes')(app);
 
 /*
  *  Error Handling
