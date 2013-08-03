@@ -1,7 +1,8 @@
 var mongoose = require('../../lib/mongoose');
-var Schema = mongoose.Schema;
-var schema = new Schema({
-    username: String
+var BaseSchema = require('./Common').BS;
+
+var schema = new BaseSchema({
+    username: {type: String, default: 'nousername'}
     , email: String
     , uid: String
 });
