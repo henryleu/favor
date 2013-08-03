@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var mongoose = require('mongoose');
 var logger = require('../../lib/logging').logger;
 var CommonProps = {
     ID: '_id',
@@ -27,22 +28,32 @@ var BaseOptions = {
     strict: true,
     versionKey: CommonProps.DOCUMENT_VERSION
 };
+var Schema = mongoose.Schema;
 
-var BaseSchemaProvider = function(){
-    this.schema = null;
-    this.schema = _.pick(CS, CP.ID, CP.MODEL_VERSION, CP.DOCUMENT_VERSION);
-    logger.debug(JSON.stringify(this.schema));
+var BaseSchema = function(definition){
+    var baseSchema = _.pick(CS, CP.ID, CP.MODEL_VERSION, CP.DOCUMENT_VERSION);
+    _.extend(baseSchema, definition);
+    _.extend(arguments[0], baseSchema);
+    logger.info(JSON.stringify(baseSchema));
+    Schema.apply(this, arguments);
 };
-BaseSchemaProvider.prototype.extend = function(){
-    return this;
-};
-BaseSchemaProvider.prototype.toSchema = function(){
-    return this.schema;
+BaseSchema.prototype.create = function(){
+    var baseSchema = _.pick(CS, CP.ID, CP.MODEL_VERSION, CP.DOCUMENT_VERSION);
+    switch (arguments.length) {
+        case 1:
+            return Schema.create.call(this, baseSchema, arguments[0]);
+        case 2:
+            _.extend(baseSchema, arguments[0]);
+            return Schema.create.call(this, baseSchema, arguments[1]);
+        default:
+            throw new YAMLException('Wrong number of arguments for Schema.create function');
+    }
+    return schema;
 };
 
 module.exports = {
     CP: CP,
     CS: CS,
     BO: BaseOptions,
-    BS: new BaseSchemaProvider().toSchema()
+    BS: BaseSchema
 };
