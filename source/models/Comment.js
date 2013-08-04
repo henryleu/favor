@@ -12,4 +12,4 @@ var schema = SchemaBuilder
     .build();
 
 module.exports.schema = schema;
-module.exports.model = mongoose.model('Comment', schema);
+module.exports.model = mongoose.model('Comment', schema); //basically, do not use it because it is sub schema
