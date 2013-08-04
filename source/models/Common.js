@@ -64,9 +64,9 @@ SchemaBuilder.prototype.withDocumentVersion = function(){ this.setStockProperty(
 SchemaBuilder.prototype.withModelVersion = function(){ this.setStockProperty(CP.MODEL_VERSION); return this;};
 SchemaBuilder.prototype.withLifeFlag = function(){ this.setStockProperty(CP.LIFE_FLAG); return this;};
 SchemaBuilder.prototype.withCreatedBy = function(){this.setStockProperty(CP.CREATED_BY); return this;};
-SchemaBuilder.prototype.withCreateOn = function(){this.setStockProperty(CP.CREATED_ON); return this;};
+SchemaBuilder.prototype.withCreatedOn = function(){this.setStockProperty(CP.CREATED_ON); return this;};
 SchemaBuilder.prototype.withUpdatedBy = function(){this.setStockProperty(CP.UPDATED_BY); return this;};
-SchemaBuilder.prototype.withUpdateOn = function(){this.setStockProperty(CP.UPDATED_ON); return this;};
+SchemaBuilder.prototype.withUpdatedOn = function(){this.setStockProperty(CP.UPDATED_ON); return this;};
 
 module.exports = {
     SchemaBuilder: SchemaBuilder
