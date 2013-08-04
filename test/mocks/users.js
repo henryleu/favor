@@ -1,11 +1,9 @@
 module.exports = [{
-    "id": 0,
-    "_mv": 0, //document model version: the structure's version
-    "_dv": 0, //document version: the record's version
-    'username': 'henryleu'
+    "_id": 0,
+    'username': 'henryleu',
+    "email": 'henrylyu@gmail.com'
 },{
-    "id": 1,
-    "_mv": 0, //document model version: the structure's version
-    "_dv": 0, //document version: the record's version
-    'username': 'riversyang'
+    "_id": 1,
+    'username': 'riversyang',
+    "email": 'riversyang@gmail.com'
 }];

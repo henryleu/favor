@@ -1,11 +1,15 @@
 var mongoose = require('../../lib/mongoose');
-var BaseSchema = require('./Common').BS;
-
-var schema = new BaseSchema({
-    username: {type: String, default: 'nousername'}
-    , email: String
-    , uid: String
-});
+var SchemaBuilder = require('./Common').SchemaBuilder;
+var schema = SchemaBuilder
+    .i()
+    .withBase()
+    .withCreateOn()
+    .withProperties({
+        username: {type: String, default: 'nousername'}
+        , email: String
+        , uid: String
+    })
+    .build();
 
 var Model = mongoose.model('User', schema);
 
