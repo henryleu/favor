@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var mongoose = require('mongoose');
 var logger = require('../../lib/logging').logger;
+var Schema = mongoose.Schema;
 var CommonProps = {
     ID: '_id',
     MODEL_VERSION: '_mv',
@@ -14,46 +15,59 @@ var CommonProps = {
 var CP = CommonProps;
 
 var CommonSchema = {};
+var CS = CommonSchema;
 CommonSchema[CommonProps.ID] = Number;
 CommonSchema[CommonProps.MODEL_VERSION] = {type: Number, default: 0};
 CommonSchema[CommonProps.DOCUMENT_VERSION] = {type: Number, default: 0};
-CommonSchema[CommonProps.LIFE_FLAG] = {type: Number, default: 0};
-CommonSchema[CommonProps.CREATED_BY] = {type: Number, ref: 'User'};
+CommonSchema[CommonProps.LIFE_FLAG] = {type: Number, default: 0};//INFO: 0: active; 1: inactive; 2: deleted;
+CommonSchema[CommonProps.CREATED_BY] = {type: Number, ref: 'User', default: null};
 CommonSchema[CommonProps.CREATED_ON] = {type: Date, default: null};
-CommonSchema[CommonProps.UPDATED_BY] = {type: Number, ref: 'User'};
+CommonSchema[CommonProps.UPDATED_BY] = {type: Number, ref: 'User', default: null};
 CommonSchema[CommonProps.UPDATED_ON] = {type: Date, default: null};
-var CS = CommonSchema;
 
 var BaseOptions = {
+    //safe: {}, //TODO: it is important option which need to be specified carefully later.
     strict: true,
     versionKey: CommonProps.DOCUMENT_VERSION
 };
-var Schema = mongoose.Schema;
 
-var BaseSchema = function(definition){
-    var baseSchema = _.pick(CS, CP.ID, CP.MODEL_VERSION, CP.DOCUMENT_VERSION);
-    _.extend(baseSchema, definition);
-    _.extend(arguments[0], baseSchema);
-    logger.info(JSON.stringify(baseSchema));
-    Schema.apply(this, arguments);
+var SchemaBuilder = function(){
+    this.properties = {}
+    this.options = {};
 };
-BaseSchema.prototype.create = function(){
-    var baseSchema = _.pick(CS, CP.ID, CP.MODEL_VERSION, CP.DOCUMENT_VERSION);
-    switch (arguments.length) {
-        case 1:
-            return Schema.create.call(this, baseSchema, arguments[0]);
-        case 2:
-            _.extend(baseSchema, arguments[0]);
-            return Schema.create.call(this, baseSchema, arguments[1]);
-        default:
-            throw new YAMLException('Wrong number of arguments for Schema.create function');
-    }
-    return schema;
+SchemaBuilder.i = function(){
+    return new SchemaBuilder();
 };
+SchemaBuilder.baseProperties = _.pick(CS, CP.ID, CP.DOCUMENT_VERSION);
+SchemaBuilder.baseOptions = BaseOptions;
+SchemaBuilder.prototype.withBase = function(){
+    _.extend(this.properties, SchemaBuilder.baseProperties); //Append base properties' definition
+    _.extend(this.options, SchemaBuilder.baseOptions); //Append base options' definition
+    return this;
+};
+SchemaBuilder.prototype.withProperties = function(props){
+    _.extend(this.properties, props);
+    return this;
+};
+SchemaBuilder.prototype.withOptions = function(options){
+    _.extend(this.options, options);
+    return this;
+};
+SchemaBuilder.prototype.build = function(){
+    return new Schema(this.properties, this.options);
+};
+SchemaBuilder.prototype.setStockProperty = function(propName){
+    this.properties[propName] = CS[propName];
+};
+SchemaBuilder.prototype.withId = function(){ this.setStockProperty(CP.ID); return this;};
+SchemaBuilder.prototype.withDocumentVersion = function(){ this.setStockProperty(CP.DOCUMENT_VERSION); return this;};
+SchemaBuilder.prototype.withModelVersion = function(){ this.setStockProperty(CP.MODEL_VERSION); return this;};
+SchemaBuilder.prototype.withLifeFlag = function(){ this.setStockProperty(CP.LIFE_FLAG); return this;};
+SchemaBuilder.prototype.withCreatedBy = function(){this.setStockProperty(CP.CREATED_BY); return this;};
+SchemaBuilder.prototype.withCreateOn = function(){this.setStockProperty(CP.CREATED_ON); return this;};
+SchemaBuilder.prototype.withUpdatedBy = function(){this.setStockProperty(CP.UPDATED_BY); return this;};
+SchemaBuilder.prototype.withUpdateOn = function(){this.setStockProperty(CP.UPDATED_ON); return this;};
 
 module.exports = {
-    CP: CP,
-    CS: CS,
-    BO: BaseOptions,
-    BS: BaseSchema
+    SchemaBuilder: SchemaBuilder
 };
