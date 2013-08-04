@@ -1,7 +1,7 @@
 module.exports = [{
-    "id": 0,
-    "_mv": 0, //document model version: the structure's version
-    "_dv": 0, //document version: the record's version
+    "_id": 0,
+    "_mv": 1, //document model version: the structure's version
+    "_dv": 2, //document version: the record's version
 
     //main image url
     "image": "http://making-photos.b0.upaiyun.com/photos/2a7343fa66062c66c31586473124f009.jpg!normal",
@@ -28,9 +28,9 @@ module.exports = [{
     //long description as detailed product information
     "lDesc": "Jawbone UP 2nd Generation - 你的生活小秘书, Jawbone UP 2nd Generation - 你的生活小秘书",
 }, {
-    "id": 1,
+    "_id": 1,
     "_mv": 0, //document model version: the structure's version
-    "_dv": 0, //document version: the record's version
+    "_dv": 3, //document version: the record's version
 
     //main image url
     "image": "http://making-photos.b0.upaiyun.com/photos/2a7343fa66062c66c31586473124f009.jpg!normal",
