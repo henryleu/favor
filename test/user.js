@@ -1,4 +1,4 @@
-var User = require('../source/models/User');
+var User = require('../source/models/User').model;
 var mongoose = require('../lib/mongoose');
 var logger = require('../lib/logging').logger;
 var list = require('./mocks/users');

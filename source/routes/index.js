@@ -1,7 +1,7 @@
 var logger = require('../../lib/logging').logger;
 var util = require('../../lib/util');
 var redis = require('../../lib/redis');
-var Deal = require('../models/Deal');
+var Deal = require('../models/Deal').model;
 
 module.exports = function(app) {
     var checkUserToken = function(req, res, next) {

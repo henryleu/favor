@@ -1,13 +1,11 @@
 var mongoose = require('../../lib/mongoose');
 var SchemaBuilder = require('./Common').SchemaBuilder;
-var Schema = mongoose.Schema
-    , ObjectId = Schema.ObjectId;
-
+var Comment = require('./Comment').schema;
 var schema = SchemaBuilder
     .i()
     .withBase()
     .withCreatedBy()
-    .withCreateOn()
+    .withCreatedOn()
     .withProperties({
         //main image url
         "image": String //"http://making-photos.b0.upaiyun.com/photos/2a7343fa66062c66c31586473124f009.jpg!normal",
@@ -31,15 +29,15 @@ var schema = SchemaBuilder
         , "lDesc": String //"Jawbone UP 2nd Generation - 你的生活小秘书, Jawbone UP 2nd Generation - 你的生活小秘书"
 
         //the highly-frequently changed information which will be maintained in redis later
-        ///////////////////////////
-        , "views":  {type: Number, default: 0} //"101"
-        , "likes":  {type: Number, default: 0} //"96"
-        , "owns":   {type: Number, default: 0} //"96"
-        , "deals":  {type: Number, default: 0} //"2"
-        ///////////////////////////
+        , "meta": {
+              "views":  {type: Number, default: 0} //value of how many times user view it
+            , "likes":  {type: Number, default: 0} //value of how many users like it
+            , "owns":   {type: Number, default: 0} //value of how many users have owned it now matter where they bought from
+            , "deals":  {type: Number, default: 0} //value of how many deals users have bought it from this site
+        }
+        , "comments": [Comment]
     })
     .build();
 
-var Model = mongoose.model('Deal', schema);
-
-module.exports = Model;
+module.exports.schema = schema;
+module.exports.model = mongoose.model('Deal', schema);

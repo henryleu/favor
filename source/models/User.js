@@ -3,7 +3,7 @@ var SchemaBuilder = require('./Common').SchemaBuilder;
 var schema = SchemaBuilder
     .i()
     .withBase()
-    .withCreateOn()
+    .withCreatedOn()
     .withProperties({
         username: {type: String, default: 'nousername'}
         , email: String
@@ -11,6 +11,5 @@ var schema = SchemaBuilder
     })
     .build();
 
-var Model = mongoose.model('User', schema);
-
-module.exports = Model;
+module.exports.schema = schema;
+module.exports.model = mongoose.model('User', schema);

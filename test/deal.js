@@ -1,4 +1,4 @@
-var Deal = require('../source/models/Deal');
+var Deal = require('../source/models/Deal').model;
 var mongoose = require('../lib/mongoose');
 var logger = require('../lib/logging').logger;
 var list = require('./mocks/deals');
