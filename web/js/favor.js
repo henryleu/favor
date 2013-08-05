@@ -38,7 +38,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 prerendered: true,
                 model: this.model.hottest
             });
-            this.selfrunLargeIconsView = new CatalogListLargeIconsView({
+            this.selfrunLargeIconsView = new WaterfallView({
                 vid: 'catalog-selfrun',
                 spa: this.spa,
                 prerendered: true,
@@ -72,7 +72,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
     });
 
     var Favor = spa.extend({
-        //templates: ['catalog', 'large-icons', 'medium-icons', 'list-items', 'share-subject'],
         routes: {
             "catalog-newest": "catalogNewest",
             "catalog-hottest": "catalogHottest",
@@ -221,6 +220,10 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }
             return view;
         }
+    });
+
+    var WaterfallView = spa.View.extend({
+        templateName: 'waterfall'
     });
 
     var CatalogListLargeIconsView = spa.View.extend({
