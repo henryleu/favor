@@ -1,0 +1,17 @@
+<ul>
+<% _.each(input, function(item, index) { %>
+    <li class="thing">
+        <a target="_blank">
+            <img alt="<%=item.title%>" src="<%=item.imageUrl%>">
+        </a>
+        <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.title%>"><%=item.title%></h4>
+        <p>
+            <span class="fanciers">
+            <i class="icon-heart"></i> <span class="fanciers_count">105</span>
+            </span>
+            <span class="owners">
+                <i class="icon-check"></i> <span class="owners_count">21</span>
+            </span>
+        </p>
+<% }); %>
+</ul>

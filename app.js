@@ -3,19 +3,9 @@ var express = require('express')
     , path = require('path')
     , engine = require('ejs-locals')
     , settings = require('./settings')
-    , asseton = require('./lib/asseton')
-    , db = require('./lib/db');
+    , asseton = require('./lib/asseton');
 
 var app = module.exports = express();
-var sessionStore = null;
-if(settings.session.storeType == 'mongo'){
-    var MongoStore = require('connect-mongo')(express);
-    sessionStore = new MongoStore({db: db.mongodb});
-}
-else if(settings.session.storeType == 'redis'){
-    var RedisStore = require('connect-redis')(express);
-    sessionStore = new RedisStore({client : db.redis});
-}
 
 //some common configuration
 app.enable('trust proxy');
@@ -23,7 +13,7 @@ app.enable('trust proxy');
 // all environments
 app.locals(settings.resources);
 app.set('port', process.env.PORT || 3020);
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/source/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 
@@ -34,24 +24,19 @@ app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(settings.cookieSecret));
-app.use(express.session({
-    //cookie: {maxAge: 60000 * 20}, // 20 minutes
-    secret: settings.cookieSecret,
-    store: sessionStore
-}));
+app.use(require('./lib/session')(express)); //set session middle-ware
 
 // routing
-app.use('/public', express.static(path.join(__dirname, 'public')));
 var mode = app.get('env') || 'development';
 if ('development' == mode) {
+    app.use('/public', express.static(path.join(__dirname, 'public')));
     app.use('/web', express.static(path.join(__dirname, 'web')));
     app.use(asseton.development());
 }
 if ('production' == mode) {
     app.use(asseton.production());
 }
-require('./routes')(app);
-
+require('./source/routes')(app);
 
 /*
  *  Error Handling

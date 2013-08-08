@@ -12,13 +12,13 @@ module.exports = {
         host: 'localhost',
         port: 6379
     },
-    logging: {
-        reloadSecs: 300,
-        level: 'DEBUG'
-    },
     session: {
         storeType: 'redis',
         expires: 60 // minutes
+    },
+    logging: {
+        reloadSecs: 0, //INFO: set 0 could let nodeunit tests which use log4js exit properly
+        level: 'DEBUG'
     },
     resources: {
         appName: '爱萌范儿',
