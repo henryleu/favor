@@ -24,7 +24,7 @@ app.use(logging.applogger);
 app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.cookieParser(settings.cookieSecret));
+app.use(express.cookieParser(settings.secretKey));
 app.use(require('./lib/session')(express)); //set session middle-ware
 
 // routing
