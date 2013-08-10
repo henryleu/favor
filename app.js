@@ -3,6 +3,7 @@ var express = require('express')
     , path = require('path')
     , engine = require('ejs-locals')
     , settings = require('./settings')
+    , security = require('./lib/security')
     , asseton = require('./lib/asseton');
 
 var app = module.exports = express();
@@ -27,6 +28,8 @@ app.use(express.cookieParser(settings.cookieSecret));
 app.use(require('./lib/session')(express)); //set session middle-ware
 
 // routing
+app.use(security); //security checking including auto-sign-up and authentication
+
 var mode = app.get('env') || 'development';
 if ('development' == mode) {
     app.use('/public', express.static(path.join(__dirname, 'public')));
