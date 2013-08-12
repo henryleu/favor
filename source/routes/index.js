@@ -110,6 +110,7 @@ module.exports = function(app) {
         deal.createdOn = Date.now();
         deal.save();
         logger.debug(deal);
+        res.json(200, deal);
     });
 
 };

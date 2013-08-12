@@ -303,10 +303,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         publishDealInfo: function() {
             console.log(JSON.stringify(this.model));
-            this.model.save({error: function(model, xhr, options) {
-                console.log(JSON.stringify(model));
-                console.log(xhr);
-            }});
+            Backbone.sync('create', this.model, {
+                error: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    console.log(flag);
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    console.log(flag);
+                    $('#successMsg').show();
+                }
+            });
             this.clearDealInfo();
         },
         clearDealInfo: function() {
