@@ -238,12 +238,13 @@ define(['Spa', 'jQuery'], function(spa, $) {
         templateName: 'share-subject',
         events: {
             'change #imageExtLink': 'changeImageExtLink',
-            'change #dealLink': 'changeDealLink',
             'change #shortDes': 'changeShortDes',
             'change #longDes': 'changeLongDes',
+            'change #dealLink': 'changeDealLink',
             'keyup #imageExtLink': 'changeImageExtLink',
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
+            'keyup #dealLink': 'changeDealLink',
             'click #useRemoteImage': 'useRemoteImage',
             'click #useLocalImage': 'useLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
@@ -263,20 +264,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 done: function (e, data) {
                     var imageURL = '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
-                    console.log("model content: " + JSON.stringify(model));
+                    console.log('model content: ' + JSON.stringify(model));
                     model.set('image', imageURL);
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
-        },
-        changeDealLink: function() {
-            var url = $('#dealLink').val();
-            if (url.length > 0) {
-                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
-            } else {
-                $('#previewLink').attr('href', '/share');
-            }
-            this.model.set('dUrl', url);
         },
         useRemoteImage: function() {
             $('#remoteImageLinkContainer').show();
@@ -291,27 +283,77 @@ define(['Spa', 'jQuery'], function(spa, $) {
             $('#useLocalImageLink').hide();
         },
         changeImageExtLink: function() {
+            //Regular expression for test user input url of image
+            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
+
             var imageURL = $('#imageExtLink').val();
-            $('#previewImg').attr('src', imageURL);
-            this.model.set('image', imageURL);
+            var isValidURL = false;
+            if (reg.test(imageURL)) {
+                isValidURL = true;
+            }
+            if (isValidURL) {
+                $('#previewImg').attr('src', imageURL);
+                this.model.set('image', imageURL);
+                $('#remoteImageLinkContainer').removeClass('error');
+            } else {
+                $('#remoteImageLinkContainer').addClass('error');
+            }
         },
         changeShortDes: function() {
             var sDesc = $('#shortDes').val();
-            $('#previewSDes').html(sDesc);
-            this.model.set('sDesc', sDesc);
+            if (sDesc.length > 0) {
+                $('#previewSDes').html(sDesc);
+                this.model.set('sDesc', sDesc);
+                $('#shortDesContainer').removeClass('error');
+            } else {
+                $('#shortDesContainer').addClass('error');
+            }
         },
         changeLongDes: function() {
             var lDesc = $('#longDes').val();
-            $('#previewLDes').html(lDesc);
-            this.model.set('lDesc', lDesc);
+            if (lDesc.length > 0) {
+                $('#previewLDes').html(lDesc);
+                this.model.set('lDesc', lDesc);
+                $('#longDesContainer').removeClass('error');
+            } else {
+                $('#longDesContainer').addClass('error');
+            }
+        },
+        changeDealLink: function() {
+            //Regular expression for test user input url of image
+            var reg = /^(http|https):\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*$/;
+
+            var url = $('#dealLink').val();
+            if (reg.test(url)) {
+                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
+                this.model.set('dUrl', url);
+                $('#dealLinkContainer').removeClass('error');
+            } else {
+                $('#previewLink').attr('href', '/share');
+                $('#dealLinkContainer').addClass('error');
+            }
         },
         publishDealInfo: function() {
-            if (!($('#previewImg').attr('src').length > 0 &&
-                $('#shortDes').val().length > 0 &&
-                $('#longDes').val().length > 0 &&
-                $('#dealLink').val().length > 0)) {
-                return;
+            var errFlag = false;
+            if (!($('#imageExtLink').val().length > 0)) {
+                $('#remoteImageLinkContainer').addClass('error');
+                errFlag = true;
             }
+            if (!($('#shortDes').val().length > 0)) {
+                $('#shortDesContainer').addClass('error');
+                errFlag = true;
+            }
+            if (!($('#longDes').val().length > 0)) {
+                $('#longDesContainer').addClass('error');
+                errFlag = true;
+            }
+            if (!($('#dealLink').val().length > 0)) {
+                $('#dealLinkContainer').addClass('error');
+                errFlag = true;
+            }
+            if (errFlag) return;
+            console.log($('.error').length);
+            if ($('.error').length > 0) return;
             console.log(JSON.stringify(this.model));
             Backbone.sync('create', this.model, {
                 error: function(response, flag) {
@@ -336,6 +378,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             $('#longDes').val('');
             $('#dealLink').val('');
             $('#previewImg').attr('src', '#');
+            $('#previewLink').attr('href', '/share');
         }
     });
 
