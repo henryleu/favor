@@ -100,18 +100,31 @@ module.exports = function(app) {
     });
 
     app.post('/deal', function(req, res) {
-        var dealJson = JSON.parse(JSON.stringify(req.body));
-        logger.debug(dealJson);
+        var dealInfo = JSON.parse(JSON.stringify(req.body));
+        logger.debug(dealInfo);
         var deal = new Deal();
         deal.dealId = req.cookies.userToken + Date.now().toString();
-        deal.sDesc = dealJson.sDesc;
-        deal.lDesc = dealJson.lDesc;
-        deal.image = dealJson.image;
+        deal.image = dealInfo.image;
+        deal.sDesc = dealInfo.sDesc;
+        deal.lDesc = dealInfo.lDesc;
+        deal.dUrl = dealInfo.dUrl;
         deal.crtOn = Date.now();
         deal.crtBy = req.cookies.userToken;
         deal.save();
         logger.debug(deal);
         res.json(200, deal);
+    });
+
+    app.get('/deal/:id', function(req, res) {
+        Deal.findOne({'dealId': req.params.id}, function(err, deal) {
+            if (err) {
+                logger.error(err);
+                res.json(500, {'error': err.toString()});
+                return;
+            }
+            res.json(200, deal);
+        });
+
     });
 
 };

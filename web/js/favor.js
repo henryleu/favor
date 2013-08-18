@@ -1,6 +1,6 @@
 define(['Spa', 'jQuery'], function(spa, $) {
     var Deal = spa.Model.extend({
-        urlRoot: 'deal'
+        urlRoot: '/deal'
     });
 
     var NewestCatalog = spa.Collection.extend({
@@ -147,15 +147,21 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         share: function(viewName, id){
             var view = this.views[viewName];
-            if(!view){
+            if (!view && id == null) {
+                //When first access
                 var deal = new Deal();
+                deal.id = '0';
+                deal.sDesc = 'test';
                 view = new ShareSubjectView({spa: this, model:deal, modelDriven: false});
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
+            } else {
+
             }
             if(!(id == null)) {
                 console.log('Share dealId=' + id);
+                view.loadDealInfo(id);
                 view.useRemoteImage();
             }
         },
@@ -236,6 +242,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
 
     var ShareSubjectView = spa.View.extend({
         templateName: 'share-subject',
+        prerendered: true,
         events: {
             'change #imageExtLink': 'changeImageExtLink',
             'change #shortDes': 'changeShortDes',
@@ -251,8 +258,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'click #publishDealInfo': 'publishDealInfo',
             'click #clearDealInfo': 'clearDealInfo'
         },
+        configure: function() {
+            //Todo: add initialize process for model
+        },
         afterRender: function() {
             var model = this.model;
+            model.set('image', '');
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: '/files/',
@@ -264,8 +275,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 done: function (e, data) {
                     var imageURL = '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
-                    console.log('model content: ' + JSON.stringify(model));
                     model.set('image', imageURL);
+                    $('#localImageContainer').removeClass('error');
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -335,8 +346,10 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         publishDealInfo: function() {
             var errFlag = false;
-            if (!($('#imageExtLink').val().length > 0)) {
+            var imageURL = this.model.get('image');
+            if (imageURL.length == 0) {
                 $('#remoteImageLinkContainer').addClass('error');
+                //$('#localImageContainer').addClass('error');
                 errFlag = true;
             }
             if (!($('#shortDes').val().length > 0)) {
@@ -379,6 +392,40 @@ define(['Spa', 'jQuery'], function(spa, $) {
             $('#dealLink').val('');
             $('#previewImg').attr('src', '#');
             $('#previewLink').attr('href', '/share');
+        },
+        loadDealInfo: function(dealId) {
+            this.model.id = dealId;
+            var model = this.model;
+            Backbone.sync('read', this.model, {
+                error: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    console.log(flag);
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    console.log(flag);
+                    JSON.parse(JSON.stringify(response), function(key, value) {
+                        switch(key) {
+                            case 'image':
+                                $('#imageExtLink').val(value);
+                                break;
+                            case 'sDesc':
+                                $('#shortDes').val(value);
+                                break;
+                            case 'lDesc':
+                                $('#longDes').val(value);
+                                break;
+                            case 'dUrl':
+                                $('#dealLink').val(value);
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    $('#successMsg').hide();
+                }
+            });
         }
     });
 
