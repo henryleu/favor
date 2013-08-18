@@ -2,11 +2,11 @@
 <br>
 <div id="successMsg" class="alert alert-success" hidden="true">
     <button type="button" class="close" onclick="javascript: $('#successMsg').hide();">&times;</button>
-    <strong>分享成功!</strong>  你可以马上<a href="/share">查看</a>或者<a href="/share">修改</a>刚刚分享的信息。
+    <strong>分享成功!</strong>&nbsp;&nbsp;<span>你可以<a id="viewDeal" href="/share">&lt查看&gt</a>或者<a id="editDeal" href="/share">&lt修改&gt</a>刚刚分享的信息。</span>
 </div>
 <div id="errorMsg" class="alert alert-error" hidden="true">
     <button type="button" class="close" onclick="javascript: $('#errorMsg').hide();">&times;</button>
-    <strong>分享失败!</strong>  抱歉，上传数据时发生错误，请稍后再试。
+    <strong>分享失败!</strong>&nbsp;&nbsp;<span>抱歉，上传数据时发生错误，请稍后再试。</span>
 </div>
 </div>
 <div class="row-fluid">
@@ -52,7 +52,7 @@
                 <input class="span12" id="imageExtLink" type="text" placeholder="远程图片链接">
             </div>
             <div class="offset2 span10">
-                <small class="text-warning">-- 如果左侧的效果预览中没有正常显示你指定的图片，那么你指定的图片链接可能有问题。</small>
+                <small class="text-warning"><i class="icon-warning-sign"></i> 如果左侧的效果预览中没有正常显示你指定的图片，那么你指定的图片链接可能有问题。</small>
             </div>
         </div>
         <div class="row-fluid" id="useLocalImageLink" hidden="true">

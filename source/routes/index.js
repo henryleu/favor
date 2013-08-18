@@ -103,11 +103,12 @@ module.exports = function(app) {
         var dealJson = JSON.parse(JSON.stringify(req.body));
         logger.debug(dealJson);
         var deal = new Deal();
-        deal.id = Date.now().toString();
+        deal.dealId = req.cookies.userToken + Date.now().toString();
         deal.sDesc = dealJson.sDesc;
         deal.lDesc = dealJson.lDesc;
         deal.image = dealJson.image;
-        deal.createdOn = Date.now();
+        deal.crtOn = Date.now();
+        deal.crtBy = req.cookies.userToken;
         deal.save();
         logger.debug(deal);
         res.json(200, deal);

@@ -145,7 +145,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         home: function(viewName){
         },
-        share: function(viewName){
+        share: function(viewName, id){
             var view = this.views[viewName];
             if(!view){
                 var deal = new Deal();
@@ -153,6 +153,10 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
+            }
+            if(!(id == null)) {
+                console.log('Share dealId=' + id);
+                view.useRemoteImage();
             }
         },
         find: function(viewName){
@@ -260,7 +264,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     var imageURL = '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
                     console.log("model content: " + JSON.stringify(model));
-                    model.set("image", imageURL);
+                    model.set('image', imageURL);
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -272,7 +276,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             } else {
                 $('#previewLink').attr('href', '/share');
             }
-            this.model.set("dUrl", url);
+            this.model.set('dUrl', url);
         },
         useRemoteImage: function() {
             $('#remoteImageLinkContainer').show();
@@ -289,19 +293,25 @@ define(['Spa', 'jQuery'], function(spa, $) {
         changeImageExtLink: function() {
             var imageURL = $('#imageExtLink').val();
             $('#previewImg').attr('src', imageURL);
-            this.model.set("image", imageURL);
+            this.model.set('image', imageURL);
         },
         changeShortDes: function() {
             var sDesc = $('#shortDes').val();
             $('#previewSDes').html(sDesc);
-            this.model.set("sDesc", sDesc);
+            this.model.set('sDesc', sDesc);
         },
         changeLongDes: function() {
             var lDesc = $('#longDes').val();
             $('#previewLDes').html(lDesc);
-            this.model.set("lDesc", lDesc);
+            this.model.set('lDesc', lDesc);
         },
         publishDealInfo: function() {
+            if (!($('#previewImg').attr('src').length > 0 &&
+                $('#shortDes').val().length > 0 &&
+                $('#longDes').val().length > 0 &&
+                $('#dealLink').val().length > 0)) {
+                return;
+            }
             console.log(JSON.stringify(this.model));
             Backbone.sync('create', this.model, {
                 error: function(response, flag) {
@@ -312,13 +322,20 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 success: function(response, flag) {
                     console.log(JSON.stringify(response));
                     console.log(flag);
+                    var deal = JSON.parse(JSON.stringify(response));
+                    console.log(deal.dealId);
+                    $('#editDeal').attr('href', '/share/' + deal.dealId);
                     $('#successMsg').show();
                 }
             });
             this.clearDealInfo();
         },
         clearDealInfo: function() {
-
+            $('#imageExtLink').val('');
+            $('#shortDes').val('');
+            $('#longDes').val('');
+            $('#dealLink').val('');
+            $('#previewImg').attr('src', '#');
         }
     });
 
