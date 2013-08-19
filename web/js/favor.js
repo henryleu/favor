@@ -1,6 +1,12 @@
 define(['Spa', 'jQuery'], function(spa, $) {
     var Deal = spa.Model.extend({
-        urlRoot: '/deal'
+        urlRoot: '/deal',
+        defaults: {
+            'image': '',
+            'sDesc': '',
+            'lDesc': '',
+            'dUrl': ''
+        }
     });
 
     var NewestCatalog = spa.Collection.extend({
@@ -147,22 +153,15 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         share: function(viewName, id){
             var view = this.views[viewName];
-            if (!view && id == null) {
+            if (!view) {
                 //When first access
-                var deal = new Deal();
-                deal.id = '0';
-                deal.sDesc = 'test';
-                view = new ShareSubjectView({spa: this, model:deal, modelDriven: false});
+                view = new ShareSubjectView({spa: this, modelDriven: false});
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
-            } else {
-
             }
             if(!(id == null)) {
-                console.log('Share dealId=' + id);
                 view.loadDealInfo(id);
-                view.useRemoteImage();
             }
         },
         find: function(viewName){
@@ -244,26 +243,24 @@ define(['Spa', 'jQuery'], function(spa, $) {
         templateName: 'share-subject',
         prerendered: true,
         events: {
-            'change #imageExtLink': 'changeImageExtLink',
+            'change #imageURL': 'changeImageURL',
             'change #shortDes': 'changeShortDes',
             'change #longDes': 'changeLongDes',
             'change #dealLink': 'changeDealLink',
-            'keyup #imageExtLink': 'changeImageExtLink',
+            'keyup #imageURL': 'changeImageURL',
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
             'keyup #dealLink': 'changeDealLink',
-            'click #useRemoteImage': 'useRemoteImage',
-            'click #useLocalImage': 'useLocalImage',
+            'click #uploadLocalImage': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
             'click #clearDealInfo': 'clearDealInfo'
         },
         configure: function() {
-            //Todo: add initialize process for model
+            this.model = new Deal();
         },
         afterRender: function() {
-            var model = this.model;
-            model.set('image', '');
+            var thisView = this;
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: '/files/',
@@ -273,31 +270,23 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     data.submit();
                 },
                 done: function (e, data) {
-                    var imageURL = '/files/' + data.files[0].name;
+                    var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
-                    model.set('image', imageURL);
-                    $('#localImageContainer').removeClass('error');
+                    $('#imageURL').val(imageURL);
+                    thisView.model.set('image', imageURL);
+                    $('#imageURLContainer').removeClass('error');
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
         },
-        useRemoteImage: function() {
-            $('#remoteImageLinkContainer').show();
-            $('#useRemoteImageLink').hide();
-            $('#localImageContainer').hide();
-            $('#useLocalImageLink').show();
+        uploadLocalImage: function() {
+            $('#imageFile').click();
         },
-        useLocalImage: function() {
-            $('#remoteImageLinkContainer').hide();
-            $('#useRemoteImageLink').show();
-            $('#localImageContainer').show();
-            $('#useLocalImageLink').hide();
-        },
-        changeImageExtLink: function() {
+        changeImageURL: function() {
             //Regular expression for test user input url of image
             var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
 
-            var imageURL = $('#imageExtLink').val();
+            var imageURL = $('#imageURL').val();
             var isValidURL = false;
             if (reg.test(imageURL)) {
                 isValidURL = true;
@@ -305,9 +294,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
             if (isValidURL) {
                 $('#previewImg').attr('src', imageURL);
                 this.model.set('image', imageURL);
-                $('#remoteImageLinkContainer').removeClass('error');
+                $('#imageURLContainer').removeClass('error');
             } else {
-                $('#remoteImageLinkContainer').addClass('error');
+                $('#imageURLContainer').addClass('error');
             }
         },
         changeShortDes: function() {
@@ -345,29 +334,21 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }
         },
         publishDealInfo: function() {
-            var errFlag = false;
-            var imageURL = this.model.get('image');
-            if (imageURL.length == 0) {
-                $('#remoteImageLinkContainer').addClass('error');
-                //$('#localImageContainer').addClass('error');
-                errFlag = true;
+            if ($('#imageURL').val().length == 0) {
+                $('#imageURLContainer').addClass('error');
             }
             if (!($('#shortDes').val().length > 0)) {
                 $('#shortDesContainer').addClass('error');
-                errFlag = true;
             }
             if (!($('#longDes').val().length > 0)) {
                 $('#longDesContainer').addClass('error');
-                errFlag = true;
             }
             if (!($('#dealLink').val().length > 0)) {
                 $('#dealLinkContainer').addClass('error');
-                errFlag = true;
             }
-            if (errFlag) return;
-            console.log($('.error').length);
             if ($('.error').length > 0) return;
             console.log(JSON.stringify(this.model));
+            var thisView = this;
             Backbone.sync('create', this.model, {
                 error: function(response, flag) {
                     console.log(JSON.stringify(response));
@@ -375,6 +356,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     $('#errorMsg').show();
                 },
                 success: function(response, flag) {
+                    thisView.clearDealInfo();
                     console.log(JSON.stringify(response));
                     console.log(flag);
                     var deal = JSON.parse(JSON.stringify(response));
@@ -383,19 +365,17 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     $('#successMsg').show();
                 }
             });
-            this.clearDealInfo();
         },
         clearDealInfo: function() {
-            $('#imageExtLink').val('');
-            $('#shortDes').val('');
-            $('#longDes').val('');
-            $('#dealLink').val('');
-            $('#previewImg').attr('src', '#');
-            $('#previewLink').attr('href', '/share');
+            this.model.set('image', '');
+            this.model.set('sDesc', '');
+            this.model.set('lDesc', '');
+            this.model.set('dUrl', '');
+            this.doRender();
         },
         loadDealInfo: function(dealId) {
-            this.model.id = dealId;
-            var model = this.model;
+            var thisView = this;
+            thisView.model.id = dealId;
             Backbone.sync('read', this.model, {
                 error: function(response, flag) {
                     console.log(JSON.stringify(response));
@@ -406,23 +386,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     console.log(JSON.stringify(response));
                     console.log(flag);
                     JSON.parse(JSON.stringify(response), function(key, value) {
-                        switch(key) {
-                            case 'image':
-                                $('#imageExtLink').val(value);
-                                break;
-                            case 'sDesc':
-                                $('#shortDes').val(value);
-                                break;
-                            case 'lDesc':
-                                $('#longDes').val(value);
-                                break;
-                            case 'dUrl':
-                                $('#dealLink').val(value);
-                                break;
-                            default:
-                                break;
-                        }
+                        thisView.model.set(key, value);
                     });
+                    thisView.doRender();
                     $('#successMsg').hide();
                 }
             });
