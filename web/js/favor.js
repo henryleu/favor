@@ -2,10 +2,21 @@ define(['Spa', 'jQuery'], function(spa, $) {
     var Deal = spa.Model.extend({
         urlRoot: '/deal',
         defaults: {
+            'dealId': '',
             'image': '',
             'sDesc': '',
             'lDesc': '',
-            'dUrl': ''
+            'dUrl': '',
+            'lastDealId': ''
+        },
+        clear: function() {
+            this.id = '';
+            this.set('dealId', '');
+            this.set('image', '');
+            this.set('sDesc', '');
+            this.set('lDesc', '');
+            this.set('dUrl', '');
+            this.set('lastDealId', '');
         }
     });
 
@@ -254,7 +265,10 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'click #uploadLocalImage': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
-            'click #clearDealInfo': 'clearDealInfo'
+            'click #updateDealInfo': 'updateDealInfo',
+            'click #deleteDealInfo': 'deleteDealInfo',
+            'click #clearDealInfo': 'clearDealInfo',
+            'click #abandonChange': 'abandonChange'
         },
         configure: function() {
             this.model = new Deal();
@@ -334,6 +348,73 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }
         },
         publishDealInfo: function() {
+            if (!this.isFulfilled()) return;
+            var thisView = this;
+            thisView.model.id = '';
+            thisView.model.set('dealId', '');
+            Backbone.sync('create', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in creating deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    thisView.model.clear();
+                    console.log('Published deal: ' + JSON.stringify(response));
+                    var deal = JSON.parse(JSON.stringify(response));
+                    thisView.model.set('lastDealId', deal.dealId);
+                    thisView.doRender();
+                    $('#successMsg').show();
+                }
+            });
+        },
+        updateDealInfo: function() {
+            if (!this.isFulfilled()) return;
+            var thisView = this;
+            thisView.model.id = thisView.model.get('dealId');
+            Backbone.sync('update', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in updating deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    thisView.model.clear();
+                    console.log('Updated deal: ' + JSON.stringify(response));
+                    var deal = JSON.parse(JSON.stringify(response));
+                    thisView.model.set('lastDealId', deal.dealId);
+                    thisView.doRender();
+                    $('#successMsg').show();
+                }
+            });
+        },
+        deleteDealInfo: function() {
+            var thisView = this;
+            thisView.model.id = thisView.model.dealId;
+            Backbone.sync('delete', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in deleting deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    thisView.model.clear();
+                    thisView.doRender();
+                    console.log('Deleted deal: ' + JSON.stringify(response));
+                    $('#successMsg').show();
+                }
+            });
+        },
+        clearDealInfo: function() {
+            this.model.set('image', '');
+            this.model.set('sDesc', '');
+            this.model.set('lDesc', '');
+            this.model.set('dUrl', '');
+            this.doRender();
+        },
+        abandonChange: function() {
+            Backbone.history.navigate('share');
+            this.model.clear();
+            this.doRender();
+        },
+        isFulfilled: function() {
             if ($('#imageURL').val().length == 0) {
                 $('#imageURLContainer').addClass('error');
             }
@@ -346,40 +427,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
             if (!($('#dealLink').val().length > 0)) {
                 $('#dealLinkContainer').addClass('error');
             }
-            if ($('.error').length > 0) return;
-            console.log(JSON.stringify(this.model));
-            var thisView = this;
-            Backbone.sync('create', this.model, {
-                error: function(response, flag) {
-                    console.log(JSON.stringify(response));
-                    console.log(flag);
-                    $('#errorMsg').show();
-                },
-                success: function(response, flag) {
-                    thisView.clearDealInfo();
-                    console.log(JSON.stringify(response));
-                    console.log(flag);
-                    var deal = JSON.parse(JSON.stringify(response));
-                    console.log(deal.dealId);
-                    $('#editDeal').attr('href', '/share/' + deal.dealId);
-                    $('#successMsg').show();
-                }
-            });
-        },
-        clearDealInfo: function() {
-            this.model.set('image', '');
-            this.model.set('sDesc', '');
-            this.model.set('lDesc', '');
-            this.model.set('dUrl', '');
-            this.doRender();
+            if ($('.error').length > 0) {
+                return false;
+            } else {
+                return true;
+            }
         },
         loadDealInfo: function(dealId) {
             var thisView = this;
             thisView.model.id = dealId;
-            Backbone.sync('read', this.model, {
+            Backbone.sync('read', thisView.model, {
                 error: function(response, flag) {
-                    console.log(JSON.stringify(response));
-                    console.log(flag);
+                    console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
                     $('#errorMsg').show();
                 },
                 success: function(response, flag) {

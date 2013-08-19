@@ -2,11 +2,15 @@
 <br>
 <div id="successMsg" class="alert alert-success" hidden="true">
     <button type="button" class="close" onclick="javascript: $('#successMsg').hide();">&times;</button>
-    <strong>分享成功!</strong>&nbsp;&nbsp;<span>你可以<a id="viewDeal" href="/share">&lt查看&gt</a>或者<a id="editDeal" href="/share">&lt修改&gt</a>刚刚分享的信息。</span>
+<% if (input.lastDealId == '') { %>
+    <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以继续发布信息。</span>
+<% } else { %>
+    <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以<a id="viewDeal" href="/view/<%=input.lastDealId%>">&lt查看&gt</a>或者<a id="editDeal" href="/share/<%=input.lastDealId%>">&lt修改&gt</a>刚刚发布的信息。</span>
+<% } %>
 </div>
 <div id="errorMsg" class="alert alert-error" hidden="true">
     <button type="button" class="close" onclick="javascript: $('#errorMsg').hide();">&times;</button>
-    <strong>分享失败!</strong>&nbsp;&nbsp;<span>抱歉，上传数据时发生错误，请稍后再试。</span>
+    <strong>操作失败!</strong>&nbsp;&nbsp;<span>抱歉，服务器发生错误，请稍后再试。</span>
 </div>
 </div>
 <div class="row-fluid">
@@ -88,8 +92,14 @@
         </div>
         <div class="row-fluid">
             <div class="offset2 span10">
-                <button id="publishDealInfo" class="btn btn-primary">公开分享信息</button>
+<% if (input.dealId == '') { %>
+                <button id="publishDealInfo" class="btn btn-primary">发布信息</button>
                 <button id="clearDealInfo" class="btn">清空信息</button>
+<% } else { %>
+                <button id="updateDealInfo" class="btn btn-primary">更新信息</button>
+                <button id="deleteDealInfo" class="btn btn-danger">删除信息</button>
+                <button id="abandonChange" class="btn">放弃修改</button>
+<% } %>
             </div>
         </div>
         </div>
