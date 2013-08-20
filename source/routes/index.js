@@ -102,29 +102,75 @@ module.exports = function(app) {
     app.post('/deal', function(req, res) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug(dealInfo);
-        var deal = new Deal();
-        deal.dealId = req.cookies.userToken + Date.now().toString();
-        deal.image = dealInfo.image;
-        deal.sDesc = dealInfo.sDesc;
-        deal.lDesc = dealInfo.lDesc;
-        deal.dUrl = dealInfo.dUrl;
-        deal.crtOn = Date.now();
-        deal.crtBy = req.cookies.userToken;
-        deal.save();
-        logger.debug(deal);
-        res.json(200, deal);
+        var newDeal = new Deal();
+        newDeal.image = dealInfo.image;
+        newDeal.sDesc = dealInfo.sDesc;
+        newDeal.lDesc = dealInfo.lDesc;
+        newDeal.dUrl = dealInfo.dUrl;
+        newDeal.crtOn = Date.now();
+        newDeal.crtBy = req.cookies.userToken;
+        newDeal.save(function(err, deal, numberAffected) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            logger.debug('Created deal: ' + deal.id);
+            logger.debug(deal);
+            res.json(200, deal);
+        });
     });
 
     app.get('/deal/:id', function(req, res) {
-        Deal.findOne({'dealId': req.params.id}, function(err, deal) {
+        Deal.findOne({'_id': req.params.id}, function(err, deal) {
             if (err) {
                 logger.error(err);
-                res.json(500, {'error': err.toString()});
+                res.json(500, err);
                 return;
             }
+            logger.debug('Found deal: ' + deal.id);
+            logger.debug(deal)
             res.json(200, deal);
         });
+    });
 
+    app.put('/deal/:id', function(req, res) {
+        var dealInfo = JSON.parse(JSON.stringify(req.body));
+        Deal.findOne({'_id': req.params.id}, function(err, oldDeal) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            oldDeal.image = dealInfo.image;
+            oldDeal.sDesc = dealInfo.sDesc;
+            oldDeal.lDesc = dealInfo.lDesc;
+            oldDeal.dUrl = dealInfo.dUrl;
+            oldDeal.updOn = Date.now();
+            oldDeal.updBy = req.cookies.userToken;
+            oldDeal.save(function(err, deal, numberAffected) {
+                if (err) {
+                    logger.error(err);
+                    res.json(500, err);
+                    return;
+                }
+                logger.debug('Updated deal: ' + deal.id);
+                logger.debug(deal);
+                res.json(200, deal);
+            });
+        })
+    });
+
+    app.delete('/deal/:id', function(req, res) {
+        Deal.remove({'_id': req.params.id}, function(err) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            logger.debug('Deleted deal: ' + req.params.id);
+            res.json(200, {'_id': req.params.id});
+        })
     });
 
 };

@@ -6,12 +6,11 @@ var schema = SchemaBuilder
     .withBase()
     .withCreatedBy()
     .withCreatedOn()
+    .withUpdatedBy()
+    .withUpdatedOn()
     .withProperties({
-        //id for each deal - [userToken + Date.now()] temporarily
-        "dealId": String
-
         //main image url
-        ,"image": String //"http://making-photos.b0.upaiyun.com/photos/2a7343fa66062c66c31586473124f009.jpg!normal",
+        "image": String //"http://making-photos.b0.upaiyun.com/photos/2a7343fa66062c66c31586473124f009.jpg!normal",
 
         //other image urls
         , "images": [String]

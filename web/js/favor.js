@@ -1,22 +1,22 @@
 define(['Spa', 'jQuery'], function(spa, $) {
     var Deal = spa.Model.extend({
+        idAttribute: '_id',
         urlRoot: '/deal',
         defaults: {
-            'dealId': '',
+            '_id': 0,
             'image': '',
             'sDesc': '',
             'lDesc': '',
             'dUrl': '',
-            'lastDealId': ''
+            'lastDealId': 0
         },
         clear: function() {
-            this.id = '';
-            this.set('dealId', '');
+            this.set('_id', 0);
             this.set('image', '');
             this.set('sDesc', '');
             this.set('lDesc', '');
             this.set('dUrl', '');
-            this.set('lastDealId', '');
+            this.set('lastDealId', 0);
         }
     });
 
@@ -272,6 +272,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         configure: function() {
             this.model = new Deal();
+            this.model.set('_id', 0);
         },
         afterRender: function() {
             var thisView = this;
@@ -351,7 +352,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
             if (!this.isFulfilled()) return;
             var thisView = this;
             thisView.model.id = '';
-            thisView.model.set('dealId', '');
             Backbone.sync('create', thisView.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in creating deal. -> ' + JSON.stringify(response));
@@ -361,7 +361,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     thisView.model.clear();
                     console.log('Published deal: ' + JSON.stringify(response));
                     var deal = JSON.parse(JSON.stringify(response));
-                    thisView.model.set('lastDealId', deal.dealId);
+                    thisView.model.set('lastDealId', deal._id);
                     thisView.doRender();
                     $('#successMsg').show();
                 }
@@ -370,7 +370,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
         updateDealInfo: function() {
             if (!this.isFulfilled()) return;
             var thisView = this;
-            thisView.model.id = thisView.model.get('dealId');
             Backbone.sync('update', thisView.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in updating deal. -> ' + JSON.stringify(response));
@@ -380,7 +379,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     thisView.model.clear();
                     console.log('Updated deal: ' + JSON.stringify(response));
                     var deal = JSON.parse(JSON.stringify(response));
-                    thisView.model.set('lastDealId', deal.dealId);
+                    thisView.model.set('lastDealId', deal._id);
                     thisView.doRender();
                     $('#successMsg').show();
                 }
@@ -388,7 +387,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         deleteDealInfo: function() {
             var thisView = this;
-            thisView.model.id = thisView.model.dealId;
             Backbone.sync('delete', thisView.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in deleting deal. -> ' + JSON.stringify(response));
@@ -410,7 +408,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.doRender();
         },
         abandonChange: function() {
-            Backbone.history.navigate('share');
             this.model.clear();
             this.doRender();
         },
@@ -447,6 +444,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     JSON.parse(JSON.stringify(response), function(key, value) {
                         thisView.model.set(key, value);
                     });
+                    Backbone.history.navigate('share');
                     thisView.doRender();
                     $('#successMsg').hide();
                 }
