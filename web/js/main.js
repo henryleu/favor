@@ -22,6 +22,9 @@ require.config({
         },
         'JST': {
             exports: 'JST'
+        },
+        'Util': {
+            deps: ['jQuery']
         }
     },
     paths: {
@@ -35,9 +38,10 @@ require.config({
         JST: '../../public/build/js/templates',
         Spa: 'backbone-spa',
         Favor: 'favor',
+        Util: 'util',
         App: 'app'
     },
-    deps: ['App'],
+    deps: ['App', 'Util'],
     callback: function(){
     },
     preserveLicenseComments: false

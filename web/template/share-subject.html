@@ -5,7 +5,7 @@
 <% if (input.lastDealId == '') { %>
     <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以继续发布信息。</span>
 <% } else { %>
-    <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以<a id="viewDeal" href="/view/<%=input.lastDealId%>">&lt查看&gt</a>或者<a id="editDeal" href="/share/<%=input.lastDealId%>">&lt修改&gt</a>刚刚发布的信息。</span>
+    <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以<a id="viewDeal" href="/showDeal/<%=input.lastDealId%>">&lt查看&gt</a>或者<a id="editDeal" href="/share/<%=input.lastDealId%>">&lt修改&gt</a>刚刚发布的信息。</span>
 <% } %>
 </div>
 <div id="errorMsg" class="alert alert-error" hidden="true">

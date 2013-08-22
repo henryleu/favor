@@ -96,6 +96,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             "*view(/:id)": "switchView",
             "home": "home",
             "share": "share",
+            "showDeal": "showDeal",
             "find": "find",
             "forum": "forum",
             "about": "about"
@@ -167,6 +168,19 @@ define(['Spa', 'jQuery'], function(spa, $) {
             if (!view) {
                 //When first access
                 view = new ShareSubjectView({spa: this, modelDriven: false});
+                this.views[viewName] = view;
+                var content = '[set="' + viewName + '"].view';
+                $(content).html(view.el);
+            }
+            if(!(id == null)) {
+                view.loadDealInfo(id);
+            }
+        },
+        showDeal: function(viewName, id) {
+            var view = this.views[viewName];
+            if (!view) {
+                //When first access
+                view = new ShowDealView({spa: this, modelDriven: false});
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
@@ -252,7 +266,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
 
     var ShareSubjectView = spa.View.extend({
         templateName: 'share-subject',
-        prerendered: true,
         events: {
             'change #imageURL': 'changeImageURL',
             'change #shortDes': 'changeShortDes',
@@ -440,13 +453,71 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 },
                 success: function(response, flag) {
                     console.log(JSON.stringify(response));
-                    console.log(flag);
                     JSON.parse(JSON.stringify(response), function(key, value) {
                         thisView.model.set(key, value);
                     });
                     Backbone.history.navigate('share');
                     thisView.doRender();
                     $('#successMsg').hide();
+                }
+            });
+        }
+    });
+
+    var ShowDealView = spa.View.extend({
+        templateName: 'show-deal',
+        events: {
+        },
+        configure: function() {
+            this.model = new Deal();
+            var meta = new function(){};
+            meta.views = 0;
+            meta.likes = 0;
+            meta.owns = 0;
+            meta.deals = 0;
+            this.model.set('meta', meta);
+        },
+        loadDealInfo: function(dealId) {
+            var thisView = this;
+            thisView.model.id = dealId;
+            Backbone.sync('read', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
+                    alert('Failed to show deal: ' + dealId);
+                },
+                success: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    var meta = thisView.model.get('meta');
+                    JSON.parse(JSON.stringify(response), function(key, value) {
+                        var reg, dt;
+                        if (typeof value === 'string') {
+                            reg = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                            if (reg) {
+                                dt = new Date(Date.UTC(+reg[1], +reg[2] - 1, +reg[3], +reg[4], +reg[5], +reg[6]));
+                                value = dt.toString('yyyy-MM-dd HH:mm:ss');
+                            }
+                        }
+                        switch(key) {
+                            case 'views':
+                                meta.views = value;
+                                break;
+                            case 'likes':
+                                meta.likes = value;
+                                break;
+                            case 'owns':
+                                meta.owns = value;
+                                break;
+                            case 'deals':
+                                meta.deals = value;
+                                break;
+                            case 'meta':
+                                break;
+                            default:
+                                thisView.model.set(key, value);
+                                break;
+                        }
+                    });
+                    thisView.doRender();
                 }
             });
         }
