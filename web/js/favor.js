@@ -8,6 +8,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'sDesc': '',
             'lDesc': '',
             'dUrl': '',
+            'actionType': '',
             'lastDealId': 0
         },
         clear: function() {
@@ -16,6 +17,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.set('sDesc', '');
             this.set('lDesc', '');
             this.set('dUrl', '');
+            this.set('actionType', '');
             this.set('lastDealId', 0);
         }
     });
@@ -186,7 +188,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 $(content).html(view.el);
             }
             if(!(id == null)) {
-                view.loadDealInfo(id);
+                view.viewDeal(id);
             }
         },
         find: function(viewName){
@@ -383,6 +385,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         updateDealInfo: function() {
             if (!this.isFulfilled()) return;
             var thisView = this;
+            thisView.model.set('actionType', 'update');
             Backbone.sync('update', thisView.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in updating deal. -> ' + JSON.stringify(response));
@@ -467,6 +470,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
     var ShowDealView = spa.View.extend({
         templateName: 'show-deal',
         events: {
+            'click #likeDeal': 'likeDeal',
+            'click #ownDeal': 'ownDeal'
         },
         configure: function() {
             this.model = new Deal();
@@ -477,45 +482,58 @@ define(['Spa', 'jQuery'], function(spa, $) {
             meta.deals = 0;
             this.model.set('meta', meta);
         },
-        loadDealInfo: function(dealId) {
+        dealAttrReviver: function(view, key, value) {
+            var reg, dt;
+            if (typeof value === 'string') {
+                reg = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                if (reg) {
+                    dt = new Date(Date.UTC(+reg[1], +reg[2] - 1, +reg[3], +reg[4], +reg[5], +reg[6]));
+                    value = dt.toString('yyyy-MM-dd HH:mm:ss');
+                }
+            }
+            var meta = view.model.get('meta');
+            switch(key) {
+                case 'views':
+                    meta.views = value;
+                    break;
+                case 'likes':
+                    meta.likes = value;
+                    break;
+                case 'owns':
+                    meta.owns = value;
+                    break;
+                case 'deals':
+                    meta.deals = value;
+                    break;
+                case 'meta':
+                    break;
+                default:
+                    view.model.set(key, value);
+                    break;
+            }
+        },
+        likeDeal: function() {
+            this.loadDealInfo('like');
+        },
+        ownDeal: function() {
+            this.loadDealInfo('own');
+        },
+        viewDeal: function(dealId) {
+            this.model.id = dealId;
+            this.loadDealInfo('view');
+        },
+        loadDealInfo: function(actionType) {
             var thisView = this;
-            thisView.model.id = dealId;
-            Backbone.sync('read', thisView.model, {
+            thisView.model.set('actionType', actionType);
+            Backbone.sync('update', thisView.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
                     alert('Failed to show deal: ' + dealId);
                 },
                 success: function(response, flag) {
                     console.log(JSON.stringify(response));
-                    var meta = thisView.model.get('meta');
                     JSON.parse(JSON.stringify(response), function(key, value) {
-                        var reg, dt;
-                        if (typeof value === 'string') {
-                            reg = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-                            if (reg) {
-                                dt = new Date(Date.UTC(+reg[1], +reg[2] - 1, +reg[3], +reg[4], +reg[5], +reg[6]));
-                                value = dt.toString('yyyy-MM-dd HH:mm:ss');
-                            }
-                        }
-                        switch(key) {
-                            case 'views':
-                                meta.views = value;
-                                break;
-                            case 'likes':
-                                meta.likes = value;
-                                break;
-                            case 'owns':
-                                meta.owns = value;
-                                break;
-                            case 'deals':
-                                meta.deals = value;
-                                break;
-                            case 'meta':
-                                break;
-                            default:
-                                thisView.model.set(key, value);
-                                break;
-                        }
+                        thisView.dealAttrReviver(thisView, key, value);
                     });
                     thisView.doRender();
                 }
