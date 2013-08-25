@@ -88,7 +88,7 @@ module.exports = function(app) {
         newDeal.sDesc = dealInfo.sDesc;
         newDeal.lDesc = dealInfo.lDesc;
         newDeal.dUrl = dealInfo.dUrl;
-        newDeal.crtBy = req.cookies.userToken;
+        newDeal.crtBy = req.user.id;
         newDeal.crtOn = Date.now();
         newDeal.updBy = newDeal.crtBy;
         newDeal.updOn = newDeal.crtOn;
@@ -121,7 +121,7 @@ module.exports = function(app) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug('Inbound dealInfo: ');
         logger.debug(dealInfo);
-        var uid = req.cookies.userToken;
+        var uid = req.user.id;
         var dealId = req.params.id;
         Deal.findOne({'_id': dealId}, function(err, oldDeal) {
             if (err) {
