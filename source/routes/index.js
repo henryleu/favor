@@ -6,19 +6,7 @@ var UserLikedDeal = require('../models/UserLikedDeal').model;
 var UserOwnedDeal = require('../models/UserOwnedDeal').model;
 
 module.exports = function(app) {
-    var checkUserToken = function(req, res, next) {
-        var userToken = req.cookies.userToken;
-        if(userToken){
-            logger.info('uid: ' + userToken);
-        }
-        else{
-            userToken = new Date().getTime();
-            res.cookie('userToken', userToken);
-        }
-    };
-    //app.all('*', checkUserToken);
     app.get('/', function(req, res) {
-        checkUserToken(req, res);
 /*
         redis.set("test", "Hello World", function (err, reply) {
             if(err){
@@ -39,56 +27,47 @@ module.exports = function(app) {
         res.render('index', input);
     });
     app.get('/home', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/share', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/find', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/catalog-newest', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/catalog-hottest', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/catalog-selfrun', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
 
     app.get('/profile', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/forum', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
     });
     app.get('/about', function(req, res) {
-        checkUserToken(req, res);
         var input = {};
         util.apply(input, req.asset || {});
         res.render('index', input);
@@ -109,7 +88,7 @@ module.exports = function(app) {
         newDeal.sDesc = dealInfo.sDesc;
         newDeal.lDesc = dealInfo.lDesc;
         newDeal.dUrl = dealInfo.dUrl;
-        newDeal.crtBy = req.cookies.userToken;
+        newDeal.crtBy = req.user.id;
         newDeal.crtOn = Date.now();
         newDeal.updBy = newDeal.crtBy;
         newDeal.updOn = newDeal.crtOn;
@@ -142,7 +121,7 @@ module.exports = function(app) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug('Inbound dealInfo: ');
         logger.debug(dealInfo);
-        var uid = req.cookies.userToken;
+        var uid = req.user.id;
         var dealId = req.params.id;
         Deal.findOne({'_id': dealId}, function(err, oldDeal) {
             if (err) {

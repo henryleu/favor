@@ -5,9 +5,11 @@ var schema = SchemaBuilder
     .withBase()
     .withCreatedOn()
     .withProperties({
-        username: {type: String, default: 'nousername'}
+        utoken: {type: String}
+        , uid: {type: String}
+        , state: {type: Boolean}
+        , username: {type: String, default: 'nousername'}
         , email: String
-        , uid: String
     })
     .build();
 

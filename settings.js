@@ -2,7 +2,7 @@ module.exports = {
     id: 'fv',
     name: 'favor',
     creator: '番茄实验室',
-    cookieSecret: 'quick',
+    secretKey: 'quick',
     mongo:{
         db: 'favor',
         host: 'localhost',
