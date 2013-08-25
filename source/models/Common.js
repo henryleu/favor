@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var logger = require('../../lib/logging').logger;
 var Schema = mongoose.Schema;
 var CommonProps = {
-    ID: '_id',
     MODEL_VERSION: '_mv',
     DOCUMENT_VERSION: '_dv',
     LIFE_FLAG: 'lFlg',
@@ -16,7 +15,6 @@ var CP = CommonProps;
 
 var CommonSchema = {};
 var CS = CommonSchema;
-CommonSchema[CommonProps.ID] = Number;
 CommonSchema[CommonProps.MODEL_VERSION] = {type: Number, default: 0};
 CommonSchema[CommonProps.DOCUMENT_VERSION] = {type: Number, default: 0};
 CommonSchema[CommonProps.LIFE_FLAG] = {type: Number, default: 0};//INFO: 0: active; 1: inactive; 2: deleted;
@@ -38,7 +36,7 @@ var SchemaBuilder = function(){
 SchemaBuilder.i = function(){
     return new SchemaBuilder();
 };
-SchemaBuilder.baseProperties = _.pick(CS, CP.ID, CP.DOCUMENT_VERSION);
+SchemaBuilder.baseProperties = _.pick(CS, CP.DOCUMENT_VERSION);
 SchemaBuilder.baseOptions = BaseOptions;
 SchemaBuilder.prototype.withBase = function(){
     _.extend(this.properties, SchemaBuilder.baseProperties); //Append base properties' definition
@@ -59,7 +57,6 @@ SchemaBuilder.prototype.build = function(){
 SchemaBuilder.prototype.setStockProperty = function(propName){
     this.properties[propName] = CS[propName];
 };
-SchemaBuilder.prototype.withId = function(){ this.setStockProperty(CP.ID); return this;};
 SchemaBuilder.prototype.withDocumentVersion = function(){ this.setStockProperty(CP.DOCUMENT_VERSION); return this;};
 SchemaBuilder.prototype.withModelVersion = function(){ this.setStockProperty(CP.MODEL_VERSION); return this;};
 SchemaBuilder.prototype.withLifeFlag = function(){ this.setStockProperty(CP.LIFE_FLAG); return this;};

@@ -1,0 +1,60 @@
+<div class="row-fluid">
+    <h4 class="span12"><%=input.sDesc%></h4>
+</div>
+<div class="row-fluid">
+    <div class="span8">
+        <div class="row-fluid">
+            <ul class="thumbnails">
+                <li class="span12">
+                    <div class="thumbnail row-fluid">
+                        <a href="javascript: window.open('<%=input.dUrl%>');" id="previewLink">
+                            <img id="previewImg" src="<%=input.image%>" class="img-rounded span12" height="800">
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row-fluid">
+            <div class="span4">
+                <ul class="inline">
+<% if (input.liked == true) { %>
+                    <li><i class="icon-heart"> 我喜欢</i></li>
+<% } else { %>
+                    <li><a id="likeDeal" href="/showDeal" class="btn btn-success"><i class="icon-heart-empty"> 我喜欢</i></a></li>
+<% }
+   if (input.owned == true) { %>
+                    <li><i class="icon-check"> 我拥有</i></li>
+<% } else { %>
+                    <li><a id="ownDeal" href="/showDeal" class="btn btn-success"><i class="icon-check"> 我拥有</i></a></li>
+<% } %>
+                </ul>
+            </div>
+            <div class="span8 text-right">
+                <ul class="inline">
+                    <li><img src="/web/img/glyphicons/png/glyphicons_051_eye_open.png" title="看过" alt="看过">&nbsp;<%=input.meta.views%></li>
+                    <li><img src="/web/img/glyphicons/png/glyphicons_012_heart.png" title="喜欢" alt="喜欢">&nbsp;<%=input.meta.likes%></li>
+                    <li><img src="/web/img/glyphicons/png/glyphicons_152_check.png" title="拥有" alt="拥有">&nbsp;<%=input.meta.owns%></li>
+                    <li><img src="/web/img/glyphicons/png/glyphicons_458_money.png" title="成交" alt="成交">&nbsp;<%=input.meta.deals%></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="row-fluid">
+        <dl class="dl-horizontal" style="line-height: 24px;">
+            <dt>推荐理由：</dt>
+            <dd><%=input.lDesc%></dd>
+        </dl>
+        <dl class="dl-horizontal" style="line-height: 24px;">
+            <dt>创建人：</dt>
+            <dd><%=input.crtBy%></dd>
+            <dt>创建时间：</dt>
+            <dd><%=input.crtOn%></dd>
+            <dt>更新人：</dt>
+            <dd><%=input.updBy%></dd>
+            <dt>更新时间：</dt>
+            <dd><%=input.updOn%></dd>
+        </dl>
+        </div>
+    </div>
+</div>
