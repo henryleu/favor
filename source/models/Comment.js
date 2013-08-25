@@ -2,7 +2,6 @@ var mongoose = require('../../lib/mongoose');
 var SchemaBuilder = require('./Common').SchemaBuilder;
 var schema = SchemaBuilder
     .i()
-    .withId()
     .withCreatedOn()
     .withCreatedBy()
     .withUpdatedOn()

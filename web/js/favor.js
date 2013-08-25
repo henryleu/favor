@@ -1,19 +1,38 @@
 define(['Spa', 'jQuery'], function(spa, $) {
     var Deal = spa.Model.extend({
-        urlRoot: 'deal'
+        idAttribute: '_id',
+        urlRoot: '/deal',
+        defaults: {
+            '_id': 0,
+            'image': '',
+            'sDesc': '',
+            'lDesc': '',
+            'dUrl': '',
+            'actionType': '',
+            'lastDealId': 0
+        },
+        clear: function() {
+            this.set('_id', 0);
+            this.set('image', '');
+            this.set('sDesc', '');
+            this.set('lDesc', '');
+            this.set('dUrl', '');
+            this.set('actionType', '');
+            this.set('lastDealId', 0);
+        }
     });
 
     var NewestCatalog = spa.Collection.extend({
         model: Deal,
-        url: 'public/dummy/newest.js'
+        url: '/newestDeals'
     });
     var HottestCatalog = spa.Collection.extend({
         model: Deal,
-        url: 'public/dummy/hottest.js'
+        url: '/hottestDeals'
     });
     var SelfrunCatalog = spa.Collection.extend({
         model: Deal,
-        url: 'public/dummy/selfrun.js'
+        url: '/allDeals'
     });
 
     var CatalogView = spa.View.extend({
@@ -79,6 +98,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             "*view(/:id)": "switchView",
             "home": "home",
             "share": "share",
+            "showDeal": "showDeal",
             "find": "find",
             "forum": "forum",
             "about": "about"
@@ -145,14 +165,30 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         home: function(viewName){
         },
-        share: function(viewName){
+        share: function(viewName, id){
             var view = this.views[viewName];
-            if(!view){
-                var deal = new Deal();
-                view = new ShareSubjectView({spa: this, model:deal, modelDriven: false});
+            if (!view) {
+                //When first access
+                view = new ShareSubjectView({spa: this, modelDriven: false});
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
+            }
+            if(!(id == null)) {
+                view.loadDealInfo(id);
+            }
+        },
+        showDeal: function(viewName, id) {
+            var view = this.views[viewName];
+            if (!view) {
+                //When first access
+                view = new ShowDealView({spa: this, modelDriven: false});
+                this.views[viewName] = view;
+                var content = '[set="' + viewName + '"].view';
+                $(content).html(view.el);
+            }
+            if(!(id == null)) {
+                view.viewDeal(id);
             }
         },
         find: function(viewName){
@@ -233,21 +269,28 @@ define(['Spa', 'jQuery'], function(spa, $) {
     var ShareSubjectView = spa.View.extend({
         templateName: 'share-subject',
         events: {
-            'change #imageExtLink': 'changeImageExtLink',
-            'change #dealLink': 'changeDealLink',
+            'change #imageURL': 'changeImageURL',
             'change #shortDes': 'changeShortDes',
             'change #longDes': 'changeLongDes',
-            'keyup #imageExtLink': 'changeImageExtLink',
+            'change #dealLink': 'changeDealLink',
+            'keyup #imageURL': 'changeImageURL',
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
-            'click #useRemoteImage': 'useRemoteImage',
-            'click #useLocalImage': 'useLocalImage',
+            'keyup #dealLink': 'changeDealLink',
+            'click #uploadLocalImage': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
-            'click #clearDealInfo': 'clearDealInfo'
+            'click #updateDealInfo': 'updateDealInfo',
+            'click #deleteDealInfo': 'deleteDealInfo',
+            'click #clearDealInfo': 'clearDealInfo',
+            'click #abandonChange': 'abandonChange'
+        },
+        configure: function() {
+            this.model = new Deal();
+            this.model.set('_id', 0);
         },
         afterRender: function() {
-            var model = this.model;
+            var thisView = this;
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: '/files/',
@@ -257,60 +300,244 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     data.submit();
                 },
                 done: function (e, data) {
-                    var imageURL = '/files/' + data.files[0].name;
+                    var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
-                    console.log("model content: " + JSON.stringify(model));
-                    model.set("image", imageURL);
+                    $('#imageURL').val(imageURL);
+                    thisView.model.set('image', imageURL);
+                    $('#imageURLContainer').removeClass('error');
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
         },
-        changeDealLink: function() {
-            var url = $('#dealLink').val();
-            if (url.length > 0) {
-                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
-            } else {
-                $('#previewLink').attr('href', '/share');
+        uploadLocalImage: function() {
+            $('#imageFile').click();
+        },
+        changeImageURL: function() {
+            //Regular expression for test user input url of image
+            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
+
+            var imageURL = $('#imageURL').val();
+            var isValidURL = false;
+            if (reg.test(imageURL)) {
+                isValidURL = true;
             }
-            this.model.set("dUrl", url);
-        },
-        useRemoteImage: function() {
-            $('#remoteImageLinkContainer').show();
-            $('#useRemoteImageLink').hide();
-            $('#localImageContainer').hide();
-            $('#useLocalImageLink').show();
-        },
-        useLocalImage: function() {
-            $('#remoteImageLinkContainer').hide();
-            $('#useRemoteImageLink').show();
-            $('#localImageContainer').show();
-            $('#useLocalImageLink').hide();
-        },
-        changeImageExtLink: function() {
-            var imageURL = $('#imageExtLink').val();
-            $('#previewImg').attr('src', imageURL);
-            this.model.set("image", imageURL);
+            if (isValidURL) {
+                $('#previewImg').attr('src', imageURL);
+                this.model.set('image', imageURL);
+                $('#imageURLContainer').removeClass('error');
+            } else {
+                $('#imageURLContainer').addClass('error');
+            }
         },
         changeShortDes: function() {
             var sDesc = $('#shortDes').val();
-            $('#previewSDes').html(sDesc);
-            this.model.set("sDesc", sDesc);
+            if (sDesc.length > 0) {
+                $('#previewSDes').html(sDesc);
+                this.model.set('sDesc', sDesc);
+                $('#shortDesContainer').removeClass('error');
+            } else {
+                $('#shortDesContainer').addClass('error');
+            }
         },
         changeLongDes: function() {
             var lDesc = $('#longDes').val();
-            $('#previewLDes').html(lDesc);
-            this.model.set("lDesc", lDesc);
+            if (lDesc.length > 0) {
+                $('#previewLDes').html(lDesc);
+                this.model.set('lDesc', lDesc);
+                $('#longDesContainer').removeClass('error');
+            } else {
+                $('#longDesContainer').addClass('error');
+            }
+        },
+        changeDealLink: function() {
+            //Regular expression for test user input url of image
+            var reg = /^(http|https):\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*$/;
+
+            var url = $('#dealLink').val();
+            if (reg.test(url)) {
+                $('#previewLink').attr('href', 'javascript: window.open(\'' + url + '\');');
+                this.model.set('dUrl', url);
+                $('#dealLinkContainer').removeClass('error');
+            } else {
+                $('#previewLink').attr('href', '/share');
+                $('#dealLinkContainer').addClass('error');
+            }
         },
         publishDealInfo: function() {
-            console.log(JSON.stringify(this.model));
-            this.model.save({error: function(model, xhr, options) {
-                console.log(JSON.stringify(model));
-                console.log(xhr);
-            }});
-            this.clearDealInfo();
+            if (!this.isFulfilled()) return;
+            var thisView = this;
+            thisView.model.id = '';
+            Backbone.sync('create', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in creating deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    thisView.model.clear();
+                    console.log('Published deal: ' + JSON.stringify(response));
+                    var deal = JSON.parse(JSON.stringify(response));
+                    thisView.model.set('lastDealId', deal._id);
+                    thisView.doRender();
+                    $('#successMsg').show();
+                }
+            });
+        },
+        updateDealInfo: function() {
+            if (!this.isFulfilled()) return;
+            var thisView = this;
+            thisView.model.set('actionType', 'update');
+            Backbone.sync('update', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in updating deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    thisView.model.clear();
+                    console.log('Updated deal: ' + JSON.stringify(response));
+                    var deal = JSON.parse(JSON.stringify(response));
+                    thisView.model.set('lastDealId', deal._id);
+                    thisView.doRender();
+                    $('#successMsg').show();
+                }
+            });
+        },
+        deleteDealInfo: function() {
+            var thisView = this;
+            Backbone.sync('delete', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in deleting deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    thisView.model.clear();
+                    thisView.doRender();
+                    console.log('Deleted deal: ' + JSON.stringify(response));
+                    $('#successMsg').show();
+                }
+            });
         },
         clearDealInfo: function() {
+            this.model.set('image', '');
+            this.model.set('sDesc', '');
+            this.model.set('lDesc', '');
+            this.model.set('dUrl', '');
+            this.doRender();
+        },
+        abandonChange: function() {
+            this.model.clear();
+            this.doRender();
+        },
+        isFulfilled: function() {
+            if ($('#imageURL').val().length == 0) {
+                $('#imageURLContainer').addClass('error');
+            }
+            if (!($('#shortDes').val().length > 0)) {
+                $('#shortDesContainer').addClass('error');
+            }
+            if (!($('#longDes').val().length > 0)) {
+                $('#longDesContainer').addClass('error');
+            }
+            if (!($('#dealLink').val().length > 0)) {
+                $('#dealLinkContainer').addClass('error');
+            }
+            if ($('.error').length > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        loadDealInfo: function(dealId) {
+            var thisView = this;
+            thisView.model.id = dealId;
+            Backbone.sync('read', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
+                    $('#errorMsg').show();
+                },
+                success: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    JSON.parse(JSON.stringify(response), function(key, value) {
+                        thisView.model.set(key, value);
+                    });
+                    Backbone.history.navigate('share');
+                    thisView.doRender();
+                    $('#successMsg').hide();
+                }
+            });
+        }
+    });
 
+    var ShowDealView = spa.View.extend({
+        templateName: 'show-deal',
+        events: {
+            'click #likeDeal': 'likeDeal',
+            'click #ownDeal': 'ownDeal'
+        },
+        configure: function() {
+            this.model = new Deal();
+            var meta = new function(){};
+            meta.views = 0;
+            meta.likes = 0;
+            meta.owns = 0;
+            meta.deals = 0;
+            this.model.set('meta', meta);
+        },
+        dealAttrReviver: function(view, key, value) {
+            var reg, dt;
+            if (typeof value === 'string') {
+                reg = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                if (reg) {
+                    dt = new Date(Date.UTC(+reg[1], +reg[2] - 1, +reg[3], +reg[4], +reg[5], +reg[6]));
+                    value = dt.toString('yyyy-MM-dd HH:mm:ss');
+                }
+            }
+            var meta = view.model.get('meta');
+            switch(key) {
+                case 'views':
+                    meta.views = value;
+                    break;
+                case 'likes':
+                    meta.likes = value;
+                    break;
+                case 'owns':
+                    meta.owns = value;
+                    break;
+                case 'deals':
+                    meta.deals = value;
+                    break;
+                case 'meta':
+                    break;
+                default:
+                    view.model.set(key, value);
+                    break;
+            }
+        },
+        likeDeal: function() {
+            this.loadDealInfo('like');
+        },
+        ownDeal: function() {
+            this.loadDealInfo('own');
+        },
+        viewDeal: function(dealId) {
+            this.model.id = dealId;
+            this.loadDealInfo('view');
+        },
+        loadDealInfo: function(actionType) {
+            var thisView = this;
+            thisView.model.set('actionType', actionType);
+            Backbone.sync('update', thisView.model, {
+                error: function(response, flag) {
+                    console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
+                    alert('Failed to show deal: ' + dealId);
+                },
+                success: function(response, flag) {
+                    console.log(JSON.stringify(response));
+                    JSON.parse(JSON.stringify(response), function(key, value) {
+                        thisView.dealAttrReviver(thisView, key, value);
+                    });
+                    thisView.doRender();
+                }
+            });
         }
     });
 
