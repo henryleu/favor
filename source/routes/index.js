@@ -109,8 +109,10 @@ module.exports = function(app) {
         newDeal.sDesc = dealInfo.sDesc;
         newDeal.lDesc = dealInfo.lDesc;
         newDeal.dUrl = dealInfo.dUrl;
-        newDeal.crtOn = Date.now();
         newDeal.crtBy = req.cookies.userToken;
+        newDeal.crtOn = Date.now();
+        newDeal.updBy = newDeal.crtBy;
+        newDeal.updOn = newDeal.crtOn;
         newDeal.save(function(err, deal, numberAffected) {
             if (err) {
                 logger.error(err);
@@ -193,7 +195,11 @@ module.exports = function(app) {
                             res.json(500, err);
                             return;
                         }
-                        res.json(200, [deal, {'liked': dealInfo.liked, 'owned': dealInfo.owned}]);
+                        var editable = false;
+                        if (uid == oldDeal.crtBy) {
+                            editable = true;
+                        }
+                        res.json(200, [deal, {'liked': dealInfo.liked, 'owned': dealInfo.owned, 'editable': editable}]);
                     });
                     break;
                 case 'like':
@@ -258,6 +264,17 @@ module.exports = function(app) {
             }
             logger.debug('Deleted deal: ' + req.params.id);
             res.json(200, {'_id': req.params.id});
+        })
+    });
+
+    app.get('/allDeals', function(req, res) {
+        Deal.find({}, function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
         })
     });
 
