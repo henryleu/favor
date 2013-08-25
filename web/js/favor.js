@@ -24,15 +24,15 @@ define(['Spa', 'jQuery'], function(spa, $) {
 
     var NewestCatalog = spa.Collection.extend({
         model: Deal,
-        url: 'public/dummy/newest.js'
+        url: '/newestDeals'
     });
     var HottestCatalog = spa.Collection.extend({
         model: Deal,
-        url: 'public/dummy/hottest.js'
+        url: '/hottestDeals'
     });
     var SelfrunCatalog = spa.Collection.extend({
         model: Deal,
-        url: 'public/dummy/selfrun.js'
+        url: '/allDeals'
     });
 
     var CatalogView = spa.View.extend({

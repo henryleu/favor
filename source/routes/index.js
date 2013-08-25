@@ -268,7 +268,29 @@ module.exports = function(app) {
     });
 
     app.get('/allDeals', function(req, res) {
-        Deal.find({}, function(err, docs) {
+        Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
+        })
+    });
+
+    app.get('/newestDeals', function(req, res) {
+        Deal.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
+        })
+    });
+
+    app.get('/hottestDeals', function(req, res) {
+        Deal.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
