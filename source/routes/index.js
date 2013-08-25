@@ -148,13 +148,23 @@ module.exports = function(app) {
                 res.json(500, err);
                 return;
             }
-            UserLikedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, adventure) {
-                if (err) dealInfo.liked = false;
-                else dealInfo.liked = true;
+            UserLikedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, userLiked) {
+                if (err) {
+                    logger.error(err);
+                    res.json(500, err);
+                    return;
+                }
+                if (userLiked) dealInfo.liked = true;
+                else dealInfo.liked = false;
             });
-            UserOwnedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, adventure) {
-                if (err) dealInfo.owned = false;
-                else dealInfo.owned = true;
+            UserOwnedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, userOwned) {
+                if (err) {
+                    logger.error(err);
+                    res.json(500, err);
+                    return;
+                }
+                if (userOwned) dealInfo.owned = true;
+                else dealInfo.owned = false;
             });
             switch (dealInfo.actionType) {
                 case 'update':
