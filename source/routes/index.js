@@ -2,6 +2,8 @@ var logger = require('../../lib/logging').logger;
 var util = require('../../lib/util');
 var redis = require('../../lib/redis');
 var Deal = require('../models/Deal').model;
+var UserLikedDeal = require('../models/UserLikedDeal').model;
+var UserOwnedDeal = require('../models/UserOwnedDeal').model;
 
 module.exports = function(app) {
     var checkUserToken = function(req, res, next) {
@@ -138,12 +140,22 @@ module.exports = function(app) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug('Inbound dealInfo: ');
         logger.debug(dealInfo);
-        Deal.findOne({'_id': req.params.id}, function(err, oldDeal) {
+        var uid = req.cookies.userToken;
+        var dealId = req.params.id;
+        Deal.findOne({'_id': dealId}, function(err, oldDeal) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
                 return;
             }
+            UserLikedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, adventure) {
+                if (err) dealInfo.liked = false;
+                else dealInfo.liked = true;
+            });
+            UserOwnedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, adventure) {
+                if (err) dealInfo.owned = false;
+                else dealInfo.owned = true;
+            });
             switch (dealInfo.actionType) {
                 case 'update':
                     oldDeal.image = dealInfo.image;
@@ -151,7 +163,7 @@ module.exports = function(app) {
                     oldDeal.lDesc = dealInfo.lDesc;
                     oldDeal.dUrl = dealInfo.dUrl;
                     oldDeal.updOn = Date.now();
-                    oldDeal.updBy = req.cookies.userToken;
+                    oldDeal.updBy = uid;
                     oldDeal.save(function(err, deal, numberAffected) {
                         if (err) {
                             logger.error(err);
@@ -168,31 +180,56 @@ module.exports = function(app) {
                     oldDeal.save(function(err, deal, numberAffected) {
                         if (err) {
                             logger.error(err);
+                            res.json(500, err);
                             return;
                         }
-                        res.json(200, deal);
+                        res.json(200, [deal, {'liked': dealInfo.liked, 'owned': dealInfo.owned}]);
                     });
                     break;
                 case 'like':
-                    oldDeal.meta.likes += 1;
-                    oldDeal.save(function(err, deal, numberAffected) {
+                    var userLiked = new UserLikedDeal();
+                    userLiked.uid = uid;
+                    userLiked.dealId = dealId;
+                    userLiked.crtOn = Date.now();
+                    userLiked.save(function(err, liked, numberAffected) {
                         if (err) {
                             logger.error(err);
-                            res.json(200, deal);
+                            res.json(500, err);
                             return;
                         }
-                        res.json(200, deal);
+                        oldDeal.meta.likes += 1;
+                        oldDeal.save(function(err, deal, numberAffected) {
+                            if (err) {
+                                logger.error(err);
+                                res.json(500, err);
+                                return;
+                            }
+                            res.json(200, [deal, {'liked': true, 'owned': dealInfo.owned}]);
+                        });
                     });
                     break;
                 case 'own':
-                    oldDeal.meta.owns += 1;
-                    oldDeal.save(function(err, deal, numberAffected) {
+                    var userOwned = new UserOwnedDeal();
+                    userOwned.uid = uid;
+                    userOwned.dealId = dealId;
+                    userOwned.crtOn = Date.now();
+                    userOwned.save(function(err, owned, numberAffected) {
                         if (err) {
                             logger.error(err);
-                            res.json(200, deal);
+                            res.json(500, err);
                             return;
                         }
-                        res.json(200, deal);
+                        oldDeal.meta.owns += 1;
+                        oldDeal.save(function(err, deal, numberAffected) {
+                            if (err) {
+                                logger.error(err);
+                                res.json(500, err);
+                                return;
+                            }
+                            deal.owned = true;
+                            logger.debug(deal);
+                            res.json(200, [deal, {'liked': dealInfo.liked, 'owned': true}]);
+                        });
                     });
                     break;
                 default:
