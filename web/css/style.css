@@ -5,7 +5,7 @@ html {
 body {
   height: 100%;
   background-color: white;
-  background: url(../img/background.png) repeat;
+  background: url(img/background.png) repeat;
   background1: -webkit-linear-gradient(bottom right, #f6f6f7, #ffffff);
   background1: -moz-linear-gradient(bottom right, #f6f6f7, #ffffff);
 }
@@ -252,7 +252,7 @@ button:focus.cystal-button img {
   padding-right: 5px;
   display: table;
   background-color1: #F6F6F7;
-  background1: url(../img/background.png) repeat;
+  background1: url(img/background.png) repeat;
   background1: -webkit-linear-gradient(left, #f6f6f7, #ffffff);
   background1: -moz-linear-gradient(left, #f6f6f7, #ffffff);
 }
