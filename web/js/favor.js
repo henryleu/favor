@@ -292,26 +292,37 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var thisView = this;
+            $.ajaxSetup({
+                error: function(xhr, status, e) {
+                    if (xhr.status == 413) {
+                        alert('抱歉，上传失败。你选择的图片太大了。');
+                    } else {
+                        alert(xhr.status + ': ' + e.toString());
+                    }
+                }
+            });
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: '/files/',
                 dataType: 'json',
-                add: function (e, data) {
+                add: function(e, data) {
                     $('#uploadIcon').removeClass('icon-picture');
                     $('#uploadIcon').addClass('icon-spinner icon-spin');
                     thisView.uploadingImage = true;
                     $('#fileName').html(data.files[0].name);
                     data.submit();
                 },
-                done: function (e, data) {
-                    $('#uploadIcon').removeClass('icon-spinner icon-spin');
-                    $('#uploadIcon').addClass('icon-picture');
-                    thisView.uploadingImage = false;
+                done: function(e, data) {
                     var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
                     thisView.model.set('image', imageURL);
                     $('#imageURLContainer').removeClass('error');
+                },
+                always: function(e, data) {
+                    $('#uploadIcon').removeClass('icon-spinner icon-spin');
+                    $('#uploadIcon').addClass('icon-picture');
+                    thisView.uploadingImage = false;
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
