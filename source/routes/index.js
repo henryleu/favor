@@ -88,8 +88,10 @@ module.exports = function(app) {
         newDeal.sDesc = dealInfo.sDesc;
         newDeal.lDesc = dealInfo.lDesc;
         newDeal.dUrl = dealInfo.dUrl;
+        newDeal.crtBy = req.user.id;
         newDeal.crtOn = Date.now();
-        newDeal.crtBy = req.cookies.userToken;
+        newDeal.updBy = newDeal.crtBy;
+        newDeal.updOn = newDeal.crtOn;
         newDeal.save(function(err, deal, numberAffected) {
             if (err) {
                 logger.error(err);
@@ -119,7 +121,7 @@ module.exports = function(app) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug('Inbound dealInfo: ');
         logger.debug(dealInfo);
-        var uid = req.cookies.userToken;
+        var uid = req.user.id;
         var dealId = req.params.id;
         Deal.findOne({'_id': dealId}, function(err, oldDeal) {
             if (err) {
@@ -172,7 +174,11 @@ module.exports = function(app) {
                             res.json(500, err);
                             return;
                         }
-                        res.json(200, [deal, {'liked': dealInfo.liked, 'owned': dealInfo.owned}]);
+                        var editable = false;
+                        if (uid == oldDeal.crtBy) {
+                            editable = true;
+                        }
+                        res.json(200, [deal, {'liked': dealInfo.liked, 'owned': dealInfo.owned, 'editable': editable}]);
                     });
                     break;
                 case 'like':
@@ -237,6 +243,39 @@ module.exports = function(app) {
             }
             logger.debug('Deleted deal: ' + req.params.id);
             res.json(200, {'_id': req.params.id});
+        })
+    });
+
+    app.get('/allDeals', function(req, res) {
+        Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
+        })
+    });
+
+    app.get('/newestDeals', function(req, res) {
+        Deal.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
+        })
+    });
+
+    app.get('/hottestDeals', function(req, res) {
+        Deal.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
         })
     });
 

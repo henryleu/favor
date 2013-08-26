@@ -34,7 +34,7 @@
                     <li><img src="/web/img/glyphicons/png/glyphicons_051_eye_open.png" title="看过" alt="看过">&nbsp;<%=input.meta.views%></li>
                     <li><img src="/web/img/glyphicons/png/glyphicons_012_heart.png" title="喜欢" alt="喜欢">&nbsp;<%=input.meta.likes%></li>
                     <li><img src="/web/img/glyphicons/png/glyphicons_152_check.png" title="拥有" alt="拥有">&nbsp;<%=input.meta.owns%></li>
-                    <li><img src="/web/img/glyphicons/png/glyphicons_458_money.png" title="成交" alt="成交">&nbsp;<%=input.meta.deals%></li>
+                    <li><img src="/web/img/glyphicons/png/glyphicons_130_inbox.png" title="成交" alt="成交">&nbsp;<%=input.meta.deals%></li>
                 </ul>
             </div>
         </div>
@@ -55,6 +55,12 @@
             <dt>更新时间：</dt>
             <dd><%=input.updOn%></dd>
         </dl>
+        </div>
+        <div class="row-fluid text-right">
+<% if (input.editable == true) { %>
+            <a href="/share/<%=input._id%>" class="btn"><i class="icon-edit"> 编辑</i></a>
+<% } %>
+            <a href="javascript: history.back();" class="btn"><i class="icon-chevron-left"> 返回</i></a>
         </div>
     </div>
 </div>
