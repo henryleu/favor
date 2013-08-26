@@ -31,10 +31,10 @@
             </div>
             <div class="span8 text-right">
                 <ul class="inline">
-                    <li><img src="/web/img/glyphicons/png/glyphicons_051_eye_open.png" title="看过" alt="看过">&nbsp;<%=input.meta.views%></li>
-                    <li><img src="/web/img/glyphicons/png/glyphicons_012_heart.png" title="喜欢" alt="喜欢">&nbsp;<%=input.meta.likes%></li>
-                    <li><img src="/web/img/glyphicons/png/glyphicons_152_check.png" title="拥有" alt="拥有">&nbsp;<%=input.meta.owns%></li>
-                    <li><img src="/web/img/glyphicons/png/glyphicons_130_inbox.png" title="成交" alt="成交">&nbsp;<%=input.meta.deals%></li>
+                    <li><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=input.meta.views%></i></li>
+                    <li><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=input.meta.likes%></i></li>
+                    <li><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=input.meta.owns%></i></li>
+                    <li><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=input.meta.deals%></i></li>
                 </ul>
             </div>
         </div>
@@ -60,7 +60,7 @@
 <% if (input.editable == true) { %>
             <a href="/share/<%=input._id%>" class="btn"><i class="icon-edit"> 编辑</i></a>
 <% } %>
-            <a href="javascript: history.back();" class="btn"><i class="icon-chevron-left"> 返回</i></a>
+            <a href="javascript: history.back();" class="btn"><i class="icon-reply"> 返回</i></a>
         </div>
     </div>
 </div>

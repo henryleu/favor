@@ -288,6 +288,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         configure: function() {
             this.model = new Deal();
             this.model.set('_id', 0);
+            this.uploadingImage = false;
         },
         afterRender: function() {
             var thisView = this;
@@ -296,10 +297,16 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 url: '/files/',
                 dataType: 'json',
                 add: function (e, data) {
+                    $('#uploadIcon').removeClass('icon-picture');
+                    $('#uploadIcon').addClass('icon-spinner icon-spin');
+                    thisView.uploadingImage = true;
                     $('#fileName').html(data.files[0].name);
                     data.submit();
                 },
                 done: function (e, data) {
+                    $('#uploadIcon').removeClass('icon-spinner icon-spin');
+                    $('#uploadIcon').addClass('icon-picture');
+                    thisView.uploadingImage = false;
                     var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
@@ -310,6 +317,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
         },
         uploadLocalImage: function() {
+            if (this.uploadingImage == true) return;
             $('#imageFile').click();
         },
         changeImageURL: function() {
