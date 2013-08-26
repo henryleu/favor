@@ -292,19 +292,14 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var thisView = this;
-            $.ajaxSetup({
-                error: function(xhr, status, e) {
-                    if (xhr.status == 413) {
-                        alert('抱歉，上传失败。你选择的图片太大了。');
-                    } else {
-                        alert(xhr.status + ': ' + e.toString());
-                    }
-                }
-            });
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: '/files/',
                 dataType: 'json',
+                timeout: 20000,
+                error: function(xhr, status, e) {
+                    alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
+                },
                 add: function(e, data) {
                     $('#uploadIcon').removeClass('icon-picture');
                     $('#uploadIcon').addClass('icon-spinner icon-spin');
