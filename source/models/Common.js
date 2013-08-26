@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var logger = require('../../lib/logging').logger;
 var Schema = mongoose.Schema;
 var CommonProps = {
+    ID: '_id',
     MODEL_VERSION: '_mv',
     DOCUMENT_VERSION: '_dv',
     LIFE_FLAG: 'lFlg',
@@ -15,6 +16,7 @@ var CP = CommonProps;
 
 var CommonSchema = {};
 var CS = CommonSchema;
+CommonSchema[CommonProps.ID] = Number;
 CommonSchema[CommonProps.MODEL_VERSION] = {type: Number, default: 0};
 CommonSchema[CommonProps.DOCUMENT_VERSION] = {type: Number, default: 0};
 CommonSchema[CommonProps.LIFE_FLAG] = {type: Number, default: 0};//INFO: 0: active; 1: inactive; 2: deleted;
@@ -26,7 +28,9 @@ CommonSchema[CommonProps.UPDATED_ON] = {type: Date, default: null};
 var BaseOptions = {
     //safe: {}, //TODO: it is important option which need to be specified carefully later.
     strict: true,
-    versionKey: CommonProps.DOCUMENT_VERSION
+    versionKey: CommonProps.DOCUMENT_VERSION,
+    _id: true,//TODO: switch off later if user-generated id is used
+    id: true//TODO: switch off later if user-generated id is used
 };
 
 var SchemaBuilder = function(){
@@ -38,9 +42,17 @@ SchemaBuilder.i = function(){
 };
 SchemaBuilder.baseProperties = _.pick(CS, CP.DOCUMENT_VERSION);
 SchemaBuilder.baseOptions = BaseOptions;
-SchemaBuilder.prototype.withBase = function(){
-    _.extend(this.properties, SchemaBuilder.baseProperties); //Append base properties' definition
+SchemaBuilder.prototype.withBaseOptions = function(){
     _.extend(this.options, SchemaBuilder.baseOptions); //Append base options' definition
+    return this;
+};
+SchemaBuilder.prototype.withBaseProperties = function(){
+    _.extend(this.properties, SchemaBuilder.baseProperties); //Append base properties' definition
+    return this;
+};
+SchemaBuilder.prototype.withBase = function(){
+    this.withBaseOptions();
+    this.withBaseProperties();
     return this;
 };
 SchemaBuilder.prototype.withProperties = function(props){
