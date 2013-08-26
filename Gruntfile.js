@@ -9,6 +9,24 @@ function createFileSha(filenane) {
 module.exports = function(grunt) {
 	grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        copy: {
+            img: {
+                files: [
+                    {
+                        expand: true, flatten: false,
+                        cwd: 'web/css/img/',
+                        src: ['**'],
+                        dest: 'public/build/img/'
+                    },
+                    {
+                        expand: true, flatten: false,
+                        cwd: 'web/css/img/',
+                        src: ['**'],
+                        dest: 'web/build/img/'
+                    }
+                ]
+            }
+        },
         jst: {
             compile: {
                 options: {
@@ -95,8 +113,8 @@ module.exports = function(grunt) {
         },
         watch: {
             img: {
-                files: ['web/img/*'],
-                tasks: ['requirejs:css_prd', 'requirejs:css_dev'],
+                files: ['web/css/img/*'],
+                tasks: ['copy:img', 'requirejs:css_prd', 'requirejs:css_dev'],
                 options: {
                     nospawn: true,
                     interrupt: false
@@ -130,7 +148,7 @@ module.exports = function(grunt) {
 	});
 
 	// Laoded tasks
-//    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 //    grunt.loadNpmTasks('grunt-contrib-concat');
 //    grunt.loadNpmTasks('grunt-contrib-uglify');
 //    grunt.loadNpmTasks('grunt-recess');
@@ -145,6 +163,6 @@ module.exports = function(grunt) {
 	// Default task.
 	//grunt.registerTask('default', ['jshint', 'requirejs', 'hashres']);
 //    grunt.registerTask('default', ['copy',  'jst', 'concat', 'recess','uglify']);
-    grunt.registerTask('default', ['jst', 'requirejs']);
+    grunt.registerTask('default', ['copy', 'jst', 'requirejs']);
     grunt.registerTask('dev', ['watch']);
 };
