@@ -309,7 +309,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.$('#imageFile').fileupload({
                 url: '/files/',
                 dataType: 'json',
-                timeout: 20000,
+                timeout: 30000,
                 error: function(xhr, status, e) {
                     alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
                 },
