@@ -119,8 +119,6 @@ module.exports = function(app) {
 
     app.put('/deal/:id', function(req, res) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
-        logger.debug('Inbound dealInfo: ');
-        logger.debug(dealInfo);
         var uid = req.user.id;
         var dealId = req.params.id;
         Deal.findOne({'_id': dealId}, function(err, oldDeal) {
