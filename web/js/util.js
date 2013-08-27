@@ -86,6 +86,10 @@ Date.prototype.toString=function(format,loc){
         var matched = loadUrl.apply(this, arguments),
             gaFragment = this.fragment;
         if (!/^\//.test(gaFragment)) gaFragment = '/' + gaFragment;
+        (function(i,r){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();
+        })(window,'ga');
+        ga('create', 'UA-43530384-1', 'realsaas.com');
         ga('send', 'pageview');
         console.log('send pageview - ' + gaFragment);
         if(window._gaq !== undefined) {
