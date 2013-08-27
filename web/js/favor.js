@@ -135,6 +135,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 }
             });
             this.models['catalog'].selfrun = selfrunCatalog;
+
+            this.configureViews();
         },
         switchView: function(view, id){
             console.log(view + ' - ' + id);
@@ -255,6 +257,17 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 $(content).html( view.el );
             }
             return view;
+        },
+        configureViews: function(){
+            $('ul li.message a').mouseup(function(){
+                var p = $(this).parent();
+                if(p.hasClass('active')){
+                    p.removeClass('active');
+                }
+                else{
+                    p.addClass('active');
+                }
+            });
         }
     });
 
