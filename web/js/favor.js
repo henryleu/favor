@@ -309,22 +309,28 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.$('#imageFile').fileupload({
                 url: '/files/',
                 dataType: 'json',
-                add: function (e, data) {
+                timeout: 20000,
+                error: function(xhr, status, e) {
+                    alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
+                },
+                add: function(e, data) {
                     $('#uploadIcon').removeClass('icon-picture');
                     $('#uploadIcon').addClass('icon-spinner icon-spin');
                     thisView.uploadingImage = true;
                     $('#fileName').html(data.files[0].name);
                     data.submit();
                 },
-                done: function (e, data) {
-                    $('#uploadIcon').removeClass('icon-spinner icon-spin');
-                    $('#uploadIcon').addClass('icon-picture');
-                    thisView.uploadingImage = false;
+                done: function(e, data) {
                     var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
                     thisView.model.set('image', imageURL);
                     $('#imageURLContainer').removeClass('error');
+                },
+                always: function(e, data) {
+                    $('#uploadIcon').removeClass('icon-spinner icon-spin');
+                    $('#uploadIcon').addClass('icon-picture');
+                    thisView.uploadingImage = false;
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
