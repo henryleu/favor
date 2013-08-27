@@ -20,6 +20,9 @@ require.config({
         'Fileupload': {
             deps: ['jQuery', 'jquery.ui.widget']
         },
+        'backbone.analytics': {
+            deps: ['Backbone', 'Underscore']
+        },
         'JST': {
             exports: 'JST'
         },
@@ -35,13 +38,14 @@ require.config({
         Bootstrap: '../../public/components/bootstrap-tl/tl/js/bootstrap',
         'jquery.ui.widget':  '../../public/components/jquery-file-upload/js/vendor/jquery.ui.widget',
         Fileupload: '../../public/components/jquery-file-upload/js/jquery.fileupload',
+        'backbone.analytics': '../../public/components/backbone.analytics/backbone.analytics',
         JST: '../../public/build/js/templates',
         Spa: 'backbone-spa',
         Favor: 'favor',
         Util: 'util',
         App: 'app'
     },
-    deps: ['App', 'Util'],
+    deps: ['App', 'Util', 'backbone.analytics'],
     callback: function(){
     },
     preserveLicenseComments: false

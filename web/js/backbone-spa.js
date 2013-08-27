@@ -31,8 +31,6 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
             _apply(this, this.defaults());
             _apply(this, _.pick(options, spaOptions));
             this.configure.apply(this, arguments);
-            //track every route change as a page view in google analytics
-            this.bind('route', this.trackPageview);
         },
         configure: function(){},
         startup: function(){
@@ -59,18 +57,6 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
                     Backbone.history.navigate(href.attr, true);
                 }
             });
-        },
-        trackPageview: function ()
-        {
-            var url = Backbone.history.getFragment();
-
-            //prepend slash
-            if (!/^\//.test(url) && url != "")
-            {
-                url = "/" + url;
-            }
-
-            if (window._gaq !== undefined) window._gaq.push(['_trackPageview', url]);
         }
     });
 

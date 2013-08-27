@@ -11,6 +11,7 @@
     "requirejs": "~2.1.8",
     "animate.css": "latest",
     "font-awesome": "~3.2.1",
-    "jquery-file-upload": "~8.6.1"
+    "jquery-file-upload": "~8.6.1",
+    "backbone.analytics": "latest"
   }
 }
