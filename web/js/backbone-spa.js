@@ -70,7 +70,7 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
                 url = "/" + url;
             }
 
-            _gaq.push(['_trackPageview', url]);
+            if (window._gaq !== undefined) window._gaq.push(['_trackPageview', url]);
         }
     });
 
