@@ -31,6 +31,8 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
             _apply(this, this.defaults());
             _apply(this, _.pick(options, spaOptions));
             this.configure.apply(this, arguments);
+            //bind route events for google analytics
+            this.bind('route', this.trackPageview);
         },
         configure: function(){},
         startup: function(){
@@ -57,6 +59,15 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
                     Backbone.history.navigate(href.attr, true);
                 }
             });
+        },
+        trackPageview: function() {
+            var url = Backbone.history.getFragment();
+            if (!/^\//.test(url)) url = '/' + url;
+            ga('send', {
+                'hitType': 'pageview',
+                'page': url
+            });
+            console.log('send pageview - ' + url);
         }
     });
 
