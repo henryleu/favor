@@ -24,7 +24,7 @@ require.config({
             exports: 'JST'
         },
         'Util': {
-            deps: ['jQuery', 'Underscore', 'Backbone']
+            deps: ['jQuery']
         }
     },
     paths: {
