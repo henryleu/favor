@@ -20,12 +20,12 @@
 <% if (input.liked == true) { %>
                     <li><i class="icon-heart"> 我喜欢</i></li>
 <% } else { %>
-                    <li><a id="likeDeal" href="/showDeal" class="btn btn-success"><i class="icon-heart-empty"> 我喜欢</i></a></li>
+                    <li><button id="likeDeal" class="btn btn-success"><i class="icon-heart-empty"> 我喜欢</i></button></li>
 <% }
    if (input.owned == true) { %>
                     <li><i class="icon-check"> 我拥有</i></li>
 <% } else { %>
-                    <li><a id="ownDeal" href="/showDeal" class="btn btn-success"><i class="icon-check"> 我拥有</i></a></li>
+                    <li><button id="ownDeal" class="btn btn-success"><i class="icon-check"> 我拥有</i></button></li>
 <% } %>
                 </ul>
             </div>
