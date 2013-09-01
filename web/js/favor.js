@@ -502,8 +502,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
         events: {
             'click #likeDeal': 'likeDeal',
             'click #ownDeal': 'ownDeal',
-            'mouseover .innerButton': 'onMouseoverButton',
-            'mouseleave .innerButton': 'onMouseleaveButton'
+            'mouseover .needOverLeave': 'onMouseoverButton',
+            'mouseleave .needOverLeave': 'onMouseleaveButton'
         },
         configure: function() {
             var meta = new function(){};
@@ -551,11 +551,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
-            $(event.currentTarget).addClass('btn-success');
+//            $(event.currentTarget).addClass('btn-success');
         },
         onMouseleaveButton: function(event) {
             $(event.currentTarget).addClass('btn-link');
-            $(event.currentTarget).removeClass('btn-success');
+//            $(event.currentTarget).removeClass('btn-success');
         },
         viewDeal: function(dealId) {
             this.model.id = dealId;
