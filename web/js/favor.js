@@ -1,25 +1,7 @@
 define(['Spa', 'jQuery'], function(spa, $) {
     var Deal = spa.Model.extend({
         idAttribute: '_id',
-        urlRoot: '/deal',
-        defaults: {
-            '_id': 0,
-            'image': '',
-            'sDesc': '',
-            'lDesc': '',
-            'dUrl': '',
-            'actionType': '',
-            'lastDealId': 0
-        },
-        clear: function() {
-            this.set('_id', 0);
-            this.set('image', '');
-            this.set('sDesc', '');
-            this.set('lDesc', '');
-            this.set('dUrl', '');
-            this.set('actionType', '');
-            this.set('lastDealId', 0);
-        }
+        urlRoot: '/deal'
     });
 
     var NewestCatalog = spa.Collection.extend({
@@ -87,6 +69,31 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         catalogSelfrun: function(){
             this.switchView(this.selfrunLargeIconsView);
+        },
+        reFetchAll: function() {
+            console.debug('Start reFetchAll...');
+            var me = this;
+            this.model.newest.fetch({
+                success: function(){
+                    me.model.newest.fetched = true;
+                    me.newestLargeIconsView.doRender();
+                    console.debug('Newest rendered.');
+                }
+            });
+            this.model.hottest.fetch({
+                success: function(){
+                    me.model.hottest.fetched = true;
+                    me.hottestLargeIconsView.doRender();
+                    console.debug('Hottest rendered.');
+                }
+            });
+            this.model.selfrun.fetch({
+                success: function(){
+                    me.model.selfrun.fetched = true;
+                    me.selfrunLargeIconsView.doRender();
+                    console.debug('Selfrun rendered.');
+                }
+            });
         }
     });
 
@@ -171,10 +178,19 @@ define(['Spa', 'jQuery'], function(spa, $) {
             var view = this.views[viewName];
             if (!view) {
                 //When first access
-                view = new ShareSubjectView({spa: this, modelDriven: false});
+                var deal = new Deal();
+                view = new ShareSubjectView({spa: this, model: deal, modelDriven: false});
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
+                //Let Catalog view to listen the sync event of share model
+                if (!this.views['catalog']) {
+                    this.ensureCatalogView('find');
+                }
+                var catalogView = this.views['catalog'];
+                this.views['catalog'].listenTo(this.views['share'].model, 'sync', function() {
+                    catalogView.reFetchAll();
+                });
             }
             if(!(id == null)) {
                 view.loadDealInfo(id);
@@ -296,15 +312,48 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'click #updateDealInfo': 'updateDealInfo',
             'click #deleteDealInfo': 'deleteDealInfo',
             'click #clearDealInfo': 'clearDealInfo',
-            'click #abandonChange': 'abandonChange'
+            'click #abandonChange': 'clearDealInfo'
         },
         configure: function() {
-            this.model = new Deal();
-            this.model.set('_id', 0);
+            var me = this;
             this.uploadingImage = false;
+            this.listenTo(this.model, 'sync', function(model, resp, options) {
+                console.debug('ShareSubjectView sync event callback: ' + me.syncMethod);
+                switch(me.syncMethod) {
+                    case 'create':
+                    case 'update':
+                        me.model.clear();
+                        console.log('Successfully ' + me.syncMethod + ': ' + JSON.stringify(resp));
+                        var deal = JSON.parse(JSON.stringify(resp));
+                        me.model.set('lastDealId', deal._id);
+                        me.doRender();
+                        $('#successMsg').show();
+                        break;
+                    case 'delete':
+                        me.clearDealInfo();
+                        console.log('Successfully delete: ' + JSON.stringify(resp));
+                        $('#successMsg').show();
+                        break;
+                    case 'read':
+                        console.log('Successfully read: ' + JSON.stringify(resp));
+                        JSON.parse(JSON.stringify(resp), function(key, value) {
+                            me.model.set(key, value);
+                        });
+                        Backbone.history.navigate('share');
+                        me.doRender();
+                        $('#successMsg').hide();
+                        break;
+                    default:
+                        break;
+                }
+            });
+            this.listenTo(this.model, 'error', function(model, xhr, options) {
+                console.log('Error occurred when ' + me.syncMethod + ' deal. -> ' + JSON.stringify(xhr));
+                $('#errorMsg').show();
+            });
         },
         afterRender: function() {
-            var thisView = this;
+            var me = this;
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: '/files/',
@@ -316,7 +365,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 add: function(e, data) {
                     $('#uploadIcon').removeClass('icon-picture');
                     $('#uploadIcon').addClass('icon-spinner icon-spin');
-                    thisView.uploadingImage = true;
+                    me.uploadingImage = true;
                     $('#fileName').html(data.files[0].name);
                     data.submit();
                 },
@@ -324,13 +373,13 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
                     $('#previewImg').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
-                    thisView.model.set('image', imageURL);
+                    me.model.set('image', imageURL);
                     $('#imageURLContainer').removeClass('error');
                 },
                 always: function(e, data) {
                     $('#uploadIcon').removeClass('icon-spinner icon-spin');
                     $('#uploadIcon').addClass('icon-picture');
-                    thisView.uploadingImage = false;
+                    me.uploadingImage = false;
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -393,65 +442,20 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         publishDealInfo: function() {
             if (!this.isFulfilled()) return;
-            var thisView = this;
-            thisView.model.id = '';
-            Backbone.sync('create', thisView.model, {
-                error: function(response, flag) {
-                    console.log('Error occurred in creating deal. -> ' + JSON.stringify(response));
-                    $('#errorMsg').show();
-                },
-                success: function(response, flag) {
-                    thisView.model.clear();
-                    console.log('Published deal: ' + JSON.stringify(response));
-                    var deal = JSON.parse(JSON.stringify(response));
-                    thisView.model.set('lastDealId', deal._id);
-                    thisView.doRender();
-                    $('#successMsg').show();
-                }
-            });
+            this.syncMethod = 'create';
+            this.model.save();
         },
         updateDealInfo: function() {
             if (!this.isFulfilled()) return;
-            var thisView = this;
-            thisView.model.set('actionType', 'update');
-            Backbone.sync('update', thisView.model, {
-                error: function(response, flag) {
-                    console.log('Error occurred in updating deal. -> ' + JSON.stringify(response));
-                    $('#errorMsg').show();
-                },
-                success: function(response, flag) {
-                    thisView.model.clear();
-                    console.log('Updated deal: ' + JSON.stringify(response));
-                    var deal = JSON.parse(JSON.stringify(response));
-                    thisView.model.set('lastDealId', deal._id);
-                    thisView.doRender();
-                    $('#successMsg').show();
-                }
-            });
+            this.model.set('actionType', 'update');
+            this.syncMethod = 'update';
+            this.model.save();
         },
         deleteDealInfo: function() {
-            var thisView = this;
-            Backbone.sync('delete', thisView.model, {
-                error: function(response, flag) {
-                    console.log('Error occurred in deleting deal. -> ' + JSON.stringify(response));
-                    $('#errorMsg').show();
-                },
-                success: function(response, flag) {
-                    thisView.model.clear();
-                    thisView.doRender();
-                    console.log('Deleted deal: ' + JSON.stringify(response));
-                    $('#successMsg').show();
-                }
-            });
+            this.syncMethod = 'delete';
+            this.model.destroy();
         },
         clearDealInfo: function() {
-            this.model.set('image', '');
-            this.model.set('sDesc', '');
-            this.model.set('lDesc', '');
-            this.model.set('dUrl', '');
-            this.doRender();
-        },
-        abandonChange: function() {
             this.model.clear();
             this.doRender();
         },
@@ -475,23 +479,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }
         },
         loadDealInfo: function(dealId) {
-            var thisView = this;
-            thisView.model.id = dealId;
-            Backbone.sync('read', thisView.model, {
-                error: function(response, flag) {
-                    console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
-                    $('#errorMsg').show();
-                },
-                success: function(response, flag) {
-                    console.log(JSON.stringify(response));
-                    JSON.parse(JSON.stringify(response), function(key, value) {
-                        thisView.model.set(key, value);
-                    });
-                    Backbone.history.navigate('share');
-                    thisView.doRender();
-                    $('#successMsg').hide();
-                }
-            });
+            this.model.id = dealId;
+            this.syncMethod = 'read';
+            this.model.fetch();
         }
     });
 
@@ -551,9 +541,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.loadDealInfo('view');
         },
         loadDealInfo: function(actionType) {
-            var thisView = this;
-            thisView.model.set('actionType', actionType);
-            Backbone.sync('update', thisView.model, {
+            var me = this;
+            me.model.set('actionType', actionType);
+            Backbone.sync('update', me.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
                     alert('Failed to show deal: ' + dealId);
@@ -561,9 +551,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 success: function(response, flag) {
                     console.log(JSON.stringify(response));
                     JSON.parse(JSON.stringify(response), function(key, value) {
-                        thisView.dealAttrReviver(thisView, key, value);
+                        me.dealAttrReviver(me, key, value);
                     });
-                    thisView.doRender();
+                    me.doRender();
                 }
             });
         }
