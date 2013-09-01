@@ -200,7 +200,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
             var view = this.views[viewName];
             if (!view) {
                 //When first access
-                view = new ShowDealView({spa: this, modelDriven: false});
+                var deal = new Deal();
+                view = new ShowDealView({spa: this, model: deal, modelDriven: false});
                 this.views[viewName] = view;
                 var content = '[set="' + viewName + '"].view';
                 $(content).html(view.el);
@@ -292,7 +293,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
     });
 
     var CatalogListLargeIconsView = spa.View.extend({
-        templateName: 'large-icons'
+        templateName: 'large-icons',
+        events: {
+            'click .itemImage': 'onClickThumbnail'
+        },
+        onClickThumbnail: function(event) {
+            console.debug($(event.currentTarget).attr('dealid') + ' clicked.');
+            var deal = new Deal();
+            var view = new ShowDealView({spa: this.spa, model: deal, modelDriven: false});
+//            $(event.currentTarget).removeClass('btn btn-link');
+            $(event.currentTarget).parent().html(view.el);
+            view.viewDeal($(event.currentTarget).attr('dealid'));
+        }
     });
 
     var ShareSubjectView = spa.View.extend({
@@ -489,10 +501,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
         templateName: 'show-deal',
         events: {
             'click #likeDeal': 'likeDeal',
-            'click #ownDeal': 'ownDeal'
+            'click #ownDeal': 'ownDeal',
+            'mouseover .innerButton': 'onMouseoverButton',
+            'mouseleave .innerButton': 'onMouseleaveButton'
         },
         configure: function() {
-            this.model = new Deal();
             var meta = new function(){};
             meta.views = 0;
             meta.likes = 0;
@@ -536,14 +549,22 @@ define(['Spa', 'jQuery'], function(spa, $) {
         ownDeal: function() {
             this.loadDealInfo('own');
         },
+        onMouseoverButton: function(event) {
+            $(event.currentTarget).removeClass('btn-link');
+            $(event.currentTarget).addClass('btn-success');
+        },
+        onMouseleaveButton: function(event) {
+            $(event.currentTarget).addClass('btn-link');
+            $(event.currentTarget).removeClass('btn-success');
+        },
         viewDeal: function(dealId) {
             this.model.id = dealId;
             this.loadDealInfo('view');
         },
         loadDealInfo: function(actionType) {
             var me = this;
-            me.model.set('actionType', actionType);
-            Backbone.sync('update', me.model, {
+            this.model.set('actionType', actionType);
+            Backbone.sync('update', this.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
                     alert('Failed to show deal: ' + dealId);
