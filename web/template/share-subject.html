@@ -1,7 +1,7 @@
 <div class="row-fluid">
 <br>
 <div id="successMsg" class="alert alert-success" hidden="true">
-    <button type="button" class="close" onclick="javascript: $('#successMsg').hide();">&times;</button>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
 <% if (!input.lastDealId) { %>
     <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以继续发布信息。</span>
 <% } else { %>
@@ -9,7 +9,7 @@
 <% } %>
 </div>
 <div id="errorMsg" class="alert alert-error" hidden="true">
-    <button type="button" class="close" onclick="javascript: $('#errorMsg').hide();">&times;</button>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>操作失败!</strong>&nbsp;&nbsp;<span>抱歉，服务器发生错误，请稍后再试。</span>
 </div>
 </div>

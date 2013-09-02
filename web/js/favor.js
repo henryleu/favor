@@ -12,9 +12,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
         model: Deal,
         url: '/hottestDeals'
     });
-    var SelfrunCatalog = spa.Collection.extend({
+    var RecommendCatalog = spa.Collection.extend({
         model: Deal,
-        url: '/allDeals'
+        url: '/recommendDeals'
     });
 
     var CatalogView = spa.View.extend({
@@ -22,36 +22,72 @@ define(['Spa', 'jQuery'], function(spa, $) {
         hidden: false,
         prerendered: true,
         events: {
-            'mouseup [href="catalog-newest"]': 'catalogNewest',
-            'mouseup [href="catalog-hottest"]': 'catalogHottest',
-            'mouseup [href="catalog-selfrun"]': 'catalogSelfrun',
+            'click .largeIconsMode': 'switchToLargeIconsMode',
+            'click .waterfallMode': 'switchToWaterfallMode',
             'mouseover .floatButton': 'onMouseoverButton',
             'mouseleave .floatButton': 'onMouseleaveButton',
             'click #refreshAll': 'refetchAll',
             'hidden #myModal': 'refetchAll'
         },
-        configure: function(){
-            this.newestLargeIconsView = new CatalogListLargeIconsView({
-                vid: 'catalog-newest',
+        configure: function() {
+            this.newestLargeIconsView = new LargeIconsView({
+                vid: 'catalog-newest-largeIcons',
                 spa: this.spa,
                 prerendered: true,
                 model: this.model.newest
             });
-            this.hottestLargeIconsView = new CatalogListLargeIconsView({
-                vid: 'catalog-hottest',
+            this.hottestLargeIconsView = new LargeIconsView({
+                vid: 'catalog-hottest-largeIcons',
                 spa: this.spa,
                 prerendered: true,
                 model: this.model.hottest
             });
-            this.selfrunLargeIconsView = new WaterfallView({
-                vid: 'catalog-selfrun',
+            this.recommendLargeIconsView = new LargeIconsView({
+                vid: 'catalog-recommend-largeIcons',
                 spa: this.spa,
                 prerendered: true,
-                model: this.model.selfrun
+                model: this.model.recommend
+            });
+            this.newestWaterfallView = new WaterfallView({
+                vid: 'catalog-newest-waterfall',
+                spa: this.spa,
+                prerendered: true,
+                model: this.model.newest
+            });
+            this.hottestWaterfallView = new WaterfallView({
+                vid: 'catalog-hottest-waterfall',
+                spa: this.spa,
+                prerendered: true,
+                model: this.model.hottest
+            });
+            this.recommendWaterfallView = new WaterfallView({
+                vid: 'catalog-recommend-waterfall',
+                spa: this.spa,
+                prerendered: true,
+                model: this.model.recommend
             });
             this.addChild(this.newestLargeIconsView);
             this.addChild(this.hottestLargeIconsView);
-            this.addChild(this.selfrunLargeIconsView);
+            this.addChild(this.recommendLargeIconsView);
+            this.addChild(this.newestWaterfallView);
+            this.addChild(this.hottestWaterfallView);
+            this.addChild(this.recommendWaterfallView);
+
+            this.viewMode = [];
+            this.viewMode['newest'] = 'largeIcons';
+            this.viewMode['hottest'] = 'largeIcons';
+            this.viewMode['recommend'] = 'largeIcons';
+            this.subViews = [];
+            this.subViews['newest'] = [];
+            this.subViews['newest']['largeIcons'] = this.newestLargeIconsView;
+            this.subViews['newest']['waterfall'] = this.newestWaterfallView;
+            this.subViews['hottest'] = [];
+            this.subViews['hottest']['largeIcons'] = this.hottestLargeIconsView;
+            this.subViews['hottest']['waterfall'] = this.hottestWaterfallView;
+            this.subViews['recommend'] = [];
+            this.subViews['recommend']['largeIcons'] = this.recommendLargeIconsView;
+            this.subViews['recommend']['waterfall'] = this.recommendWaterfallView;
+            this.curViewName = 'newest';
 
             //Initialize dealDetailView
             this.dealDetailView = new ShowDealView({
@@ -59,57 +95,74 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 spa: this.spa,
                 model: this.model.curDeal
             });
-            this.selfrunLargeIconsView.dealView = this.dealDetailView;
+            this.newestWaterfallView.dealView = this.dealDetailView;
+            this.hottestWaterfallView.dealView = this.dealDetailView;
+            this.recommendWaterfallView.dealView = this.dealDetailView;
             var me = this;
             this.listenTo(this.dealDetailView, 'dataLoaded', function() {
                 $('#myModal').modal();
             });
         },
-        afterRender: function(){
+        afterRender: function() {
         },
-        afterRenderChildren: function(){
+        afterRenderChildren: function() {
         },
-        switchView: function(view){
+        switchSubView: function() {
             _.each(this.children, function(v, id){
                 v.hide();
             });
-            //alert(view.model.fetched);
+            var view = this.subViews[this.curViewName][this.viewMode[this.curViewName]];
             view.doRender();
             view.show();
+            this.switchModeButtons();
+
+            //Enable google analytics tracking of switchSubView
+            ga('send', {
+                'hitType': 'event',
+                'eventCategory': this.curViewName + '-' + this.viewMode[this.curViewName],
+                'eventAction': 'click',
+                'eventLabel': 'switch view mode'
+            });
         },
-        catalogNewest: function(){
-            this.switchView(this.newestLargeIconsView);
+        catalogNewest: function() {
+            this.curViewName = 'newest';
+            this.switchSubView();
         },
         catalogHottest: function(){
-            this.switchView(this.hottestLargeIconsView);
+            this.curViewName = 'hottest';
+            this.switchSubView();
         },
-        catalogSelfrun: function(){
-            this.switchView(this.selfrunLargeIconsView);
+        catalogRecommend: function(){
+            this.curViewName = 'recommend';
+            this.switchSubView();
+        },
+        switchToLargeIconsMode: function() {
+            this.viewMode[this.curViewName] = 'largeIcons';
+            this.switchSubView();
+        },
+        switchToWaterfallMode: function() {
+            this.viewMode[this.curViewName] = 'waterfall';
+            this.switchSubView();
+        },
+        switchModeButtons: function() {
+            switch(this.viewMode[this.curViewName]) {
+                case 'largeIcons':
+                    $('.largeIconsMode').addClass('active');
+                    $('.waterfallMode').removeClass('active');
+                    break;
+                case 'waterfall':
+                    $('.largeIconsMode').removeClass('active');
+                    $('.waterfallMode').addClass('active');
+                    break;
+                default:
+                    break;
+            }
         },
         refetchAll: function() {
             console.debug('Start refetchAll...');
-            var me = this;
-            this.model.newest.fetch({
-                success: function(){
-                    me.model.newest.fetched = true;
-                    me.newestLargeIconsView.doRender();
-                    console.debug('Newest rendered.');
-                }
-            });
-            this.model.hottest.fetch({
-                success: function(){
-                    me.model.hottest.fetched = true;
-                    me.hottestLargeIconsView.doRender();
-                    console.debug('Hottest rendered.');
-                }
-            });
-            this.model.selfrun.fetch({
-                success: function(){
-                    me.model.selfrun.fetched = true;
-                    me.selfrunLargeIconsView.doRender();
-                    console.debug('Selfrun rendered.');
-                }
-            });
+            this.model.newest.fetch();
+            this.model.hottest.fetch();
+            this.model.recommend.fetch();
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
@@ -123,7 +176,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         routes: {
             "catalog-newest": "catalogNewest",
             "catalog-hottest": "catalogHottest",
-            "catalog-selfrun": "catalogSelfrun",
+            "catalog-recommend": "catalogRecommend",
             "*view(/:id)": "switchView",
             "home": "home",
             "share": "share",
@@ -139,7 +192,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 fetched: true,
                 newest: null,
                 hottest: null,
-                selfrun: null,
+                recommend: null,
                 curDeal: null
             };
             var newestCatalog = new NewestCatalog({});
@@ -158,13 +211,13 @@ define(['Spa', 'jQuery'], function(spa, $) {
             });
             this.models['catalog'].hottest = hottestCatalog;
 
-            var selfrunCatalog = new SelfrunCatalog({});
-            selfrunCatalog.fetch({
+            var recommendCatalog = new RecommendCatalog({});
+            recommendCatalog.fetch({
                 success: function(){
-                    selfrunCatalog.fetched = true;
+                    recommendCatalog.fetched = true;
                 }
             });
-            this.models['catalog'].selfrun = selfrunCatalog;
+            this.models['catalog'].recommend = recommendCatalog;
 
             this.models['catalog'].curDeal = new Deal();
 
@@ -236,55 +289,19 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }
         },
         find: function(viewName){
-            this.ensureCatalogView(viewName).show().catalogNewest();
+            this.ensureCatalogView(viewName).show().switchSubView();
         },
         catalogNewest: function(viewName){
-            if(this.models['catalog'].newest.fetched){
-                this.switchView('find');
-                this.ensureCatalogView('find').show().catalogNewest();
-            }
-            else{
-                var me = this;
-                this.models['catalog'].newest.fetch({
-                    success: function(){
-                        me.models['catalog'].newest.fetched = true;
-                        me.switchView('find');
-                        me.ensureCatalogView('find').show().catalogNewest();
-                    }
-                });
-            }
+            this.switchView('find');
+            this.ensureCatalogView('find').show().catalogNewest();
         },
         catalogHottest: function(viewName){
-            if(this.models['catalog'].hottest.fetched){
-                this.switchView('find');
-                this.ensureCatalogView('find').show().catalogHottest();
-            }
-            else{
-                var me = this;
-                this.models['catalog'].hottest.fetch({
-                    success:function(){
-                        me.models['catalog'].hottest.fetched = true;
-                        me.switchView('find');
-                        me.ensureCatalogView('find').show().catalogHottest();
-                    }
-                });
-            }
+            this.switchView('find');
+            this.ensureCatalogView('find').show().catalogHottest();
         },
-        catalogSelfrun: function(viewName){
-            if(this.models['catalog'].selfrun.fetched){
-                this.switchView('find');
-                this.ensureCatalogView('find').show().catalogSelfrun();
-            }
-            else{
-                var me = this;
-                this.models['catalog'].selfrun.fetch({
-                    success:function(){
-                        me.models['catalog'].selfrun.fetched = true;
-                        me.switchView('find');
-                        me.ensureCatalogView('find').show().catalogSelfrun();
-                    }
-                });
-            }
+        catalogRecommend: function(viewName){
+            this.switchView('find');
+            this.ensureCatalogView('find').show().catalogRecommend();
         },
         forum: function(viewName){
 
@@ -319,13 +336,27 @@ define(['Spa', 'jQuery'], function(spa, $) {
         events: {
             'click .thing': 'onClickItem'
         },
+        configure: function() {
+            var me = this;
+            this.listenTo(this.model, 'sync', function(model, res, options) {
+                me.model.fetched = true;
+                me.doRender();
+            });
+        },
         onClickItem: function(event) {
             this.dealView.viewDeal($(event.currentTarget).attr('dealId'));
         }
     });
 
-    var CatalogListLargeIconsView = spa.View.extend({
-        templateName: 'large-icons'
+    var LargeIconsView = spa.View.extend({
+        templateName: 'large-icons',
+        configure: function() {
+            var me = this;
+            this.listenTo(this.model, 'sync', function(model, res, options) {
+                me.model.fetched = true;
+                me.doRender();
+            });
+        }
     });
 
     var ShareSubjectView = spa.View.extend({
@@ -350,26 +381,26 @@ define(['Spa', 'jQuery'], function(spa, $) {
         configure: function() {
             var me = this;
             this.uploadingImage = false;
-            this.listenTo(this.model, 'sync', function(model, resp, options) {
+            this.listenTo(this.model, 'sync', function(model, res, options) {
                 console.debug('ShareSubjectView sync event callback: ' + me.syncMethod);
                 switch(me.syncMethod) {
                     case 'create':
                     case 'update':
                         me.model.clear();
-                        console.log('Successfully ' + me.syncMethod + ': ' + JSON.stringify(resp));
-                        var deal = JSON.parse(JSON.stringify(resp));
+                        console.log('Successfully ' + me.syncMethod + ': ' + JSON.stringify(res));
+                        var deal = JSON.parse(JSON.stringify(res));
                         me.model.set('lastDealId', deal._id);
                         me.doRender();
                         $('#successMsg').show();
                         break;
                     case 'delete':
                         me.clearDealInfo();
-                        console.log('Successfully delete: ' + JSON.stringify(resp));
+                        console.log('Successfully delete: ' + JSON.stringify(res));
                         $('#successMsg').show();
                         break;
                     case 'read':
-                        console.log('Successfully read: ' + JSON.stringify(resp));
-                        JSON.parse(JSON.stringify(resp), function(key, value) {
+                        console.log('Successfully read: ' + JSON.stringify(res));
+                        JSON.parse(JSON.stringify(res), function(key, value) {
                             me.model.set(key, value);
                         });
                         Backbone.history.navigate('share');

@@ -244,7 +244,7 @@ module.exports = function(app) {
         })
     });
 
-    app.get('/allDeals', function(req, res) {
+    app.get('/recommendDeals', function(req, res) {
         Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
             if (err) {
                 logger.error(err);
