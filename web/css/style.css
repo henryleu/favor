@@ -670,6 +670,7 @@ button:focus.cystal-button img {
   box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
 }
 li.thing {
+  cursor: pointer;
   float: left;
   width: 270px;
   margin: 1em;

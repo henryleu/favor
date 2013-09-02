@@ -24,7 +24,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
         events: {
             'mouseup [href="catalog-newest"]': 'catalogNewest',
             'mouseup [href="catalog-hottest"]': 'catalogHottest',
-            'mouseup [href="catalog-selfrun"]': 'catalogSelfrun'
+            'mouseup [href="catalog-selfrun"]': 'catalogSelfrun',
+            'mouseover .floatButton': 'onMouseoverButton',
+            'mouseleave .floatButton': 'onMouseleaveButton',
+            'click #refreshAll': 'refetchAll',
+            'hidden #myModal': 'refetchAll'
         },
         configure: function(){
             this.newestLargeIconsView = new CatalogListLargeIconsView({
@@ -48,6 +52,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.addChild(this.newestLargeIconsView);
             this.addChild(this.hottestLargeIconsView);
             this.addChild(this.selfrunLargeIconsView);
+
+            //Initialize dealDetailView
+            this.dealDetailView = new ShowDealView({
+                vid: 'dealDetail',
+                spa: this.spa,
+                model: this.model.curDeal
+            });
+            this.selfrunLargeIconsView.dealView = this.dealDetailView;
+            var me = this;
+            this.listenTo(this.dealDetailView, 'dataLoaded', function() {
+                $('#myModal').modal();
+            });
         },
         afterRender: function(){
         },
@@ -70,8 +86,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
         catalogSelfrun: function(){
             this.switchView(this.selfrunLargeIconsView);
         },
-        reFetchAll: function() {
-            console.debug('Start reFetchAll...');
+        refetchAll: function() {
+            console.debug('Start refetchAll...');
             var me = this;
             this.model.newest.fetch({
                 success: function(){
@@ -94,6 +110,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     console.debug('Selfrun rendered.');
                 }
             });
+        },
+        onMouseoverButton: function(event) {
+            $(event.currentTarget).removeClass('btn-link');
+        },
+        onMouseleaveButton: function(event) {
+            $(event.currentTarget).addClass('btn-link');
         }
     });
 
@@ -117,7 +139,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 fetched: true,
                 newest: null,
                 hottest: null,
-                selfrun: null
+                selfrun: null,
+                curDeal: null
             };
             var newestCatalog = new NewestCatalog({});
             newestCatalog.fetch({
@@ -142,6 +165,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 }
             });
             this.models['catalog'].selfrun = selfrunCatalog;
+
+            this.models['catalog'].curDeal = new Deal();
 
             this.configureViews();
         },
@@ -189,7 +214,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 }
                 var catalogView = this.views['catalog'];
                 this.views['catalog'].listenTo(this.views['share'].model, 'sync', function() {
-                    catalogView.reFetchAll();
+                    catalogView.refetchAll();
                 });
             }
             if(!(id == null)) {
@@ -272,6 +297,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 this.views['catalog'] = view;
                 var content = '[set="'+viewName+'"].view';
                 $(content).html( view.el );
+                $('#myModal').html(view.dealDetailView.el);
             }
             return view;
         },
@@ -289,22 +315,17 @@ define(['Spa', 'jQuery'], function(spa, $) {
     });
 
     var WaterfallView = spa.View.extend({
-        templateName: 'waterfall'
+        templateName: 'waterfall',
+        events: {
+            'click .thing': 'onClickItem'
+        },
+        onClickItem: function(event) {
+            this.dealView.viewDeal($(event.currentTarget).attr('dealId'));
+        }
     });
 
     var CatalogListLargeIconsView = spa.View.extend({
-        templateName: 'large-icons',
-        events: {
-            'click .itemImage': 'onClickThumbnail'
-        },
-        onClickThumbnail: function(event) {
-            console.debug($(event.currentTarget).attr('dealid') + ' clicked.');
-            var deal = new Deal();
-            var view = new ShowDealView({spa: this.spa, model: deal, modelDriven: false});
-//            $(event.currentTarget).removeClass('btn btn-link');
-            $(event.currentTarget).parent().html(view.el);
-            view.viewDeal($(event.currentTarget).attr('dealid'));
-        }
+        templateName: 'large-icons'
     });
 
     var ShareSubjectView = spa.View.extend({
@@ -501,9 +522,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         templateName: 'show-deal',
         events: {
             'click #likeDeal': 'likeDeal',
-            'click #ownDeal': 'ownDeal',
-            'mouseover .needOverLeave': 'onMouseoverButton',
-            'mouseleave .needOverLeave': 'onMouseleaveButton'
+            'click #ownDeal': 'ownDeal'
         },
         configure: function() {
             var meta = new function(){};
@@ -549,14 +568,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
         ownDeal: function() {
             this.loadDealInfo('own');
         },
-        onMouseoverButton: function(event) {
-            $(event.currentTarget).removeClass('btn-link');
-//            $(event.currentTarget).addClass('btn-success');
-        },
-        onMouseleaveButton: function(event) {
-            $(event.currentTarget).addClass('btn-link');
-//            $(event.currentTarget).removeClass('btn-success');
-        },
         viewDeal: function(dealId) {
             this.model.id = dealId;
             this.loadDealInfo('view');
@@ -575,6 +586,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         me.dealAttrReviver(me, key, value);
                     });
                     me.doRender();
+                    if (actionType == 'view') me.trigger('dataLoaded');
                 }
             });
         }
