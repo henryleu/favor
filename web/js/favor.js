@@ -193,8 +193,10 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
+            $(event.currentTarget).addClass('btn-success');
         },
         onMouseleaveButton: function(event) {
+            $(event.currentTarget).removeClass('btn-success');
             $(event.currentTarget).addClass('btn-link');
         },
         onRequestFetchModel: function() {

@@ -20,18 +20,18 @@
         <div class="text-center">
             <br>
             <ul class="inline">
-                <li><a class="btn btn-link"><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=input.meta.views%></i></a></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=input.meta.views%></i></span></li>
                 <% if (input.liked == true) { %>
-                <li><a class="btn btn-link"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=input.meta.likes%></i></a></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=input.meta.likes%></i></span></li>
                 <% } else { %>
                 <li><a class="btn btn-link floatButton" id="likeDeal"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=input.meta.likes%></i></a></li>
                 <% }
                 if (input.owned == true) { %>
-                <li><a class="btn btn-link"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=input.meta.owns%></i></a></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=input.meta.owns%></i></span></li>
                 <% } else { %>
                 <li><a class="btn btn-link floatButton" id="ownDeal"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=input.meta.owns%></i></a></li>
                 <% } %>
-                <li><a class="btn btn-link"><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=input.meta.deals%></i></a></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=input.meta.deals%></i></span></li>
             </ul>
             <p>本信息由 <%=input.crtBy%> 创建于 <%=input.crtOn%>，由 <%=input.updBy%> 更新于 <%=input.updOn%>。</p>
         </div>

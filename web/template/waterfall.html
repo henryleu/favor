@@ -1,14 +1,16 @@
-<ul>
+<div class="row-fluid">
+    <ul>
 <% _.each(input, function(item, index) { %>
-    <li class="thing" dealId="<%=item._id%>">
-        <img alt="<%=item.sDesc%>" src="<%=item.image%>">
-        <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
-        <p><ul class="inline text-center">
-            <li><i class="icon-eye-open"> <%=item.meta.views%></i></li>
-            <li><i class="icon-heart"> <%=item.meta.likes%></i></li>
-            <li><i class="icon-check"> <%=item.meta.owns%></i></li>
-            <li><i class="icon-shopping-cart"> <%=item.meta.deals%></i></li>
-        </ul></p>
-    </li>
+        <li class="thing" dealId="<%=item._id%>">
+            <img alt="<%=item.sDesc%>" src="<%=item.image%>">
+            <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
+            <p><ul class="inline text-center">
+                <li><i class="icon-eye-open"> <%=item.meta.views%></i></li>
+                <li><i class="icon-heart"> <%=item.meta.likes%></i></li>
+                <li><i class="icon-check"> <%=item.meta.owns%></i></li>
+                <li><i class="icon-shopping-cart"> <%=item.meta.deals%></i></li>
+            </ul></p>
+        </li>
 <% }); %>
-</ul>
+    </ul>
+</div>
