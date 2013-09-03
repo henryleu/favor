@@ -26,8 +26,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'click .waterfallMode': 'switchToWaterfallMode',
             'mouseover .floatButton': 'onMouseoverButton',
             'mouseleave .floatButton': 'onMouseleaveButton',
-            'click #refreshAll': 'refetchAll',
-            'hidden #myModal': 'refetchAll'
+            'click #refreshAll': 'doRefresh',
+            'hide #dealDetailModal': 'refetchAll'
         },
         configure: function() {
             this.newestLargeIconsView = new LargeIconsView({
@@ -88,7 +88,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.subViews['recommend']['largeIcons'] = this.recommendLargeIconsView;
             this.subViews['recommend']['waterfall'] = this.recommendWaterfallView;
             this.curViewName = 'newest';
-
+            //Initialize refreshTime
+            this.lastRefreshTime = 0;
+            //Add listener for models
+            this.listenTo(this.model.newest, 'request', this.onRequestFetchModel);
+            this.listenTo(this.model.newest, 'sync', this.onSuccessFetchModel);
+            this.listenTo(this.model.newest, 'error', this.onErrorFetchModel);
+            this.listenTo(this.model.hottest, 'request', this.onRequestFetchModel);
+            this.listenTo(this.model.hottest, 'sync', this.onSuccessFetchModel);
+            this.listenTo(this.model.hottest, 'error', this.onErrorFetchModel);
+            this.listenTo(this.model.recommend, 'request', this.onRequestFetchModel);
+            this.listenTo(this.model.recommend, 'sync', this.onSuccessFetchModel);
+            this.listenTo(this.model.recommend, 'error', this.onErrorFetchModel);
             //Initialize dealDetailView
             this.dealDetailView = new ShowDealView({
                 vid: 'dealDetail',
@@ -100,7 +111,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.recommendWaterfallView.dealView = this.dealDetailView;
             var me = this;
             this.listenTo(this.dealDetailView, 'dataLoaded', function() {
-                $('#myModal').modal();
+                $('#dealDetailModal').modal();
             });
         },
         afterRender: function() {
@@ -158,8 +169,24 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     break;
             }
         },
+        doRefresh: function() {
+            if (this.refreshCount > 0) {
+                console.debug('In refreshing..., need to wait.');
+                return;
+            }
+            var curTime = Date.now();
+            if (curTime - this.lastUpdateTime < 30000) {
+                console.debug('No need to refresh, only ' + (curTime - this.lastUpdateTime)/1000 + 's passed.');
+                return;
+            }
+            this.refetchAll();
+        },
         refetchAll: function() {
+            this.lastUpdateTime = Date.now();
             console.debug('Start refetchAll...');
+            this.refreshCount = 0;
+            $('.icon-refresh').addClass('icon-spin');
+            $('#refreshAll').find('span').html(' 刷新中...');
             this.model.newest.fetch();
             this.model.hottest.fetch();
             this.model.recommend.fetch();
@@ -169,6 +196,23 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         onMouseleaveButton: function(event) {
             $(event.currentTarget).addClass('btn-link');
+        },
+        onRequestFetchModel: function() {
+            this.refreshCount += 1;
+        },
+        onSuccessFetchModel: function() {
+            this.refreshCount -= 1;
+            if (this.refreshCount == 0) {
+                $('.icon-refresh').removeClass('icon-spin');
+                $('#refreshAll').find('span').html(' ');
+            }
+        },
+        onErrorFetchModel: function() {
+            this.refreshCount -= 1;
+            if (this.refreshCount == 0) {
+                $('.icon-refresh').removeClass('icon-spin');
+                $('#refreshAll').find('span').html(' ');
+            }
         }
     });
 
@@ -314,7 +358,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 this.views['catalog'] = view;
                 var content = '[set="'+viewName+'"].view';
                 $(content).html( view.el );
-                $('#myModal').html(view.dealDetailView.el);
+                $('#dealDetailModal').html(view.dealDetailView.el);
             }
             return view;
         },
@@ -370,6 +414,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
             'keyup #dealLink': 'changeDealLink',
+            'click .preview': 'onClickPreview',
             'click #uploadLocalImage': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
@@ -389,7 +434,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         me.model.clear();
                         console.log('Successfully ' + me.syncMethod + ': ' + JSON.stringify(res));
                         var deal = JSON.parse(JSON.stringify(res));
-                        me.model.set('lastDealId', deal._id);
                         me.doRender();
                         $('#successMsg').show();
                         break;
@@ -435,7 +479,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 },
                 done: function(e, data) {
                     var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
-                    $('#previewImg').attr('src', imageURL);
+                    $('.previewImage').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
                     me.model.set('image', imageURL);
                     $('#imageURLContainer').removeClass('error');
@@ -448,11 +492,15 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
         },
+        onClickPreview: function() {
+            var url = this.model.get('dUrl');
+            if (url && url.length > 0) window.open(url);
+        },
         uploadLocalImage: function() {
             if (this.uploadingImage == true) return;
             $('#imageFile').click();
         },
-        changeImageURL: function() {
+        changeImageURL: function(event) {
             //Regular expression for test user input url of image
             var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
 
@@ -462,7 +510,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 isValidURL = true;
             }
             if (isValidURL) {
-                $('#previewImg').attr('src', imageURL);
+                $('.previewImage').attr('src', imageURL);
                 this.model.set('image', imageURL);
                 $('#imageURLContainer').removeClass('error');
             } else {
