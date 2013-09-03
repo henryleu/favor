@@ -648,7 +648,7 @@ button:focus.cystal-button img {
 .large-item {
   background: #ccc;
   display: table-cell;
-  width: 450px;
+  width: 50%;
   height: 450px;
   text-align: center;
   vertical-align: middle;
@@ -715,7 +715,9 @@ ol {
 div.preview {
     cursor: pointer;
     background: white;
-    display: block;
+    *display: block;
+    position: relative;
+    overflow: hidden;
     margin: 1em;
     padding: 4px;
     line-height: 20px;
@@ -746,4 +748,71 @@ div.preview > img {
     max-width: 100%;
     margin-right: auto;
     margin-left: auto;
+}
+.btn-bluefont-noborder {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0088cc;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+    background-color: transparent;
+    border: 0;
+    border-color: transparent;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.carousel-control-fullheight {
+    display: table-cell;
+    vertical-align: middle;
+    position: absolute;
+    top: 18px;
+    left: -48px;
+    width: 40px;
+    height: 100%;
+    *height: 40px;
+    margin-top: -20px;
+    font-size: 60px;
+    font-weight: 100;
+    *line-height: 30px;
+    color: #ffffff;
+    text-align: center;
+    background: #cccccc;
+    *background: #222222;
+    border: 3px solid #ffffff;
+    -webkit-border-radius: 23px;
+    -moz-border-radius: 23px;
+    border-radius: 23px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+.carousel-control-fullheight.right {
+    right: -48px;
+    left: auto;
+}
+.carousel-control-fullheight:hover,
+.carousel-control-fullheight:focus {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+.progress-icon {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: -5px;
+    margin-top: -20px;
+    text-align: center;
+    color: #0088cc;
+    background-color: transparent;
+    border: 0;
+    border-color: transparent;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }

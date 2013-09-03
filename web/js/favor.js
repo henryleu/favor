@@ -193,8 +193,10 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
+            $(event.currentTarget).addClass('btn-success');
         },
         onMouseleaveButton: function(event) {
+            $(event.currentTarget).removeClass('btn-success');
             $(event.currentTarget).addClass('btn-link');
         },
         onRequestFetchModel: function() {
@@ -414,8 +416,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
             'keyup #dealLink': 'changeDealLink',
-            'click .preview': 'onClickPreview',
-            'click #uploadLocalImage': 'uploadLocalImage',
+            'click .preview': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
             'click #updateDealInfo': 'updateDealInfo',
@@ -468,11 +469,13 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 dataType: 'json',
                 timeout: 30000,
                 error: function(xhr, status, e) {
+                    $('.previewImage').attr('src', '/public/build/img/share-alt-image.png');
                     alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
                 },
                 add: function(e, data) {
-                    $('#uploadIcon').removeClass('icon-picture');
-                    $('#uploadIcon').addClass('icon-spinner icon-spin');
+                    $('.previewImage').attr('src', '/public/build/img/background.png');
+                    $('#uploadIcon').removeClass('hide');
+                    $('#uploadIcon').addClass('icon-spin');
                     me.uploadingImage = true;
                     $('#fileName').html(data.files[0].name);
                     data.submit();
@@ -485,16 +488,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     $('#imageURLContainer').removeClass('error');
                 },
                 always: function(e, data) {
-                    $('#uploadIcon').removeClass('icon-spinner icon-spin');
-                    $('#uploadIcon').addClass('icon-picture');
+                    $('#uploadIcon').removeClass('icon-spin');
+                    $('#uploadIcon').addClass('hide');
                     me.uploadingImage = false;
                 }
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
-        },
-        onClickPreview: function() {
-            var url = this.model.get('dUrl');
-            if (url && url.length > 0) window.open(url);
         },
         uploadLocalImage: function() {
             if (this.uploadingImage == true) return;
@@ -524,6 +523,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 this.model.set('sDesc', sDesc);
                 $('#shortDesContainer').removeClass('error');
             } else {
+                $('#previewSDes').html($('#shortDes').attr('placeholder'));
                 $('#shortDesContainer').addClass('error');
             }
         },
@@ -534,6 +534,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 this.model.set('lDesc', lDesc);
                 $('#longDesContainer').removeClass('error');
             } else {
+                $('#previewLDes').html($('#longDes').attr('placeholder'));
                 $('#longDesContainer').addClass('error');
             }
         },

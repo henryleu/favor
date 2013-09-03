@@ -1,9 +1,9 @@
-<div class="offset2 span1">
-    <a class="carousel-control left" href="#carousel_<%=id%>" data-slide="prev" data-bypass>&lsaquo;</a>
-</div>
-<div class="span8">
-    <div id="carousel_<%=id%>" class="carousel slide">
+<div class="row-fluid">
+    <div class="span3 text-right">
+    </div>
+    <div class="span6">
         <div class="row-fluid">
+        <div id="carousel_<%=id%>" class="carousel slide">
             <ol class="carousel-indicators">
                 <% _.each(input, function(item, index) { %>
                 <li data-target="#carousel_<%=id%>" data-slide-to="<%=index%>" class="<%=index==0?'active':''%>"></li>
@@ -20,21 +20,24 @@
                         <p><%=item.lDesc%></p>
                         <br>
                         <ul class="inline">
-                            <li><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=item.meta.views%></i></li>
-                            <li><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=item.meta.likes%></i></li>
-                            <li><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=item.meta.owns%></i></li>
-                            <li><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=item.meta.deals%></i></li>
+                            <li><span class="btn-bluefont-noborder"><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=item.meta.views%></i></span></li>
+                            <li><span class="btn-bluefont-noborder"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=item.meta.likes%></i></span></li>
+                            <li><span class="btn-bluefont-noborder"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=item.meta.owns%></i></span></li>
+                            <li><span class="btn-bluefont-noborder"><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=item.meta.deals%></i></span></li>
                         </ul>
                         <br>
                         <p>本信息由 <%=item.crtBy%> 创建于 <%=item.crtOn%>，由 <%=item.updBy%> 更新于 <%=item.updOn%>。</p>
                     </div>
                 </div>
                 <% }); %>
+            </div>
+
             <!-- Carousel nav -->
+            <a id="slide-left" class="carousel-control-fullheight left" href="#carousel_<%=id%>" data-slide="prev" data-bypass>&lsaquo;</a>
+            <a id="slide-right" class="carousel-control-fullheight right" href="#carousel_<%=id%>" data-slide="next" data-bypass>&rsaquo;</a>
         </div>
         </div>
     </div>
-</div>
-<div class="span1">
-    <a class="carousel-control right" href="#carousel_<%=id%>" data-slide="next" data-bypass>&rsaquo;</a>
+    <div class="span3 text-left">
+    </div>
 </div>
