@@ -156,7 +156,7 @@ button.cystal-button img.pressed {
 button:focus.cystal-button img {
   width: 36px;
   height: 36px;
-  border: 2px intset #fff;
+  border: 2px inset #fff;
   opacity: 1;
   filter: alpha(opacity=100);
   -moz-opacity: 1;
@@ -670,6 +670,7 @@ button:focus.cystal-button img {
   box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
 }
 li.thing {
+  cursor: pointer;
   float: left;
   width: 270px;
   margin: 1em;
@@ -693,7 +694,7 @@ li.thing > a {
   text-align: center;
   vertical-align: middle;
 }
-li.thing h4 {
+li.thing > h4 {
   text-align: center;
   margin: 1em 0 .5em;
   height: 20px;
@@ -703,11 +704,46 @@ li.thing h4 {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-li.thing img {
+li.thing > img {
   width: auto;
   height: auto;
 }
 ul,
 ol {
   list-style: none;
+}
+div.preview {
+    cursor: pointer;
+    background: white;
+    display: block;
+    margin: 1em;
+    padding: 4px;
+    line-height: 20px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+    transition: all 0.2s ease-in-out;
+    padding: 1em;
+}
+div.preview > h4 {
+    text-align: center;
+    margin: 1em 0 .5em;
+    height: 20px;
+    font-size: 14px;
+    overflow: hidden;
+    color: #777;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+div.preview > img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
 }
