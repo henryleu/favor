@@ -460,7 +460,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var me = this;
-            var uploadBaseUrl = 'http://favor.realsaas.com/files/';
+            var uploadBaseUrl = 'http://favor-upload.tomatolabs.org/files/';
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: uploadBaseUrl,
@@ -656,7 +656,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
             Backbone.sync('update', this.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
-                    alert('Failed to show deal: ' + dealId);
                 },
                 success: function(response, flag) {
                     console.log(JSON.stringify(response));
