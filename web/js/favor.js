@@ -463,17 +463,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var me = this;
+            var uploadBaseUrl = 'http://favor.realsaas.com/files/';
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
-                url: '/files/',
+                url: uploadBaseUrl,
                 dataType: 'json',
                 timeout: 30000,
                 error: function(xhr, status, e) {
-                    $('.previewImage').attr('src', '/public/build/img/share-alt-image.png');
+                    $('.previewImage').attr('src', 'http://favor-img.oss.aliyuncs.com/share-alt-image.png');
                     alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
                 },
                 add: function(e, data) {
-                    $('.previewImage').attr('src', '/public/build/img/background.png');
+                    $('.previewImage').attr('src', 'http://favor-img.oss.aliyuncs.com/background.png');
                     $('#uploadIcon').removeClass('hide');
                     $('#uploadIcon').addClass('icon-spin');
                     me.uploadingImage = true;
@@ -481,7 +482,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     data.submit();
                 },
                 done: function(e, data) {
-                    var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
+                    var imageURL = uploadBaseUrl + data.result.files[0].name;
                     $('.previewImage').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
                     me.model.set('image', imageURL);
