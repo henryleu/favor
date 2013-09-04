@@ -73,10 +73,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.addChild(this.hottestWaterfallView);
             this.addChild(this.recommendWaterfallView);
 
-            this.viewMode = [];
-            this.viewMode['newest'] = 'largeIcons';
-            this.viewMode['hottest'] = 'largeIcons';
-            this.viewMode['recommend'] = 'largeIcons';
+            this.viewMode = 'largeIcons';
             this.subViews = [];
             this.subViews['newest'] = [];
             this.subViews['newest']['largeIcons'] = this.newestLargeIconsView;
@@ -122,7 +119,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             _.each(this.children, function(v, id){
                 v.hide();
             });
-            var view = this.subViews[this.curViewName][this.viewMode[this.curViewName]];
+            var view = this.subViews[this.curViewName][this.viewMode];
             view.doRender();
             view.show();
             this.switchModeButtons();
@@ -130,7 +127,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             //Enable google analytics tracking of switchSubView
             ga('send', {
                 'hitType': 'event',
-                'eventCategory': this.curViewName + '-' + this.viewMode[this.curViewName],
+                'eventCategory': this.curViewName + '-' + this.viewMode,
                 'eventAction': 'click',
                 'eventLabel': 'switch view mode'
             });
@@ -148,15 +145,15 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.switchSubView();
         },
         switchToLargeIconsMode: function() {
-            this.viewMode[this.curViewName] = 'largeIcons';
+            this.viewMode = 'largeIcons';
             this.switchSubView();
         },
         switchToWaterfallMode: function() {
-            this.viewMode[this.curViewName] = 'waterfall';
+            this.viewMode = 'waterfall';
             this.switchSubView();
         },
         switchModeButtons: function() {
-            switch(this.viewMode[this.curViewName]) {
+            switch(this.viewMode) {
                 case 'largeIcons':
                     $('.largeIconsMode').addClass('active');
                     $('.waterfallMode').removeClass('active');
@@ -470,11 +467,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 dataType: 'json',
                 timeout: 30000,
                 error: function(xhr, status, e) {
-                    $('.previewImage').attr('src', 'http://favor-img.oss.aliyuncs.com/share-alt-image.png');
+                    $('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/share-alt-image.png');
                     alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
                 },
                 add: function(e, data) {
-                    $('.previewImage').attr('src', 'http://favor-img.oss.aliyuncs.com/background.png');
+                    $('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/background.png');
                     $('#uploadIcon').removeClass('hide');
                     $('#uploadIcon').addClass('icon-spin');
                     me.uploadingImage = true;
