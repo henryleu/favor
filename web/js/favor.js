@@ -1,5 +1,6 @@
 define(['Spa', 'jQuery'], function(spa, $) {
     var uploadServer = 'http://115.28.3.7';
+    var imageServer = 'http://favor-image.b0.upaiyun.com';
 
     var Deal = spa.Model.extend({
         idAttribute: '_id',
@@ -415,6 +416,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
             'keyup #dealLink': 'changeDealLink',
+            'mouseover .floatButton': 'onMouseoverButton',
+            'mouseleave .floatButton': 'onMouseleaveButton',
+            'click #changeImageMode': 'changeImageMode',
             'click .preview': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
@@ -425,6 +429,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         configure: function() {
             var me = this;
+            this.usingLocalImage = true;
             this.uploadingImage = false;
             this.listenTo(this.model, 'sync', function(model, res, options) {
                 console.debug('ShareSubjectView sync event callback: ' + me.syncMethod);
@@ -469,11 +474,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
                 dataType: 'json',
                 timeout: 30000,
                 error: function(xhr, status, e) {
-                    $('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/share-alt-image.png');
+                    $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
                     alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
                 },
                 add: function(e, data) {
-                    $('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/background.png');
+                    $('.previewImage').attr('src', imageServer + '/background.png');
                     $('#uploadIcon').removeClass('hide');
                     $('#uploadIcon').addClass('icon-spin');
                     me.uploadingImage = true;
@@ -495,13 +500,47 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
         },
+        onMouseoverButton: function(event) {
+            $(event.currentTarget).removeClass('btn-link');
+            $(event.currentTarget).addClass('btn-success');
+            if (this.usingLocalImage == true) {
+                $(event.currentTarget).html('图片链接');
+            } else {
+                $(event.currentTarget).html('本地图片');
+            }
+        },
+        onMouseleaveButton: function(event) {
+            $(event.currentTarget).removeClass('btn-success');
+            $(event.currentTarget).addClass('btn-link');
+            if (this.usingLocalImage == true) {
+                $(event.currentTarget).html('本地图片');
+            } else {
+                $(event.currentTarget).html('图片链接');
+            }
+        },
+        changeImageMode: function() {
+            if (this.usingLocalImage == true) {
+                $('#changeImageMode').html('图片链接');
+                $('#imageURL').removeAttr('disabled');
+                $('#imageURL').val('');
+                $('.previewImage').attr('src', imageServer + '/background.png');
+                this.usingLocalImage = false;
+            } else {
+                $('#changeImageMode').html('本地图片');
+                $('#imageURL').attr('disabled', 'disabled');
+                $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
+                this.usingLocalImage = true;
+            }
+        },
         uploadLocalImage: function() {
+            if (this.usingLocalImage != true) return;
             if (this.uploadingImage == true) return;
             $('#imageFile').click();
         },
         changeImageURL: function(event) {
             //Regular expression for test user input url of image
-            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
+            //var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
+            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\//;
 
             var imageURL = $('#imageURL').val();
             var isValidURL = false;
@@ -570,6 +609,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         clearDealInfo: function() {
             this.model.clear();
+            this.usingLocalImage = true;
+            this.uploadingImage = false;
             this.doRender();
         },
         isFulfilled: function() {

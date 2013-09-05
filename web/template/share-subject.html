@@ -22,7 +22,7 @@
                 <h4 id="previewSDes"><%=input.sDesc%></h4>
 <% } %>
 <% if (!input.image) { %>
-                <img class="previewImage" src="http://favor-image.b0.upaiyun.com/share-alt-image.png" alt="你指定的图片链接可能有误">
+                <img class="previewImage text-center" src="http://favor-image.b0.upaiyun.com/share-alt-image.png" alt="图片链接有误或因网络问题无法访问" sytle="vertical-align: middle;">
 <% } else { %>
                 <img class="previewImage" src="<%=input.image%>">
 <% } %>
@@ -52,7 +52,7 @@
             </div>
             <div class="row-fluid control-group" id="imageURLContainer">
                 <div class="span2 text-right">
-                    <button class="btn btn-link floatButton">本地图片</button>
+                    <button class="btn btn-link floatButton" id="changeImageMode">本地图片</button>
                 </div>
                 <div class="span10">
                     <input class="disabled span12" id="imageURL" type="text" placeholder="商品图片的完整链接" disabled="disabled" value="<%=input.image%>">

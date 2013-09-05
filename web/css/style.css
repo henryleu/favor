@@ -807,8 +807,8 @@ div.preview > img {
     position: absolute;
     top: 50%;
     width: 100%;
-    left: -5px;
     margin-top: -20px;
+    left: 0;
     text-align: center;
     color: #0088cc;
     background-color: transparent;
