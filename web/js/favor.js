@@ -128,12 +128,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.switchModeButtons();
 
             //Enable google analytics tracking of switchSubView
-            ga('send', {
-                'hitType': 'event',
-                'eventCategory': this.curViewName + '-' + this.viewMode[this.curViewName],
-                'eventAction': 'click',
-                'eventLabel': 'switch view mode'
-            });
+//            ga('send', {
+//                'hitType': 'event',
+//                'eventCategory': this.curViewName + '-' + this.viewMode[this.curViewName],
+//                'eventAction': 'click',
+//                'eventLabel': 'switch view mode'
+//            });
         },
         catalogNewest: function() {
             this.curViewName = 'newest';

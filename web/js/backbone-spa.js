@@ -61,13 +61,13 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
             });
         },
         trackPageview: function() {
-            var url = Backbone.history.getFragment();
-            if (!/^\//.test(url)) url = '/' + url;
-            ga('send', {
-                'hitType': 'pageview',
-                'page': url
-            });
-            console.log('send pageview - ' + url);
+//            var url = Backbone.history.getFragment();
+//            if (!/^\//.test(url)) url = '/' + url;
+//            ga('send', {
+//                'hitType': 'pageview',
+//                'page': url
+//            });
+//            console.log('send pageview - ' + url);
         }
     });
 
@@ -189,7 +189,6 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
             _.extend(this.o, options);
             _.extend(this, _.pick(this.o, 'prefix'));
         }
-//        _.extend(this.templates, window['JST']);
         _.extend(this.templates, JST);
     };
     _.extend( TemplateManager.prototype, {
