@@ -1,3 +1,12 @@
+<%
+var metaDefaults = {
+    views: 0,
+    likes: 0,
+    owns: 0,
+    deals: 0
+};
+var meta = _.defaults(input.meta||{}, metaDefaults);
+%>
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3><%=input.sDesc%></h3>
@@ -20,18 +29,18 @@
         <div class="text-center">
             <br>
             <ul class="inline">
-                <li><span class="btn-bluefont-noborder"><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=input.meta.views%></i></span></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=meta.views%></i></span></li>
                 <% if (input.liked == true) { %>
-                <li><span class="btn-bluefont-noborder"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=input.meta.likes%></i></span></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=meta.likes%></i></span></li>
                 <% } else { %>
-                <li><a class="btn btn-link floatButton" id="likeDeal"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=input.meta.likes%></i></a></li>
+                <li><a class="btn btn-link floatButton" id="likeDeal"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=meta.likes%></i></a></li>
                 <% }
                 if (input.owned == true) { %>
-                <li><span class="btn-bluefont-noborder"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=input.meta.owns%></i></span></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=meta.owns%></i></span></li>
                 <% } else { %>
-                <li><a class="btn btn-link floatButton" id="ownDeal"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=input.meta.owns%></i></a></li>
+                <li><a class="btn btn-link floatButton" id="ownDeal"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=meta.owns%></i></a></li>
                 <% } %>
-                <li><span class="btn-bluefont-noborder"><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=input.meta.deals%></i></span></li>
+                <li><span class="btn-bluefont-noborder"><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=meta.deals%></i></span></li>
             </ul>
             <p>本信息由 <%=input.crtBy%> 创建于 <%=input.crtOn%>，由 <%=input.updBy%> 更新于 <%=input.updOn%>。</p>
         </div>
