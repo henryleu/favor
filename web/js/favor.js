@@ -1,4 +1,6 @@
 define(['Spa', 'jQuery'], function(spa, $) {
+    var uploadServer = 'http://115.28.3.7';
+
     var Deal = spa.Model.extend({
         idAttribute: '_id',
         urlRoot: '/deal'
@@ -460,7 +462,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var me = this;
-            var uploadBaseUrl = 'http://favor-upload.tomatolabs.org/files/';
+            var uploadBaseUrl = uploadServer + '/files/';
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
                 url: uploadBaseUrl,

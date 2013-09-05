@@ -22,7 +22,7 @@
                 <h4 id="previewSDes"><%=input.sDesc%></h4>
 <% } %>
 <% if (!input.image) { %>
-                <img class="previewImage" src="http://favor-image.b0.upaiyun.com/share-alt-image.png">
+                <img class="previewImage" src="http://favor-image.b0.upaiyun.com/share-alt-image.png" alt="你指定的图片链接可能有误">
 <% } else { %>
                 <img class="previewImage" src="<%=input.image%>">
 <% } %>
@@ -51,25 +51,33 @@
                 </div>
             </div>
             <div class="row-fluid control-group" id="imageURLContainer">
-                <label class="control-label span2 text-right" for="imageURL">图片链接</label>
+                <div class="span2 text-right">
+                    <button class="btn btn-link floatButton">本地图片</button>
+                </div>
                 <div class="span10">
-                    <input class="span12" id="imageURL" type="text" placeholder="商品图片的完整链接" value="<%=input.image%>">
+                    <input class="disabled span12" id="imageURL" type="text" placeholder="商品图片的完整链接" disabled="disabled" value="<%=input.image%>">
                 </div>
             </div>
             <div class="row-fluid control-group" id="shortDesContainer">
-                <label class="control-label span2 text-right" for="shortDes">简短概括</label>
+                <div class="span2 text-right">
+                    <span class="btn-static-noborder">简短概括</span>
+                </div>
                 <div class="span10">
                     <input class="span12" id="shortDes" type="text" placeholder="简单概括下商品" value="<%=input.sDesc%>">
                 </div>
             </div>
             <div class="row-fluid control-group" id="longDesContainer">
-                <label class="control-label span2 text-right" for="longDes">推荐理由</label>
+                <div class="span2 text-right">
+                    <span class="btn-static-noborder">推荐理由</span>
+                </div>
                 <div class="span10">
                     <textarea class="span12" rows="5" id="longDes" placeholder="说说为什么推荐这个商品吧～～"><%=input.lDesc%></textarea>
                 </div>
             </div>
             <div class="row-fluid control-group" id="dealLinkContainer">
-                <label class="control-label span2 text-right" for="dealLink">商品链接</label>
+                <div class="span2 text-right">
+                    <span class="btn-static-noborder">商品链接</span>
+                </div>
                 <div class="span10">
                     <input class="span12" id="dealLink" type="text" placeholder="商品来源网站的完整链接" value="<%=input.dUrl%>">
                 </div>
