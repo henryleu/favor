@@ -42,7 +42,7 @@ require.config({
         Util: 'util',
         App: 'app'
     },
-    deps: ['App'],
+    deps: ['App', 'Util'],
     callback: function(){
     },
     preserveLicenseComments: false
