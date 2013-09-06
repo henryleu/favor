@@ -37,6 +37,7 @@ require.config({
         Fileupload: '../../public/components/jquery-file-upload/js/jquery.fileupload',
         JST: '../../public/build/js/templates',
         Spa: 'backbone-spa',
+        Flowbar: 'flowbar',
         Favor: 'favor',
         Util: 'util',
         App: 'app'
