@@ -1,4 +1,4 @@
-define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
+define(['Underscore', 'Backbone', 'jQuery', 'Analytics', 'JST'], function(_, bb, $, Analytics, JST) {
     window.tl = window.tl || {};
     var noop = function(){};
     console = console || {log: noop, info: noop, warn: noop, debug: noop, error: noop};
@@ -32,7 +32,7 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
             _apply(this, _.pick(options, spaOptions));
             this.configure.apply(this, arguments);
             //bind route events for google analytics
-            this.bind('route', this.trackPageview);
+            this.bind('route', this.trackPageView);
         },
         configure: function(){},
         startup: function(){
@@ -60,14 +60,14 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
                 }
             });
         },
-        trackPageview: function() {
-//            var url = Backbone.history.getFragment();
-//            if (!/^\//.test(url)) url = '/' + url;
-//            ga('send', {
-//                'hitType': 'pageview',
-//                'page': url
-//            });
-//            console.log('send pageview - ' + url);
+        trackPageView: function() {
+            if(!this.analytics) return;
+            var url = Backbone.history.getFragment();
+            if (!/^\//.test(url)) url = '/' + url;
+            //TODO: for old browsers, url will with hash sign, try to send the uniform url
+            this.analytics.sendHit({
+                page: url
+            });
         }
     });
 
@@ -218,5 +218,6 @@ define(['Underscore', 'Backbone', 'jQuery', 'JST'], function(_, bb, $, JST) {
         }
     });
 
+    spa.Analytics = Analytics;
     return spa;
 });
