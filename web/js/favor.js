@@ -1,4 +1,7 @@
 define(['Spa', 'jQuery'], function(spa, $) {
+    var uploadServer = 'http://115.28.3.7';
+    var imageServer = 'http://favor-image.b0.upaiyun.com';
+
     var Deal = spa.Model.extend({
         idAttribute: '_id',
         urlRoot: '/deal'
@@ -73,10 +76,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.addChild(this.hottestWaterfallView);
             this.addChild(this.recommendWaterfallView);
 
-            this.viewMode = [];
-            this.viewMode['newest'] = 'largeIcons';
-            this.viewMode['hottest'] = 'largeIcons';
-            this.viewMode['recommend'] = 'largeIcons';
+            this.viewMode = 'largeIcons';
             this.subViews = [];
             this.subViews['newest'] = [];
             this.subViews['newest']['largeIcons'] = this.newestLargeIconsView;
@@ -122,7 +122,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             _.each(this.children, function(v, id){
                 v.hide();
             });
-            var view = this.subViews[this.curViewName][this.viewMode[this.curViewName]];
+            var view = this.subViews[this.curViewName][this.viewMode];
             view.doRender();
             view.show();
             this.switchModeButtons();
@@ -148,15 +148,15 @@ define(['Spa', 'jQuery'], function(spa, $) {
             this.switchSubView();
         },
         switchToLargeIconsMode: function() {
-            this.viewMode[this.curViewName] = 'largeIcons';
+            this.viewMode = 'largeIcons';
             this.switchSubView();
         },
         switchToWaterfallMode: function() {
-            this.viewMode[this.curViewName] = 'waterfall';
+            this.viewMode = 'waterfall';
             this.switchSubView();
         },
         switchModeButtons: function() {
-            switch(this.viewMode[this.curViewName]) {
+            switch(this.viewMode) {
                 case 'largeIcons':
                     $('.largeIconsMode').addClass('active');
                     $('.waterfallMode').removeClass('active');
@@ -416,6 +416,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'keyup #shortDes': 'changeShortDes',
             'keyup #longDes': 'changeLongDes',
             'keyup #dealLink': 'changeDealLink',
+            'mouseover .floatButton': 'onMouseoverButton',
+            'mouseleave .floatButton': 'onMouseleaveButton',
+            'click #changeImageMode': 'changeImageMode',
             'click .preview': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
@@ -426,6 +429,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         configure: function() {
             var me = this;
+            this.usingLocalImage = true;
             this.uploadingImage = false;
             this.listenTo(this.model, 'sync', function(model, res, options) {
                 console.debug('ShareSubjectView sync event callback: ' + me.syncMethod);
@@ -463,17 +467,18 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var me = this;
+            var uploadBaseUrl = uploadServer + '/files/';
             //Initialize file upload plugin
             this.$('#imageFile').fileupload({
-                url: '/files/',
+                url: uploadBaseUrl,
                 dataType: 'json',
                 timeout: 30000,
                 error: function(xhr, status, e) {
-                    $('.previewImage').attr('src', '/public/build/img/share-alt-image.png');
+                    $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
                     alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
                 },
                 add: function(e, data) {
-                    $('.previewImage').attr('src', '/public/build/img/background.png');
+                    $('.previewImage').attr('src', imageServer + '/background.png');
                     $('#uploadIcon').removeClass('hide');
                     $('#uploadIcon').addClass('icon-spin');
                     me.uploadingImage = true;
@@ -481,7 +486,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     data.submit();
                 },
                 done: function(e, data) {
-                    var imageURL = 'http://' + location.hostname + '/files/' + data.files[0].name;
+                    var imageURL = uploadBaseUrl + data.result.files[0].name;
                     $('.previewImage').attr('src', imageURL);
                     $('#imageURL').val(imageURL);
                     me.model.set('image', imageURL);
@@ -495,13 +500,47 @@ define(['Spa', 'jQuery'], function(spa, $) {
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
         },
+        onMouseoverButton: function(event) {
+            $(event.currentTarget).removeClass('btn-link');
+            $(event.currentTarget).addClass('btn-success');
+            if (this.usingLocalImage == true) {
+                $(event.currentTarget).html('图片链接');
+            } else {
+                $(event.currentTarget).html('本地图片');
+            }
+        },
+        onMouseleaveButton: function(event) {
+            $(event.currentTarget).removeClass('btn-success');
+            $(event.currentTarget).addClass('btn-link');
+            if (this.usingLocalImage == true) {
+                $(event.currentTarget).html('本地图片');
+            } else {
+                $(event.currentTarget).html('图片链接');
+            }
+        },
+        changeImageMode: function() {
+            if (this.usingLocalImage == true) {
+                $('#changeImageMode').html('图片链接');
+                $('#imageURL').removeAttr('disabled');
+                $('#imageURL').val('');
+                $('.previewImage').attr('src', imageServer + '/background.png');
+                this.usingLocalImage = false;
+            } else {
+                $('#changeImageMode').html('本地图片');
+                $('#imageURL').attr('disabled', 'disabled');
+                $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
+                this.usingLocalImage = true;
+            }
+        },
         uploadLocalImage: function() {
+            if (this.usingLocalImage != true) return;
             if (this.uploadingImage == true) return;
             $('#imageFile').click();
         },
         changeImageURL: function(event) {
             //Regular expression for test user input url of image
-            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
+            //var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*)*\.(jpg|jpeg|png|gif)$/;
+            var reg = /^http:\/\/[\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*(\.([\w\u0391-\uFFE5]+(-[\w\u0391-\uFFE5]+)*))*\//;
 
             var imageURL = $('#imageURL').val();
             var isValidURL = false;
@@ -570,6 +609,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         clearDealInfo: function() {
             this.model.clear();
+            this.usingLocalImage = true;
+            this.uploadingImage = false;
             this.doRender();
         },
         isFulfilled: function() {
@@ -658,7 +699,6 @@ define(['Spa', 'jQuery'], function(spa, $) {
             Backbone.sync('update', this.model, {
                 error: function(response, flag) {
                     console.log('Error occurred in loading deal. -> ' + JSON.stringify(response));
-                    alert('Failed to show deal: ' + dealId);
                 },
                 success: function(response, flag) {
                     console.log(JSON.stringify(response));
