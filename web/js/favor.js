@@ -1,4 +1,5 @@
 define(['Spa', 'jQuery'], function(spa, $) {
+    var envMode = 'production';
     var uploadServer = 'http://115.28.3.7';
     var imageServer = 'http://favor-image.b0.upaiyun.com';
 
@@ -419,7 +420,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'mouseover .floatButton': 'onMouseoverButton',
             'mouseleave .floatButton': 'onMouseleaveButton',
             'click #changeImageMode': 'changeImageMode',
-            'click .preview': 'uploadLocalImage',
+            'click .previewImage': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
             'click #updateDealInfo': 'updateDealInfo',
@@ -469,36 +470,57 @@ define(['Spa', 'jQuery'], function(spa, $) {
             var me = this;
             var uploadBaseUrl = uploadServer + '/files/';
             //Initialize file upload plugin
-            this.$('#imageFile').fileupload({
-                url: uploadBaseUrl,
-                dataType: 'json',
-                timeout: 30000,
-                error: function(xhr, status, e) {
-                    $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
-                    alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
-                },
-                add: function(e, data) {
-                    $('.previewImage').attr('src', imageServer + '/background.png');
-                    $('#uploadIcon').removeClass('hide');
-                    $('#uploadIcon').addClass('icon-spin');
-                    me.uploadingImage = true;
-                    $('#fileName').html(data.files[0].name);
-                    data.submit();
-                },
-                done: function(e, data) {
-                    var imageURL = uploadBaseUrl + data.result.files[0].name;
-                    $('.previewImage').attr('src', imageURL);
-                    $('#imageURL').val(imageURL);
-                    me.model.set('image', imageURL);
-                    $('#imageURLContainer').removeClass('error');
-                },
-                always: function(e, data) {
-                    $('#uploadIcon').removeClass('icon-spin');
-                    $('#uploadIcon').addClass('hide');
-                    me.uploadingImage = false;
-                }
-            }).prop('disabled', !$.support.fileInput)
-            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            if (envMode == 'development') {
+                this.$('#imageFile').fileupload({
+                    url: uploadBaseUrl,
+                    dataType: 'json',
+                    timeout: 30000,
+                    error: function(xhr, status, e) {
+                        $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
+                        alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
+                    },
+                    add: function(e, data) {
+                        $('.previewImage').attr('src', imageServer + '/background.png');
+                        $('#uploadIcon').removeClass('hide');
+                        $('#uploadIcon').addClass('icon-spin');
+                        me.uploadingImage = true;
+                        $('#fileName').html(data.files[0].name);
+                        data.submit();
+                    },
+                    done: function(e, data) {
+                        var imageURL = uploadBaseUrl + data.result.files[0].name;
+                        $('.previewImage').attr('src', imageURL);
+                        $('#imageURL').val(imageURL);
+                        me.model.set('image', imageURL);
+                        $('#imageURLContainer').removeClass('error');
+                    },
+                    always: function(e, data) {
+                        $('#uploadIcon').removeClass('icon-spin');
+                        $('#uploadIcon').addClass('hide');
+                        me.uploadingImage = false;
+                    }
+                }).prop('disabled', !$.support.fileInput)
+                    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            } else {
+                this.$('#upaiUploadFile').change(function(event) {
+                    var input = event.currentTarget;
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('.previewImage').attr('src', e.target.result);
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                    $(event.currentTarget).upaiUpload(function(data) {
+                        var result = JSON.parse(data);
+                        console.debug(result);
+                        var imageURL = imageServer + result.url;
+                        $('.previewImage').attr('src', imageURL);
+                        $('#imageURL').val(imageURL);
+                        me.model.set('image', imageURL);
+                    })
+                });
+            }
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
@@ -535,7 +557,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
         uploadLocalImage: function() {
             if (this.usingLocalImage != true) return;
             if (this.uploadingImage == true) return;
-            $('#imageFile').click();
+            if (envMode == 'development') {
+                $('#imageFile').click();
+            } else {
+                $('#upaiUploadFile').click();
+            }
         },
         changeImageURL: function(event) {
             //Regular expression for test user input url of image
