@@ -1,5 +1,5 @@
 define(['Spa', 'jQuery'], function(spa, $) {
-    var envMode = 'production';
+    var envMode = 'development';
     var uploadServer = 'http://115.28.3.7';
     var imageServer = 'http://favor-image.b0.upaiyun.com';
 
@@ -441,12 +441,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         console.log('Successfully ' + me.syncMethod + ': ' + JSON.stringify(res));
                         var deal = JSON.parse(JSON.stringify(res));
                         me.doRender();
-                        $('#successMsg').show();
+                        $('.alert-success').show();
                         break;
                     case 'delete':
                         me.clearDealInfo();
                         console.log('Successfully delete: ' + JSON.stringify(res));
-                        $('#successMsg').show();
+                        $('.alert-success').show();
                         break;
                     case 'read':
                         console.log('Successfully read: ' + JSON.stringify(res));
@@ -455,7 +455,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         });
                         Backbone.history.navigate('share');
                         me.doRender();
-                        $('#successMsg').hide();
+                        $('.alert-success').hide();
                         break;
                     default:
                         break;
@@ -463,7 +463,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             });
             this.listenTo(this.model, 'error', function(model, xhr, options) {
                 console.log('Error occurred when ' + me.syncMethod + ' deal. -> ' + JSON.stringify(xhr));
-                $('#errorMsg').show();
+                $('.alert-error').show();
             });
         },
         afterRender: function() {
@@ -477,17 +477,20 @@ define(['Spa', 'jQuery'], function(spa, $) {
                     timeout: 30000,
                     error: function(xhr, status, e) {
                         $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
-                        alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
+                        $('.alert-error').find('strong').html('抱歉，上传失败。');
+                        $('.alert-error').find('span').html('您选择的图片可能过大，或者因为网络状况不佳上传超时。');
+                        $('.alert-error').show();
                     },
                     add: function(e, data) {
                         $('.previewImage').attr('src', imageServer + '/background.png');
-                        $('#uploadIcon').removeClass('hide');
-                        $('#uploadIcon').addClass('icon-spin');
+                        $('.icon-spinner').removeClass('hide');
+                        $('.icon-spinner').addClass('icon-spin');
                         me.uploadingImage = true;
                         $('#fileName').html(data.files[0].name);
                         data.submit();
                     },
                     done: function(e, data) {
+                        $('.alert-error').hide();
                         var imageURL = uploadBaseUrl + data.result.files[0].name;
                         $('.previewImage').attr('src', imageURL);
                         $('#imageURL').val(imageURL);
@@ -495,8 +498,8 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         $('#imageURLContainer').removeClass('error');
                     },
                     always: function(e, data) {
-                        $('#uploadIcon').removeClass('icon-spin');
-                        $('#uploadIcon').addClass('hide');
+                        $('.icon-spinner').removeClass('icon-spin');
+                        $('.icon-spinner').addClass('hide');
                         me.uploadingImage = false;
                     }
                 }).prop('disabled', !$.support.fileInput)
@@ -511,15 +514,25 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         }
                         reader.readAsDataURL(input.files[0]);
                     }
-                    $(event.currentTarget).upaiUpload(function(data) {
-                        var result = JSON.parse(data);
+                    $(event.currentTarget).upaiUpload(function(result) {
                         console.debug(result);
-                        var imageURL = imageServer + result.url;
-                        $('.previewImage').attr('src', imageURL);
-                        $('#imageURL').val(imageURL);
-                        me.model.set('image', imageURL);
+                        if (result.code != '200') {
+                            $('.alert-error').find('strong').html('抱歉，您选择的本地图片上传失败，别人将无法看到该图片。');
+                            $('.alert-error').find('span').html('您可以选择其他图片再试。');
+                            $('.alert-error').show();
+                        } else {
+                            var imageURL = imageServer + result.url;
+                            $('.previewImage').attr('src', imageURL);
+                            $('#imageURL').val(imageURL);
+                            me.model.set('image', imageURL);
+                        }
                     })
                 });
+            }
+            if (this.model.get('image') == undefined) {
+                this.$('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/share-alt-image.png');
+            } else {
+                this.$('.previewImage').attr('src', this.model.get('image'));
             }
         },
         onMouseoverButton: function(event) {
@@ -678,6 +691,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
             meta.owns = 0;
             meta.deals = 0;
             this.model.set('meta', meta);
+        },
+        afterRender: function() {
+            if (this.model.get('image') != undefined) {
+                this.$('.previewImage').attr('src', this.model.get('image'));
+            }
         },
         dealAttrReviver: function(view, key, value) {
             var reg, dt;

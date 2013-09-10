@@ -1,3 +1,7 @@
+/**
+ * jQuery extension for UpaiYun form API
+ */
+
 (function($) {
 
     var uuid = 0;
@@ -113,7 +117,17 @@
         }
         data = $(contents).find('body').find('pre').html();
 
-        return data;
+        var result;
+        try {
+            result = JSON.parse(data);
+            if (!result.code) {
+                result.code = '-1';
+            }
+        } catch(e) {
+            result.code = '-1';
+        }
+
+        return result;
     }
 
 })(jQuery);

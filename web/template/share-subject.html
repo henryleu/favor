@@ -1,10 +1,10 @@
 <div class="row-fluid">
     <br>
-    <div id="successMsg" class="alert alert-success hide">
+    <div class="alert alert-success hide">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>操作成功!</strong>&nbsp;&nbsp;<span>你可以继续发布信息。</span>
     </div>
-    <div id="errorMsg" class="alert alert-error hide">
+    <div class="alert alert-error hide">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>操作失败!</strong>&nbsp;&nbsp;<span>抱歉，服务器发生错误，请稍后再试。</span>
     </div>
@@ -21,11 +21,7 @@
 <% } else { %>
                 <h4 id="previewSDes"><%=input.sDesc%></h4>
 <% } %>
-<% if (!input.image) { %>
-                <img class="previewImage text-center" src="http://favor-image.b0.upaiyun.com/share-alt-image.png" alt="图片链接有误或因网络问题无法访问" sytle="vertical-align: middle;">
-<% } else { %>
-                <img class="previewImage" src="<%=input.image%>">
-<% } %>
+                <img class="previewImage text-center" src="" alt="图片链接有误或因网络问题无法访问">
 <% if (!input.lDesc) { %>
                 <p id="previewLDes">更多描述</p>
 <% } else { %>
