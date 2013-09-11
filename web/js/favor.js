@@ -1,5 +1,4 @@
 define(['Spa', 'jQuery'], function(spa, $) {
-    var envMode = 'development';
     var uploadServer = 'http://115.28.3.7';
     var imageServer = 'http://favor-image.b0.upaiyun.com';
 
@@ -470,7 +469,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             var me = this;
             var uploadBaseUrl = uploadServer + '/files/';
             //Initialize file upload plugin
-            if (envMode == 'development') {
+            if (GLOBAL_ENV_MODE == 'development') {
                 this.$('#imageFile').fileupload({
                     url: uploadBaseUrl,
                     dataType: 'json',
@@ -570,7 +569,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
         uploadLocalImage: function() {
             if (this.usingLocalImage != true) return;
             if (this.uploadingImage == true) return;
-            if (envMode == 'development') {
+            if (GLOBAL_ENV_MODE == 'development') {
                 $('#imageFile').click();
             } else {
                 $('#upaiUploadFile').click();
