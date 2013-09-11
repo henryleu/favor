@@ -22,6 +22,7 @@ var logging = require('./lib/logging');
 var logger = logging.logger;
 app.use(logging.applogger);
 app.use(express.compress());
+app.use(express.query());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(settings.secretKey));
