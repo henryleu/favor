@@ -32,8 +32,9 @@ require.config({
     },
     paths: {
         requireLib : '../../public/components/requirejs/require',
-        'google-analytics' : ["http://www.google-analytics.com/analytics",
-            "../../public/components/bower-google-analytics/analytics"],
+//        'google-analytics' : ["http://www.google-analytics.com/analytics",
+//            "../../public/components/bower-google-analytics/analytics"],
+        'google-analytics' : "../../public/components/bower-google-analytics/analytics",
         jQuery: '../../public/components/jquery/jquery',
         Underscore: '../../public/components/underscore/underscore',
         Backbone: '../../public/components/backbone/backbone',
