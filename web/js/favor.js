@@ -1,5 +1,8 @@
 define(['Spa', 'jQuery'], function(spa, $) {
-    var uploadServer = 'http://115.28.3.7';
+    //upload server setting for jquery-file-upload, no longer used.
+//    var uploadServer = 'http://115.28.3.7';
+
+    //image server URL of UpaiYun
     var imageServer = 'http://favor-image.b0.upaiyun.com';
 
     var Deal = spa.Model.extend({
@@ -467,9 +470,9 @@ define(['Spa', 'jQuery'], function(spa, $) {
         },
         afterRender: function() {
             var me = this;
-            var uploadBaseUrl = uploadServer + '/files/';
 
             //Initialize file upload plugin 'jquery-file-upload', no longer used.
+//            var uploadBaseUrl = uploadServer + '/files/';
 //            this.$('#imageFile').fileupload({
 //                url: uploadBaseUrl,
 //                dataType: 'json',

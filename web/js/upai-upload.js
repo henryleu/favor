@@ -126,6 +126,7 @@
                 result.code = '-1';
             }
         } catch(e) {
+            result = new function() {};
             result.code = '-1';
         }
 
