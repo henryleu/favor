@@ -468,66 +468,66 @@ define(['Spa', 'jQuery'], function(spa, $) {
         afterRender: function() {
             var me = this;
             var uploadBaseUrl = uploadServer + '/files/';
-            //Initialize file upload plugin
-            if (GLOBAL_ENV_MODE == 'development') {
-                this.$('#imageFile').fileupload({
-                    url: uploadBaseUrl,
-                    dataType: 'json',
-                    timeout: 30000,
-                    error: function(xhr, status, e) {
-                        $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
-                        $('.alert-error').find('strong').html('抱歉，上传失败。');
-                        $('.alert-error').find('span').html('您选择的图片可能过大，或者因为网络状况不佳上传超时。');
+
+            //Initialize file upload plugin 'jquery-file-upload', no longer used.
+//            this.$('#imageFile').fileupload({
+//                url: uploadBaseUrl,
+//                dataType: 'json',
+//                timeout: 30000,
+//                error: function(xhr, status, e) {
+//                    $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
+//                    $('.alert-error').find('strong').html('抱歉，上传失败。');
+//                    $('.alert-error').find('span').html('您选择的图片可能过大，或者因为网络状况不佳上传超时。');
+//                    $('.alert-error').show();
+//                },
+//                add: function(e, data) {
+//                    $('.previewImage').attr('src', imageServer + '/background.png');
+//                    $('.icon-spinner').removeClass('hide');
+//                    $('.icon-spinner').addClass('icon-spin');
+//                    me.uploadingImage = true;
+//                    $('#fileName').html(data.files[0].name);
+//                    data.submit();
+//                },
+//                done: function(e, data) {
+//                    $('.alert-error').hide();
+//                    var imageURL = uploadBaseUrl + data.result.files[0].name;
+//                    $('.previewImage').attr('src', imageURL);
+//                    $('#imageURL').val(imageURL);
+//                    me.model.set('image', imageURL);
+//                    $('#imageURLContainer').removeClass('error');
+//                },
+//                always: function(e, data) {
+//                    $('.icon-spinner').removeClass('icon-spin');
+//                    $('.icon-spinner').addClass('hide');
+//                    me.uploadingImage = false;
+//                }
+//            }).prop('disabled', !$.support.fileInput)
+//                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+            //Enable local image upload to UpaiYun directly
+            this.$('#upaiUploadFile').change(function(event) {
+                var input = event.currentTarget;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('.previewImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+                $(event.currentTarget).upaiUpload(function(result) {
+                    console.debug(result);
+                    if (result.code != '200') {
+                        $('.alert-error').find('strong').html('抱歉，您选择的本地图片上传失败，别人将无法看到该图片。');
+                        $('.alert-error').find('span').html('您可以选择其他图片再试。');
                         $('.alert-error').show();
-                    },
-                    add: function(e, data) {
-                        $('.previewImage').attr('src', imageServer + '/background.png');
-                        $('.icon-spinner').removeClass('hide');
-                        $('.icon-spinner').addClass('icon-spin');
-                        me.uploadingImage = true;
-                        $('#fileName').html(data.files[0].name);
-                        data.submit();
-                    },
-                    done: function(e, data) {
-                        $('.alert-error').hide();
-                        var imageURL = uploadBaseUrl + data.result.files[0].name;
+                    } else {
+                        var imageURL = imageServer + result.url;
                         $('.previewImage').attr('src', imageURL);
                         $('#imageURL').val(imageURL);
                         me.model.set('image', imageURL);
-                        $('#imageURLContainer').removeClass('error');
-                    },
-                    always: function(e, data) {
-                        $('.icon-spinner').removeClass('icon-spin');
-                        $('.icon-spinner').addClass('hide');
-                        me.uploadingImage = false;
                     }
-                }).prop('disabled', !$.support.fileInput)
-                    .parent().addClass($.support.fileInput ? undefined : 'disabled');
-            } else {
-                this.$('#upaiUploadFile').change(function(event) {
-                    var input = event.currentTarget;
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            $('.previewImage').attr('src', e.target.result);
-                        }
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                    $(event.currentTarget).upaiUpload(function(result) {
-                        console.debug(result);
-                        if (result.code != '200') {
-                            $('.alert-error').find('strong').html('抱歉，您选择的本地图片上传失败，别人将无法看到该图片。');
-                            $('.alert-error').find('span').html('您可以选择其他图片再试。');
-                            $('.alert-error').show();
-                        } else {
-                            var imageURL = imageServer + result.url;
-                            $('.previewImage').attr('src', imageURL);
-                            $('#imageURL').val(imageURL);
-                            me.model.set('image', imageURL);
-                        }
-                    })
-                });
-            }
+                })
+            });
             if (this.model.get('image') == undefined) {
                 this.$('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/share-alt-image.png');
             } else {
@@ -569,11 +569,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
         uploadLocalImage: function() {
             if (this.usingLocalImage != true) return;
             if (this.uploadingImage == true) return;
-            if (GLOBAL_ENV_MODE == 'development') {
-                $('#imageFile').click();
-            } else {
-                $('#upaiUploadFile').click();
-            }
+
+            //trigger jquery-file-upload, no longer used.
+//            $('#imageFile').click();
+
+            //trigger UpaiYun upload
+            $('#upaiUploadFile').click();
         },
         changeImageURL: function(event) {
             //Regular expression for test user input url of image

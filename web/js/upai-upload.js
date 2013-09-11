@@ -20,10 +20,12 @@
 
         var form_api_secret = 'hlt6AYN9jPpFdU2mAZ2RY+R8wQE=';
 
+        var uploadRoot = '/' + GLOBAL_ENV_MODE;
+
         var options = {
             'bucket': bucket, /// 空间名
             'expiration': Math.round(Date.now()/1000) + 600, /// 授权过期时间
-            'save-key': '/dealImages/{year}/{mon}/{day}/{random}{.suffix}', /// 文件名生成格式，请参阅 API 文档
+            'save-key': uploadRoot + '/{year}/{mon}/{day}/{random}{.suffix}', /// 文件名生成格式，请参阅 API 文档
             'allow-file-type': 'jpg,jpeg,gif,png', /// 控制文件上传的类型，可选
             'content-length-range': '0,5120000', /// 限制文件大小，<5M
             'image-width-range': '100,1024000', /// 限制图片宽度，可选
