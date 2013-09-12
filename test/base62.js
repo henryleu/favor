@@ -6,6 +6,7 @@ exports.setUp = function(done){
 exports.tearDown = function(done){
     done();
 };
+
 exports.testConvert = function(test){
     var id1  = 0;
     var id2  = 1;
@@ -24,6 +25,7 @@ exports.testConvert = function(test){
     var id9  = 1000000000000;     //1 Trillion
     var id10 = 3000000000000;     //3 Trillion
     var id11 = 100000000000000;   //100 Trillion
+    var id12 = (Math.pow(2, 27)-1)<<4;   //Max integer for bitwise operations 2147483647
 
     var id = 0;
     var idConverted = 0;
@@ -93,5 +95,49 @@ exports.testConvert = function(test){
     code = Base62.encode( id ); idConverted = Base62.decode( code ); test.equals( idConverted, id );
     console.info( id +  " -> " + code +  " -> " + idConverted );
 
-    console.info( "" + (62*62*62*62*62) );
+    id = id12;
+    code = Base62.encode( id ); idConverted = Base62.decode( code ); test.equals( idConverted, id );
+    console.info( id +  " -> " + code +  " -> " + idConverted );
+    console.info('' + (62*62*62*62*62) + '\r\n');
+
+    test.done();
+};
+
+exports.testPerformance = function(test){
+    var count = 20000;
+    var index = 10000;
+    var len = count-index;
+    var id = null;
+    var code = null;
+    var isBase62 = null;
+    var codes = new Array(len);
+    var start = null;
+    var end = null;
+
+    start = new Date().getTime();
+    for(var i=index; i<count; i++){
+        code = Base62.encode(i);
+        codes.unshift(code);
+        //console.info('' + i + ' -> ' + code);
+    }
+    end = new Date().getTime();
+    console.info('It took ' + (end-start) + ' milliseconds to encode ' + len + ' ids to base62 codes');
+
+    start = new Date().getTime();
+    for(var i=0; i<len; i++){
+        id = Base62.decode(codes[i]);
+        //console.info(codes[i] + ' -> ' + id);
+    }
+    end = new Date().getTime();
+    console.info('It took ' + (end-start) + ' milliseconds to decode ' + len + ' base62 codes to ids');
+
+    start = new Date().getTime();
+    for(var i=0; i<len; i++){
+        isBase62 = Base62.validate(codes[i]);
+//        test.equals(isBase62, true);
+    }
+    end = new Date().getTime();
+    console.info('It took ' + (end-start) + ' milliseconds to check ' + len + ' base62 codes');
+    console.info('\r\n');
+    test.done();
 };
