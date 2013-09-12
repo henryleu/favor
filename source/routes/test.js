@@ -1,5 +1,5 @@
 var logger = require('../../lib/logging').logger;
-var idGenerator = require('../../lib/id-generator');
+//var idGenerator = require('../../lib/id-generator');
 
 module.exports = function(app) {
     app.get('/test', function(req, res) {

@@ -1,5 +1,8 @@
 define(['Spa', 'jQuery'], function(spa, $) {
-    var uploadServer = 'http://115.28.3.7';
+    //upload server setting for jquery-file-upload, no longer used.
+//    var uploadServer = 'http://115.28.3.7';
+
+    //image server URL of UpaiYun
     var imageServer = 'http://favor-image.b0.upaiyun.com';
 
     var Deal = spa.Model.extend({
@@ -419,7 +422,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
             'mouseover .floatButton': 'onMouseoverButton',
             'mouseleave .floatButton': 'onMouseleaveButton',
             'click #changeImageMode': 'changeImageMode',
-            'click .preview': 'uploadLocalImage',
+            'click .previewImage': 'uploadLocalImage',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
             'click #updateDealInfo': 'updateDealInfo',
@@ -440,12 +443,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         console.log('Successfully ' + me.syncMethod + ': ' + JSON.stringify(res));
                         var deal = JSON.parse(JSON.stringify(res));
                         me.doRender();
-                        $('#successMsg').show();
+                        $('.alert-success').show();
                         break;
                     case 'delete':
                         me.clearDealInfo();
                         console.log('Successfully delete: ' + JSON.stringify(res));
-                        $('#successMsg').show();
+                        $('.alert-success').show();
                         break;
                     case 'read':
                         console.log('Successfully read: ' + JSON.stringify(res));
@@ -454,7 +457,7 @@ define(['Spa', 'jQuery'], function(spa, $) {
                         });
                         Backbone.history.navigate('share');
                         me.doRender();
-                        $('#successMsg').hide();
+                        $('.alert-success').hide();
                         break;
                     default:
                         break;
@@ -462,43 +465,78 @@ define(['Spa', 'jQuery'], function(spa, $) {
             });
             this.listenTo(this.model, 'error', function(model, xhr, options) {
                 console.log('Error occurred when ' + me.syncMethod + ' deal. -> ' + JSON.stringify(xhr));
-                $('#errorMsg').show();
+                $('.alert-error').show();
             });
         },
         afterRender: function() {
             var me = this;
-            var uploadBaseUrl = uploadServer + '/files/';
-            //Initialize file upload plugin
-            this.$('#imageFile').fileupload({
-                url: uploadBaseUrl,
-                dataType: 'json',
-                timeout: 30000,
-                error: function(xhr, status, e) {
-                    $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
-                    alert('抱歉，上传失败。你选择的图片可能过大，或者因为网络状况上传超时。\n以下是内部错误信息：\n' + xhr.status + ' ' + e.toString());
-                },
-                add: function(e, data) {
-                    $('.previewImage').attr('src', imageServer + '/background.png');
-                    $('#uploadIcon').removeClass('hide');
-                    $('#uploadIcon').addClass('icon-spin');
-                    me.uploadingImage = true;
-                    $('#fileName').html(data.files[0].name);
-                    data.submit();
-                },
-                done: function(e, data) {
-                    var imageURL = uploadBaseUrl + data.result.files[0].name;
-                    $('.previewImage').attr('src', imageURL);
-                    $('#imageURL').val(imageURL);
-                    me.model.set('image', imageURL);
-                    $('#imageURLContainer').removeClass('error');
-                },
-                always: function(e, data) {
-                    $('#uploadIcon').removeClass('icon-spin');
-                    $('#uploadIcon').addClass('hide');
-                    me.uploadingImage = false;
+
+            //Initialize file upload plugin 'jquery-file-upload', no longer used.
+//            var uploadBaseUrl = uploadServer + '/files/';
+//            this.$('#imageFile').fileupload({
+//                url: uploadBaseUrl,
+//                dataType: 'json',
+//                timeout: 30000,
+//                error: function(xhr, status, e) {
+//                    $('.previewImage').attr('src', imageServer + '/share-alt-image.png');
+//                    $('.alert-error').find('strong').html('抱歉，上传失败。');
+//                    $('.alert-error').find('span').html('您选择的图片可能过大，或者因为网络状况不佳上传超时。');
+//                    $('.alert-error').show();
+//                },
+//                add: function(e, data) {
+//                    $('.previewImage').attr('src', imageServer + '/background.png');
+//                    $('.icon-spinner').removeClass('hide');
+//                    $('.icon-spinner').addClass('icon-spin');
+//                    me.uploadingImage = true;
+//                    $('#fileName').html(data.files[0].name);
+//                    data.submit();
+//                },
+//                done: function(e, data) {
+//                    $('.alert-error').hide();
+//                    var imageURL = uploadBaseUrl + data.result.files[0].name;
+//                    $('.previewImage').attr('src', imageURL);
+//                    $('#imageURL').val(imageURL);
+//                    me.model.set('image', imageURL);
+//                    $('#imageURLContainer').removeClass('error');
+//                },
+//                always: function(e, data) {
+//                    $('.icon-spinner').removeClass('icon-spin');
+//                    $('.icon-spinner').addClass('hide');
+//                    me.uploadingImage = false;
+//                }
+//            }).prop('disabled', !$.support.fileInput)
+//                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+            //Enable local image upload to UpaiYun directly
+            this.$('#upaiUploadFile').change(function(event) {
+                var input = event.currentTarget;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('.previewImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
                 }
-            }).prop('disabled', !$.support.fileInput)
-            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                $(event.currentTarget).upaiUpload(function(result) {
+                    console.debug(result);
+                    if (result.code != '200') {
+                        $('.alert-error').find('strong').html('抱歉，您选择的本地图片上传失败，别人将无法看到该图片。');
+                        $('.alert-error').find('span').html('您可以选择其他图片再试。');
+                        $('.alert-error').show();
+                    } else {
+                        $('.alert-error').hide();
+                        var imageURL = imageServer + result.url;
+                        $('.previewImage').attr('src', imageURL);
+                        $('#imageURL').val(imageURL);
+                        me.model.set('image', imageURL);
+                    }
+                })
+            });
+            if (this.model.get('image') == undefined) {
+                this.$('.previewImage').attr('src', 'http://favor-image.b0.upaiyun.com/share-alt-image.png');
+            } else {
+                this.$('.previewImage').attr('src', this.model.get('image'));
+            }
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
@@ -535,7 +573,12 @@ define(['Spa', 'jQuery'], function(spa, $) {
         uploadLocalImage: function() {
             if (this.usingLocalImage != true) return;
             if (this.uploadingImage == true) return;
-            $('#imageFile').click();
+
+            //trigger jquery-file-upload, no longer used.
+//            $('#imageFile').click();
+
+            //trigger UpaiYun upload
+            $('#upaiUploadFile').click();
         },
         changeImageURL: function(event) {
             //Regular expression for test user input url of image
@@ -652,6 +695,11 @@ define(['Spa', 'jQuery'], function(spa, $) {
             meta.owns = 0;
             meta.deals = 0;
             this.model.set('meta', meta);
+        },
+        afterRender: function() {
+            if (this.model.get('image') != undefined) {
+                this.$('.previewImage').attr('src', this.model.get('image'));
+            }
         },
         dealAttrReviver: function(view, key, value) {
             var reg, dt;
