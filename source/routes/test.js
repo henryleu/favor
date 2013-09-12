@@ -1,5 +1,5 @@
 var logger = require('../../lib/logging').logger;
-var idGenerator = require('../../lib/id-generator');
+var idGenerator = require('../../lib/id');
 
 module.exports = function(app) {
     app.get('/test', function(req, res) {
@@ -16,7 +16,7 @@ module.exports = function(app) {
         var num = Number(size||10);
         var id = null;
         for(var i=0; i<num; i++){
-            id = idGenerator.next();
+            id = idGenerator.next().toId();
             ids.push(id);
             logger.debug('id: ' + id);
         }
