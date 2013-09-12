@@ -28,6 +28,9 @@ require.config({
         },
         'Util': {
             deps: ['jQuery']
+        },
+        'UpaiUpload': {
+            deps: ['jQuery', 'Base64', 'MD5']
         }
     },
     paths: {
@@ -47,9 +50,12 @@ require.config({
         Flowbar: 'flowbar',
         Favor: 'favor',
         Util: 'util',
+        UpaiUpload: 'upai-upload',
+        Base64: '../../public/components/js-base64/base64',
+        MD5: 'CryptoJS v3/rollups/md5',
         App: 'app'
     },
-    deps: ['App', 'Util'],
+    deps: ['App', 'Util', 'UpaiUpload'],
     callback: function(){
     },
     preserveLicenseComments: false
