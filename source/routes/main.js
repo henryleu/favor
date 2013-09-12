@@ -269,4 +269,20 @@ module.exports = function(app) {
         })
     });
 
+    app.get('/upaireturn', function(req, res) {
+        var uploadResult = {
+            code: req.param('code'),
+            message: req.param('message'),
+            url: req.param('url'),
+            time: req.param('time'),
+            sign: req.param('sign')
+        };
+        if (req.param('code') != '200') {
+            console.error(uploadResult);
+        } else {
+            console.debug(uploadResult);
+        }
+        res.json(uploadResult);
+    });
+
 };
