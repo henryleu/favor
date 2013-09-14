@@ -7,7 +7,7 @@ var plugin = new SchemaPlugin({
         type: Date
     },
     use: function(schema, options){
-        //Add _id property
+        //Add the property to schema
         var path = {};
         path[this.prop] = this.type;
         schema.add(path);
