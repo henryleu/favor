@@ -6,5 +6,6 @@ DomainBuilder.plug(require('./CreatedOn'));
 DomainBuilder.plug(require('./CreatedBy'));
 DomainBuilder.plug(require('./UpdatedOn'));
 DomainBuilder.plug(require('./UpdatedBy'));
+DomainBuilder.plug(require('./LifeFlag'));
 
 module.exports = DomainBuilder;

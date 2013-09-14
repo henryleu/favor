@@ -3,6 +3,7 @@ var DomainBuilder = require('./common/DomainBuilder');
 var schema = DomainBuilder
     .i('Thing')
     .withBasis()
+    .withLifeFlag()
     .withCreatedOn()
     .withCreatedBy()
     .withUpdatedOn()
