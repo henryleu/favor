@@ -1,4 +1,5 @@
 var u = require('../../../lib/util');
+
 var SchemaPlugin = function(o){
     u.extend(this, o);
     if(!this.name){

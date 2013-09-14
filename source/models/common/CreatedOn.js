@@ -1,5 +1,5 @@
 var SchemaPlugin = require('./SchemaPlugin');
-var idGen = require('../../../lib/id');
+
 var plugin = new SchemaPlugin({
     name: 'createdOn',
     prop: 'crtOn',
@@ -12,7 +12,7 @@ var plugin = new SchemaPlugin({
         path[this.prop] = this.type;
         schema.add(path);
 
-        //Add a save method's Preprocessor for id auto-generating
+        //Add a save method's Preprocessor for updatedOn auto-generating
         schema.pre('save', function (next) {
             this.autoCreatedOn();
             next()

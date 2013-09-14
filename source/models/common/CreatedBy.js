@@ -1,5 +1,5 @@
 var SchemaPlugin = require('./SchemaPlugin');
-var idGen = require('../../../lib/id');
+
 var plugin = new SchemaPlugin({
     name: 'createdBy',
     prop: 'crtBy',
@@ -10,7 +10,7 @@ var plugin = new SchemaPlugin({
         path[this.prop] = this.type;
         schema.add(path);
 
-        //Add a save method's Preprocessor for id auto-generating
+        //Add a save method's Preprocessor for createdBy auto-populating with current user
         schema.pre('save', function (next) {
             //TODO: get and set current user id
             next()
