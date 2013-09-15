@@ -1,6 +1,6 @@
 var SchemaPlugin = require('./SchemaPlugin');
 var lifeFlagEnum = require('./enums').LifeFlag;
-console.log(lifeFlagEnum);
+
 var plugin = new SchemaPlugin({
     name: 'LifeFlag',
     prop: 'lFlg',
