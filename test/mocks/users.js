@@ -1,9 +1,9 @@
 module.exports = [{
-    "_id": 0,
+    state: 'v',
     'username': 'henryleu',
     "email": 'henrylyu@gmail.com'
 },{
-    "_id": 1,
+    state: 'v',
     'username': 'riversyang',
     "email": 'riversyang@gmail.com'
 }];
