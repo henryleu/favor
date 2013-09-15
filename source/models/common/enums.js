@@ -17,7 +17,24 @@ var LifeFlag = new EnumType([
         text: '已删除'
     }
 ]);
-
+var UserState = new EnumType([
+    {
+        value: 'a',
+        name: 'Anonymous',
+        text: '匿名'
+    },
+    {
+        value: 'r',
+        name: 'registered',
+        text: '已注册'
+    },
+    {
+        value: 'v',
+        name: 'Verified',
+        text: '已验证'
+    }
+]);
 module.exports = {
-    LifeFlag: LifeFlag
+    LifeFlag: LifeFlag,
+    UserState: UserState
 };
