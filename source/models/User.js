@@ -1,17 +1,19 @@
 var mongoose = require('../../lib/mongoose');
-var SchemaBuilder = require('./common/Common').SchemaBuilder;
-var schema = SchemaBuilder
-    .i()
-    .withBase()
+var DomainBuilder = require('./common/DomainBuilder');
+var UserState = require('./common/enums').UserState;
+
+var schema = DomainBuilder
+    .i('User')
+    .withBasis()
+    .withLifeFlag()
     .withCreatedOn()
     .withProperties({
         utoken: {type: String}
-        , uid: {type: String}
-        , state: {type: Boolean}
-        , username: {type: String, default: 'nousername'}
-        , email: String
+        , stt: {type: String, enum: UserState.values(), required: true}
+        , username: {type: String, default: '匿名'}
+        , email: {type: String}
     })
     .build();
 
 module.exports.schema = schema;
-module.exports.model = mongoose.model('User', schema);
+module.exports.model = mongoose.model(schema.name, schema);
