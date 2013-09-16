@@ -56,10 +56,11 @@ module.exports = function(app) {
         newDeal.sDesc = dealInfo.sDesc;
         newDeal.lDesc = dealInfo.lDesc;
         newDeal.dUrl = dealInfo.dUrl;
-        newDeal.crtBy = req.user.id;
-        newDeal.crtOn = Date.now();
-        newDeal.updBy = newDeal.crtBy;
-        newDeal.updOn = newDeal.crtOn;
+        //those will be generated and populated automatically
+//        newDeal.crtBy = req.user.id;
+//        newDeal.crtOn = Date.now();
+//        newDeal.updBy = newDeal.crtBy;
+//        newDeal.updOn = newDeal.crtOn;
         newDeal.save(function(err, deal, numberAffected) {
             if (err) {
                 logger.error(err);
