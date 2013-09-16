@@ -25,7 +25,7 @@ app.use(express.query());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(settings.secretKey));
-app.use(require('./lib/session')(express)); //set session middle-ware
+app.use(require('./source/middlewares/session')(express)); //set session middle-ware
 
 // routing
 app.use(authenticate); //security checking including auto-sign-up and authentication
