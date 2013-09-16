@@ -18,7 +18,7 @@ var plugin = new SchemaPlugin({
             next()
         });
 
-        //Add a instance method to ensure id: generate, set and return id
+        //Add a instance method to ensure updatedOn: generate, set and return it
         var prop = this.prop;
         schema.method('autoUpdatedOn', function () {
             this[prop] = new Date();//TODO: use module to generate time
