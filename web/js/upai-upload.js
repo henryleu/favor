@@ -30,7 +30,7 @@
             'content-length-range': '0,5120000', /// 限制文件大小，<5M
             'image-width-range': '100,1024000', /// 限制图片宽度，可选
             'image-height-range': '100,1024000', /// 限制图片高度，可选
-            'return-url': 'http://localhost/upaireturn'
+            'return-url': 'http://' + window.location.hostname + '/upaireturn'
         };
 
         console.debug(JSON.stringify(options));
