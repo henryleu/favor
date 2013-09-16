@@ -19,6 +19,11 @@ var seq = new SequenceGenerator(
         redisClient: redisClient
     },
     [{
+        key: 'ComingRequest',
+        initialValue: 0,
+        step: 100000,
+        bookStep: 50000
+    },{
         key: 'User',
         initialValue: 0,
         step: 1000,
