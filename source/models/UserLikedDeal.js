@@ -1,8 +1,8 @@
 var mongoose = require('../commons/mongoose');
-var SchemaBuilder = require('./common/Common').SchemaBuilder;
-var schema = SchemaBuilder
-    .i()
-    .withBase()
+var DomainBuilder = require('./common/DomainBuilder');
+var schema = DomainBuilder
+    .i('UserLikedDeal')
+    .withBasis()
     .withCreatedOn()
     .withProperties({
         uid: String
@@ -11,4 +11,4 @@ var schema = SchemaBuilder
     .build();
 
 module.exports.schema = schema;
-module.exports.model = mongoose.model('UserLikedDeal', schema);
+module.exports.model = mongoose.model(schema.name, schema);
