@@ -1,12 +1,11 @@
 var logger = require('../../lib/logging').logger;
-var util = require('../../lib/util');
 var Deal = require('../models/Deal').model;
 var UserLikedDeal = require('../models/UserLikedDeal').model;
 var UserOwnedDeal = require('../models/UserOwnedDeal').model;
 
 module.exports = function(app) {
     var mode = app.get('env') || 'development';
-    var asseton = require('../../lib/asseton')(mode);
+    var asseton = require('../middlewares/asseton')(mode);
 
     app.get('/', asseton, function(req, res) {
         var input = {};
