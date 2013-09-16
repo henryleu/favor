@@ -15,7 +15,7 @@ var seq = new SequenceGenerator(
             bookStep: 500
         },
         defaultKey: 'global',
-        keyPrefix: 'seq:',
+        keyPrefix: 'seq:id:',
         redisClient: redisClient
     },
     [{
