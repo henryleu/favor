@@ -26,7 +26,8 @@ var plugin = new SchemaPlugin({
         });
 
         /*
-         * Get and store the Model's ID Generator by modelName options
+         * Get and store the Model's ID Generator by schema's name.
+         * By default, schema and model have the same name
          */
         schema.idGenerator = idGen.get(schema.name);
 
