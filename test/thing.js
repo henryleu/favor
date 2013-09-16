@@ -6,9 +6,9 @@ var list = require('./mocks/things');
 exports.setUp = function(done){
     setTimeout(function(){done();}, 500);
 };
-//exports.tearDown = function(done){
-//    done();
-//};
+exports.tearDown = function(done){
+    done();
+};
 exports.testSaveThing = function(test){
     var length = list.length;
     test.equals(length, 2);

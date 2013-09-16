@@ -8,6 +8,7 @@ var schema = DomainBuilder
     .withCreatedBy()
     .withUpdatedOn()
     .withUpdatedBy()
+    .withRank()
     .withProperties({
         name: {type: String, required: true}
     })
