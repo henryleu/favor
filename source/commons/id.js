@@ -24,6 +24,11 @@ var seq = new SequenceGenerator(
         step: 1000,
         bookStep: 500
     },{
+        key: 'Thing',
+        initialValue: 0,
+        step: 1000,
+        bookStep: 500
+    },{
         key: 'Deal'
     }]
 );
