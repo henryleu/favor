@@ -1,7 +1,7 @@
 var mongoose = require('../commons/mongoose');
-var SchemaBuilder = require('./common/Common').SchemaBuilder;
-var schema = SchemaBuilder
-    .i()
+var DomainBuilder = require('./common/DomainBuilder');
+var schema = DomainBuilder
+    .i('Comment')
     .withCreatedOn()
     .withCreatedBy()
     .withUpdatedOn()
@@ -11,4 +11,4 @@ var schema = SchemaBuilder
     .build();
 
 module.exports.schema = schema;
-module.exports.model = mongoose.model('Comment', schema); //basically, do not use it because it is sub schema
+module.exports.model = mongoose.model(schema.name, schema); //basically, do not use it because it is sub schema
