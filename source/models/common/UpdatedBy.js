@@ -1,4 +1,5 @@
 var SchemaPlugin = require('./SchemaPlugin');
+var context = require('../../commons/context');
 
 var plugin = new SchemaPlugin({
     name: 'updatedBy',
@@ -12,8 +13,18 @@ var plugin = new SchemaPlugin({
 
         //Add a save method's Preprocessor for updatedBy auto-populating with current user
         schema.pre('save', function (next) {
-            //TODO: get and set current user id
+            this.autoUpdatedBy();
             next()
+        });
+
+        /*
+         * Add a instance method to ensure updatedBy:
+         * get it from current context, then set and return it.
+         */
+        var prop = this.prop;
+        schema.method('autoUpdatedBy', function () {
+            this[prop] = context.userId;
+            return this[prop];
         });
     }
 });
