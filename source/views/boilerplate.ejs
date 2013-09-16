@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <title><%=appTitle%></title>
     <link rel="shortcut icon" href="./web/img/settings_32.png">
-    <link rel="stylesheet" href="<%=mainCss%>">
+    <link rel="stylesheet" href="<%=asset.mainCss%>">
     <!--[if IE 7]>
     <link rel="stylesheet" href="./public/font-awesome/css/font-awesome-ie7.min.css">
     <![endif]-->
@@ -19,9 +19,9 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script>
-        var GLOBAL_ENV_MODE = '<%=mode%>';
+        var GLOBAL_ENV_MODE = '<%=asset.mode%>';
     </script>
-    <script src="<%=mainJs%>" data-main="<%=configJs%>"></script>
+    <script src="<%=asset.mainJs%>" data-main="<%=asset.configJs%>"></script>
     <%-scripts%>
 </head>
 <body>

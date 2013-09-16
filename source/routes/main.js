@@ -5,55 +5,48 @@ var UserLikedDeal = require('../models/UserLikedDeal').model;
 var UserOwnedDeal = require('../models/UserOwnedDeal').model;
 
 module.exports = function(app) {
-    app.get('/', function(req, res) {
+    var mode = app.get('env') || 'development';
+    var asseton = require('../../lib/asseton')(mode);
+
+    app.get('/', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/home', function(req, res) {
+    app.get('/home', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/share', function(req, res) {
+    app.get('/share', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/find', function(req, res) {
+    app.get('/find', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/catalog-newest', function(req, res) {
+    app.get('/catalog-newest', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/catalog-hottest', function(req, res) {
+    app.get('/catalog-hottest', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/catalog-selfrun', function(req, res) {
+    app.get('/catalog-selfrun', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
 
-    app.get('/profile', function(req, res) {
+    app.get('/profile', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/forum', function(req, res) {
+    app.get('/forum', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
-    app.get('/about', function(req, res) {
+    app.get('/about', asseton, function(req, res) {
         var input = {};
-        util.extend(input, req.asset || {});
         res.render('index', input);
     });
     app.post('/deal', function(req, res) {

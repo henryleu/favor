@@ -3,8 +3,7 @@ var express = require('express')
     , path = require('path')
     , engine = require('ejs-locals')
     , settings = require('./settings')
-    , authenticate = require('./source/middlewares/authenticate')
-    , asseton = require('./lib/asseton');
+    , authenticate = require('./source/middlewares/authenticate');
 
 var app = module.exports = express();
 
@@ -35,10 +34,6 @@ var mode = app.get('env') || 'development';
 if ('development' == mode) {
     app.use('/public', express.static(path.join(__dirname, 'public')));
     app.use('/web', express.static(path.join(__dirname, 'web')));
-    app.use(asseton.development());
-}
-if ('production' == mode) {
-    app.use(asseton.production());
 }
 require('./source/routes')(app);
 
