@@ -1,6 +1,6 @@
 var User = require('../source/models/User').model;
-var mongoose = require('../lib/mongoose');
-var logger = require('../lib/logging').logger;
+var mongoose = require('../source/commons/mongoose');
+var logger = require('../source/commons/logging').logger;
 var list = require('./mocks/users');
 
 exports.setUp = function(done){

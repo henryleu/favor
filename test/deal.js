@@ -1,6 +1,6 @@
 var Deal = require('../source/models/Deal').model;
-var mongoose = require('../lib/mongoose');
-var logger = require('../lib/logging').logger;
+var mongoose = require('../source/commons/mongoose');
+var logger = require('../source/commons/logging').logger;
 var list = require('./mocks/deals');
 
 exports.setUp = function(done){

@@ -1,4 +1,4 @@
-var mongoose = require('../../lib/mongoose');
+var mongoose = require('../commons/mongoose');
 var DomainBuilder = require('./common/DomainBuilder');
 var UserState = require('./common/enums').UserState;
 

@@ -1,4 +1,4 @@
-var u = require('../../../lib/util');
+var u = require('../../commons/util');
 
 var Enum = function(items){
     this.itemMap = {};

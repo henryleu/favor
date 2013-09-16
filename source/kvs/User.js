@@ -1,6 +1,6 @@
-var redis = require('../../lib/redis');
+var redis = require('../commons/redis');
 var _ = require('underscore');
-var logger = require('../../lib/logging').logger;
+var logger = require('../commons/logging').logger;
 
 var userKey = function(utoken){
     return 'utoken:' + utoken;

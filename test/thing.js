@@ -1,6 +1,6 @@
 var Thing = require('../source/models/Thing').model;
-var mongoose = require('../lib/mongoose');
-var logger = require('../lib/logging').logger;
+var mongoose = require('../source/commons/mongoose');
+var logger = require('../source/commons/logging').logger;
 var list = require('./mocks/things');
 
 exports.setUp = function(done){

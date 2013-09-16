@@ -3,7 +3,7 @@ var UserKv = require('../kvs/User');
 var UserState = require('../models/common/enums').UserState;
 var settings = require('../../settings');
 var crypto = require('crypto');
-var logger = require('../../lib/logging').logger;
+var logger = require('../commons/logging').logger;
 
 var generateUserToken = function(uid){
     var key = settings.secretKey;

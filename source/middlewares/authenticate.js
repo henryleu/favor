@@ -1,5 +1,5 @@
 var UserService = require('../services/UserService');
-var logger = require('../../lib/logging').logger;
+var logger = require('../commons/logging').logger;
 var invalidTokenPage = '/public/common/invalidated-user.html'; //TODO:
 
 var authenticate = function (req, res, next) {

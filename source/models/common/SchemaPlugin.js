@@ -1,4 +1,4 @@
-var u = require('../../../lib/util');
+var u = require('../../commons/util');
 
 var SchemaPlugin = function(o){
     u.extend(this, o);

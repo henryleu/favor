@@ -1,5 +1,5 @@
-var logger = require('../../lib/logging').logger;
-var idGenerator = require('../../lib/id');
+var logger = require('../commons/logging').logger;
+var idGenerator = require('../commons/id');
 
 module.exports = function(app) {
     app.get('/test', function(req, res) {

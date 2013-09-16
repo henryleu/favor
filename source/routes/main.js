@@ -1,4 +1,4 @@
-var logger = require('../../lib/logging').logger;
+var logger = require('../commons/logging').logger;
 var Deal = require('../models/Deal').model;
 var UserLikedDeal = require('../models/UserLikedDeal').model;
 var UserOwnedDeal = require('../models/UserOwnedDeal').model;

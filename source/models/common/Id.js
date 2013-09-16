@@ -1,5 +1,5 @@
 var SchemaPlugin = require('./SchemaPlugin');
-var idGen = require('../../../lib/id');
+var idGen = require('../../commons/id');
 
 var plugin = new SchemaPlugin({
     name: 'id',

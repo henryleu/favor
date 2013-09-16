@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var mongoose = require('mongoose');
-var logger = require('../../../lib/logging').logger;
+var logger = require('../../commons/logging').logger;
 var Schema = mongoose.Schema;
 var CommonProps = {
     ID: '_id',

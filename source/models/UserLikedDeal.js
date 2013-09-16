@@ -1,4 +1,4 @@
-var mongoose = require('../../lib/mongoose');
+var mongoose = require('../commons/mongoose');
 var SchemaBuilder = require('./common/Common').SchemaBuilder;
 var schema = SchemaBuilder
     .i()

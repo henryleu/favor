@@ -1,4 +1,4 @@
-var Base62 = require('../lib/base62');
+var Base62 = require('../source/commons/base62');
 
 exports.setUp = function(done){
     done();

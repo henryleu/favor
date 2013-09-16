@@ -17,7 +17,7 @@ app.set('views', __dirname + '/source/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 
-var logging = require('./lib/logging');
+var logging = require('./source/commons/logging');
 var logger = logging.logger;
 app.use(logging.applogger);
 app.use(express.compress());

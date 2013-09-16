@@ -1,6 +1,6 @@
 var settings = require('../../settings');
-var redis = require('./../../lib/redis');
-var mongodb = require('./../../lib/mongodb');
+var redis = require('./../commons/redis');
+var mongodb = require('./../commons/mongodb');
 
 module.exports = function(express){
     var sessionStore = null;

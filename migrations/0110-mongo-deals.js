@@ -1,6 +1,6 @@
 var Deal = require('../source/models/Deal');
 var list = require('../source/models/deals');
-var logger = require('../lib/logging').logger;
+var logger = require('../source/commons/logging').logger;
 exports.up = function(next){
     console.info("initialize deals test data in mongodb...");
 
