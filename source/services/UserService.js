@@ -28,6 +28,8 @@ var UserService = {
 
             if(affected==1){
                 var doc = result.toObject({getters: true});
+                doc.liked = '{}';
+                doc.owned = '{}';
                 UserKv.save(doc, callback);
             }
             else{

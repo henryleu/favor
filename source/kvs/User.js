@@ -5,7 +5,7 @@ var logger = require('../commons/logging').logger;
 var userKey = function(utoken){
     return 'utoken:' + utoken;
 };
-var userProps = ['id', 'lFlg', 'stt', 'utoken', 'username', 'email'];
+var userProps = ['id', 'lFlg', 'stt', 'utoken', 'username', 'email', 'liked', 'owned'];
 
 var User = {
     load: function(utoken, callback){
@@ -42,6 +42,11 @@ var User = {
                 callback(new Error('Fail to create anonymous user'), null);
             }
         });
+    },
+    saveProps: function(user, props, callback) {
+        var values = _.pick(Object(user), props);
+        var key = userKey(user.utoken);
+        redis.hmset(key, values, callback);
     }
 };
 module.exports = User;

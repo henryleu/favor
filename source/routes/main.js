@@ -1,7 +1,6 @@
 var logger = require('../commons/logging').logger;
-var Deal = require('../models/Deal').model;
-var UserLikedDeal = require('../models/UserLikedDeal').model;
-var UserOwnedDeal = require('../models/UserOwnedDeal').model;
+var Thing = require('../models/Thing').model;
+var ThingService = require('../services/ThingService');
 
 module.exports = function(app) {
     var mode = app.get('env') || 'development';
@@ -49,19 +48,9 @@ module.exports = function(app) {
         res.render('index', input);
     });
     app.post('/deal', function(req, res) {
-        var dealInfo = JSON.parse(JSON.stringify(req.body));
-        logger.debug(dealInfo);
-        var newDeal = new Deal();
-        newDeal.image = dealInfo.image;
-        newDeal.sDesc = dealInfo.sDesc;
-        newDeal.lDesc = dealInfo.lDesc;
-        newDeal.dUrl = dealInfo.dUrl;
-        //those will be generated and populated automatically
-//        newDeal.crtBy = req.user.id;
-//        newDeal.crtOn = Date.now();
-//        newDeal.updBy = newDeal.crtBy;
-//        newDeal.updOn = newDeal.crtOn;
-        newDeal.save(function(err, deal, numberAffected) {
+        var postInfo = JSON.parse(JSON.stringify(req.body));
+        logger.debug(postInfo);
+        ThingService.create(postInfo, function(err, deal, numberAffected) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
@@ -74,7 +63,7 @@ module.exports = function(app) {
     });
 
     app.get('/deal/:id', function(req, res) {
-        Deal.findOne({'_id': req.params.id}, function(err, foundDeal) {
+        Thing.findOne({'_id': req.params.id}, function(err, foundDeal) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
@@ -87,122 +76,41 @@ module.exports = function(app) {
     });
 
     app.put('/deal/:id', function(req, res) {
-        var dealInfo = JSON.parse(JSON.stringify(req.body));
-        var uid = req.user.id;
-        var dealId = req.params.id;
-        Deal.findOne({'_id': dealId}, function(err, oldDeal) {
+        var postInfo = JSON.parse(JSON.stringify(req.body));
+        var thingId = req.params.id;
+        var user = req.user;
+        ThingService.update(postInfo, user, thingId, function(err, thing) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
-                return;
-            }
-            UserLikedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, userLiked) {
-                if (err) {
-                    logger.error(err);
-                    res.json(500, err);
-                    return;
+            } else {
+                logger.debug(user);
+                if (user.id == thing.crtBy) {
+                    thing.editable = true;
+                } else {
+                    thing.editable = false;
                 }
-                if (userLiked) dealInfo.liked = true;
-                else dealInfo.liked = false;
-            });
-            UserOwnedDeal.findOne({'uid': uid, 'dealId': dealId}, function(err, userOwned) {
-                if (err) {
-                    logger.error(err);
-                    res.json(500, err);
-                    return;
+                var liked = JSON.parse(user.liked);
+                if (thingId in liked) {
+                    thing.liked = true;
+                } else {
+                    thing.liked = false;
                 }
-                if (userOwned) dealInfo.owned = true;
-                else dealInfo.owned = false;
-            });
-            switch (dealInfo.actionType) {
-                case 'update':
-                    oldDeal.image = dealInfo.image;
-                    oldDeal.sDesc = dealInfo.sDesc;
-                    oldDeal.lDesc = dealInfo.lDesc;
-                    oldDeal.dUrl = dealInfo.dUrl;
-                    oldDeal.updOn = Date.now();
-                    oldDeal.updBy = uid;
-                    oldDeal.save(function(err, deal, numberAffected) {
-                        if (err) {
-                            logger.error(err);
-                            res.json(500, err);
-                            return;
-                        }
-                        logger.debug('Updated deal: ' + deal.id);
-                        logger.debug(deal);
-                        res.json(200, deal);
-                    });
-                    break;
-                case 'view':
-                    oldDeal.meta.views += 1;
-                    oldDeal.save(function(err, deal, numberAffected) {
-                        if (err) {
-                            logger.error(err);
-                            res.json(500, err);
-                            return;
-                        }
-                        var editable = false;
-                        if (uid == oldDeal.crtBy) {
-                            editable = true;
-                        }
-                        res.json(200, [deal, {'liked': dealInfo.liked, 'owned': dealInfo.owned, 'editable': editable}]);
-                    });
-                    break;
-                case 'like':
-                    var userLiked = new UserLikedDeal();
-                    userLiked.uid = uid;
-                    userLiked.dealId = dealId;
-                    userLiked.crtOn = Date.now();
-                    userLiked.save(function(err, liked, numberAffected) {
-                        if (err) {
-                            logger.error(err);
-                            res.json(500, err);
-                            return;
-                        }
-                        oldDeal.meta.likes += 1;
-                        oldDeal.save(function(err, deal, numberAffected) {
-                            if (err) {
-                                logger.error(err);
-                                res.json(500, err);
-                                return;
-                            }
-                            res.json(200, [deal, {'liked': true, 'owned': dealInfo.owned}]);
-                        });
-                    });
-                    break;
-                case 'own':
-                    var userOwned = new UserOwnedDeal();
-                    userOwned.uid = uid;
-                    userOwned.dealId = dealId;
-                    userOwned.crtOn = Date.now();
-                    userOwned.save(function(err, owned, numberAffected) {
-                        if (err) {
-                            logger.error(err);
-                            res.json(500, err);
-                            return;
-                        }
-                        oldDeal.meta.owns += 1;
-                        oldDeal.save(function(err, deal, numberAffected) {
-                            if (err) {
-                                logger.error(err);
-                                res.json(500, err);
-                                return;
-                            }
-                            deal.owned = true;
-                            logger.debug(deal);
-                            res.json(200, [deal, {'liked': dealInfo.liked, 'owned': true}]);
-                        });
-                    });
-                    break;
-                default:
-                    res.json(200, oldDeal);
-                    break;
+                var owned = JSON.parse(user.owned);
+                if (thingId in owned) {
+                    thing.owned = true;
+                } else {
+                    thing.owned = false;
+                }
+                logger.debug('Updated thing: ' + thing.id);
+                logger.debug(thing);
+                res.json(200, [thing, {'liked': thing.liked, 'owned': thing.owned, 'editable': thing.editable}]);
             }
-        })
+        });
     });
 
     app.delete('/deal/:id', function(req, res) {
-        Deal.remove({'_id': req.params.id}, function(err) {
+        Thing.remove({'_id': req.params.id}, function(err) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
@@ -214,7 +122,7 @@ module.exports = function(app) {
     });
 
     app.get('/recommendDeals', function(req, res) {
-        Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
+        Thing.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
@@ -225,7 +133,7 @@ module.exports = function(app) {
     });
 
     app.get('/newestDeals', function(req, res) {
-        Deal.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
+        Thing.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
@@ -236,7 +144,7 @@ module.exports = function(app) {
     });
 
     app.get('/hottestDeals', function(req, res) {
-        Deal.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
+        Thing.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
