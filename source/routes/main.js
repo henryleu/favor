@@ -7,47 +7,64 @@ module.exports = function(app) {
     var mode = app.get('env') || 'development';
     var asseton = require('../middlewares/asseton')(mode);
 
-    app.get('/', asseton, function(req, res) {
+    var indexPage = function(req, res, next) {
+        asseton(req, res);
         var input = {};
         res.render('index', input);
-    });
-    app.get('/home', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/share', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/find', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/catalog-newest', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/catalog-hottest', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/catalog-selfrun', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
+    };
+    app.get('/',      indexPage);
+    app.get('/find',  indexPage);
+    app.get('/share', indexPage);
+    app.get('/forum', indexPage);
+    app.get('/about', indexPage);
+    app.get('/user', indexPage);
+    app.get('/things-:sort', function(req, res, next) {
+        res.format({
+            'text/html': indexPage,
+            'application/json': getThingsData
+        });
     });
 
-    app.get('/profile', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/forum', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
-    app.get('/about', asseton, function(req, res) {
-        var input = {};
-        res.render('index', input);
-    });
+    var getThingsData = function(req, res, next){
+//        var sort = req.query.sort || 'auto';
+        var sort = req.params.sort || 'auto';
+
+        if(sort=='auto'){
+            Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
+                if (err) {
+                    logger.error(err);
+                    res.json(500, err);
+                    return;
+                }
+                res.json(200, docs);
+            })
+        }
+        else if(sort=='new'){
+            Deal.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
+                if (err) {
+                    logger.error(err);
+                    res.json(500, err);
+                    return;
+                }
+                res.json(200, docs);
+            })
+        }
+        else if(sort=='hot'){
+            Deal.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
+                if (err) {
+                    logger.error(err);
+                    res.json(500, err);
+                    return;
+                }
+                res.json(200, docs);
+            })
+        }
+        else{
+            res.json(200, []);
+        }
+    };
+    app.get('/things', getThingsData);
+
     app.post('/deal', function(req, res) {
         var dealInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug(dealInfo);
@@ -213,30 +230,8 @@ module.exports = function(app) {
         })
     });
 
-    app.get('/recommendDeals', function(req, res) {
+    app.get('/things', function(req, res, next) {
         Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, docs);
-        })
-    });
-
-    app.get('/newestDeals', function(req, res) {
-        Deal.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, docs);
-        })
-    });
-
-    app.get('/hottestDeals', function(req, res) {
-        Deal.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
