@@ -33,6 +33,7 @@ require.config({
             deps: ['jQuery', 'Base64', 'Cryptojs/md5']
         }
     },
+    packages: ["skeleton", "misc", "config", "app"],
     paths: {
         requireLib : '../../public/components/requirejs/require',
         'google-analytics' : "../../public/components/bower-google-analytics/analytics",
@@ -45,15 +46,16 @@ require.config({
         Cryptojs: '../../public/components/tl-crypto-js/build/rollups/',
         Base64: '../../public/components/js-base64/base64',
         JST: '../../public/build/js/templates',
-        Spa: 'backbone-spa',
-        Analytics: 'analytics',
-        Flowbar: 'flowbar',
-        Favor: 'favor',
-        Util: 'util',
-        UpaiUpload: 'upai-upload',
-        App: 'app'
+        jQueryCustom: 'jquery.custom'
+//        Spa: 'backbone-spa',
+//        Flowbar: 'flowbar',
+//        Favor: 'favor',
+//        Util: 'util',
+//        UpaiUpload: 'upai-upload'
+//        App: 'app'
     },
-    deps: ['App', 'Util', 'UpaiUpload'],
+//    deps: ['App', 'Util', 'UpaiUpload'],
+    deps: ['app'],
     callback: function(){
     },
     preserveLicenseComments: false
