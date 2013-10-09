@@ -1,12 +1,11 @@
 function hander(mode, mainCss, mainJs, configJs) {
-    return function (req, res, next) {
+    return function (req, res) {
         res.locals.asset = {
             mode: mode,
             mainCss: mainCss,
             mainJs: mainJs,
             configJs: configJs
         };
-        next();
     };
 }
 var asseton = {
