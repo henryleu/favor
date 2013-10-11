@@ -29,7 +29,7 @@ module.exports = function(app) {
         var sort = req.params.sort || 'auto';
 
         if(sort=='auto'){
-            Deal.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
+            Thing.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
                 if (err) {
                     logger.error(err);
                     res.json(500, err);
@@ -39,7 +39,7 @@ module.exports = function(app) {
             })
         }
         else if(sort=='new'){
-            Deal.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
+            Thing.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
                 if (err) {
                     logger.error(err);
                     res.json(500, err);
@@ -49,7 +49,7 @@ module.exports = function(app) {
             })
         }
         else if(sort=='hot'){
-            Deal.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
+            Thing.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
                 if (err) {
                     logger.error(err);
                     res.json(500, err);
