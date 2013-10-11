@@ -19,7 +19,6 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script>
-//        var GLOBAL_ENV_MODE = '<%=asset.mode%>';
         window.appConfig = window.appConfig || {};
         window.appConfig.mode = '<%=asset.mode%>';
     </script>
@@ -74,14 +73,6 @@
                     <li class="">
                         <a href="user" class="link" set="user"><i class="icon-user"></i> <%=user.id %></a>
                     </li>
-                    <!--
-                    <li class="">
-                        <a href="javascript:" class="link"><i class="icon-signin"></i> 登陆</a>
-                    </li>
-                    <li class="">
-                        <a href="javascript:" class="link"><i class="icon-link"></i> 注册</a>
-                    </li>
-                    -->
                     <li class="message">
                         <a class="link"><i class="icon-envelope"></i></a>
                     </li>
@@ -90,14 +81,6 @@
 
         </div></div></div>
     </header>
-
-    <nav>
-        <a id="flowbar" class="flow-ctrl" title="回到顶部">
-            <span>
-                <i class="icon-arrow-up icon-1x"></i>
-            </span>
-        </a>
-    </nav>
 
     <section>
         <div class="main-header-padding" ></div>
