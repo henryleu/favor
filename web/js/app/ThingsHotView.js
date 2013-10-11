@@ -9,11 +9,6 @@ function($, sk, WaterfallView) {
                 model: this.model
             });
             this.addChild(waterfallView);
-            var me = this;
-            this.listenTo(this.model, 'sync', function(model, resp, options){
-                model.fetched = true;
-                me.doRender();
-            });
         }
     });
 
