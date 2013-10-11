@@ -1,0 +1,97 @@
+.frame {
+  margin: 8px 2px;
+  padding: 2px;
+  border: 0px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+}
+.frame.focus {
+  margin: 6px 1px;
+  padding: 2px;
+  border: #009add dashed 2px;
+}
+.top-img-padding {
+  margin-bottom: 30px;
+}
+.bottom-img-padding {
+  margin-bottom: 30px;
+}
+.thing {
+  position: relative;
+  margin: 0px;
+  padding: 5px;
+  background: white;
+  border: 0px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+}
+.thing-inner {
+  position: relative;
+  float: none;
+  margin: 0px;
+  padding: 0px;
+}
+.lane {
+  margin: 0px;
+  padding: 0px;
+}
+.lane ul,
+.lane ol {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.lane ul > li {
+  margin: 0px;
+  padding: 0px;
+}
+.lane .thing-inner {
+  width: 324px;
+  min-width: 324;
+  max-width: 324;
+}
+.lane .thing-inner > a {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+.lane .thing-inner h4 {
+  text-align: center;
+  margin: 0px;
+  font-size: 14px;
+  overflow: hidden;
+  color: #777;
+  text-overflow: ellipsis;
+}
+.lane .thing-inner img {
+  text-align: center;
+  width: 324px;
+  height: auto;
+  margin: 0px;
+  border: 0px;
+}
+.lane .thing-inner div.prev {
+  margin-bottom: 10px;
+}
+.lane .thing-inner div.desc {
+  display: none;
+  height: 40px;
+  margin-bottom: 10px;
+}
+.lane .thing-inner div.meta {
+  display: none;
+  height: 20px;
+  margin-bottom: 10px;
+}
