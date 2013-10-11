@@ -10,7 +10,7 @@ function(require) {
 
     var config = {
         mode: 'development', //by default, use development mode. it won't apply if mode is assigned
-        Analytics: {
+        analytics: {
             trackerName: 'favor###',
             options: {
                 'cookieDomain': 'none' // 'foo.example.com'
@@ -18,8 +18,11 @@ function(require) {
 //                , 'cookieExpires': 20000
             }
         },
-        Upai: {
-
+        upai: {
+            url: "http://v0.api.upyun.com/",
+            bucket: "favor-image",
+            formApiSecret: "hlt6AYN9jPpFdU2mAZ2RY+R8wQE=",
+            returnUri: "/upaireturn"
         }
     };
 
