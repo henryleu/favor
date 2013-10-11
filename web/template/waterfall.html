@@ -1,25 +1,65 @@
-<div class="row-fluid">
-    <ul>
+<div class="row-fluid"><div class="container-fluid waterfall">
+
 <%
-        var metaDefaults = {
-            views: 0,
-            likes: 0,
-            owns: 0,
-            deals: 0
-        };
-        _.each(input, function(item, index) {
+    //Init an array to hold N lines of items which the coming items are divided into
+    var lineCount = 3; //the N
+    var lineIndex = 0;
+    var lines = new Array(lineCount);
+    for(lineIndex=0; lineIndex<lineCount; lineIndex++){
+        lines[lineIndex] = [];
+    }
+
+    //Rearrange/divide coming items to N lines
+    _.each(input, function(item, index) {
+        lineIndex = index%lineCount;
+        lines[lineIndex].push(item);
+    });
+
+    //Make a default meta object
+    var metaDefaults = {
+        views: 0,
+        likes: 0,
+        owns: 0,
+        deals: 0
+    };
+
+    //Loop lines to generate lanes
+    for(lineIndex=0; lineIndex<lineCount; lineIndex++){
+        var line = lines[lineIndex];
+        var itemIndex = 0;
+        var itemLen = line.length;
+%>
+    <div class="span4 lane"><ul>
+<%
+        //Loop items in a line to generate a lane
+        for(var itemIndex=0; itemIndex<itemLen; itemIndex++){
+            var item = line[itemIndex];
             var meta = _.defaults(item.meta||{}, metaDefaults);
 %>
-        <li class="thing" dealId="<%=item._id%>">
-            <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
-            <p><img alt="<%=item.sDesc%>" src="<%=item.image%>!small"></p>
-            <p><ul class="inline text-center">
-                <li><i class="icon-eye-open"> <%=meta.views%></i></li>
-                <li><i class="icon-heart"> <%=meta.likes%></i></li>
-                <li><i class="icon-check"> <%=meta.owns%></i></li>
-                <li><i class="icon-shopping-cart"> <%=meta.deals%></i></li>
-            </ul></p>
-        </li>
-<% }); %>
-    </ul>
-</div>
+        <li><div class="frame">
+        <div class="thing">
+            <div class="thing-inner">
+                <input type="hidden" id="thingId" value="<%=item._id%>">
+                <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
+                <div class="top-img-padding"></div>
+                <div class="prev"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
+                <div class="bottom-img-padding"></div>
+                <div class="desc"><%= item.lDesc%></div>
+                <div class="meta"><ul class="inline text-center">
+                    <li><i class="icon-eye-open"> <%=meta.views%></i></li>
+                    <li><i class="icon-heart"> <%=meta.likes%></i></li>
+                    <li><i class="icon-check"> <%=meta.owns%></i></li>
+                    <li><i class="icon-shopping-cart"> <%=meta.deals%></i></li>
+                    </ul></div>
+            </div>
+        </div>
+        </div></li>
+<%
+        }
+%>
+    </ul></div>
+<%
+    }
+%>
+
+</div></div>
