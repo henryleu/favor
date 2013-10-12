@@ -25,13 +25,13 @@ require.config({
         },
         'JST': {
             exports: 'JST'
-        },
-        'Util': {
-            deps: ['jQuery']
-        },
-        'UpaiUpload': {
-            deps: ['jQuery', 'Base64', 'Cryptojs/md5']
         }
+//        'Util': {
+//            deps: ['jQuery']
+//        },
+//        'UpaiUpload': {
+//            deps: ['jQuery', 'Base64', 'Cryptojs/md5']
+//        }
     },
     packages: ["skeleton", "misc", "config", "app"],
     paths: {
@@ -43,7 +43,7 @@ require.config({
         Bootstrap: '../../public/components/bootstrap-tl/tl/js/bootstrap',
         'jquery.ui.widget':  '../../public/components/jquery-file-upload/js/vendor/jquery.ui.widget',
         Fileupload: '../../public/components/jquery-file-upload/js/jquery.fileupload',
-        Cryptojs: '../../public/components/tl-crypto-js/build/rollups/',
+        Cryptojs: '../../public/components/tl-crypto-js/build/rollups',
         Base64: '../../public/components/js-base64/base64',
         JST: '../../public/build/js/templates',
         jQueryCustom: 'jquery.custom'
@@ -55,7 +55,7 @@ require.config({
 //        App: 'app'
     },
 //    deps: ['App', 'Util', 'UpaiUpload'],
-    deps: ['app'],
+    deps: ['app', 'misc'],
     callback: function(){
     },
     preserveLicenseComments: false

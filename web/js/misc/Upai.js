@@ -1,4 +1,4 @@
-define(['jQuery', 'config'], function($, config) {
+define(['jQuery', 'config', 'Base64', 'Cryptojs/md5'], function($, config, base64, cryptojs) {
     var mode = window.appConfig.mode;
     var config = window.appConfig.upai;
     var bucket = config.bucket;
@@ -9,7 +9,7 @@ define(['jQuery', 'config'], function($, config) {
     var returnUri = config.returnUri;
 
 
-    var iframeName = (function(){
+    var genIframeName = (function(){
         var seq = 0;
         return function(){
             return 'upai_upload_' + ++seq;
@@ -17,9 +17,10 @@ define(['jQuery', 'config'], function($, config) {
     })();
 
     $.fn.upaiUpload = function(callback) {
-        var self = this, inputs, checkbox, checked,
-            iframe = $('<iframe name="' + iframeName() + '" style="position:absolute;top:-9999px" />').appendTo('body'),
-            form = '<form target="' + iframeName + '" method="post" enctype="multipart/form-data" />';
+        var self = this, inputs
+        var iframeName = genIframeName();
+        var iframe = $('<iframe name="' + iframeName + '" style="position:absolute;top:-9999px" />').appendTo('body')
+        var form = '<form target="' + iframeName + '" method="post" enctype="multipart/form-data" />';
 
         form = self.wrapAll(form).parent('form').attr('action', uploadUrl);
 
