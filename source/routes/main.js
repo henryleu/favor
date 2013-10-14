@@ -17,6 +17,7 @@ module.exports = function(app) {
     app.get('/forum', indexPage);
     app.get('/about', indexPage);
     app.get('/user', indexPage);
+    app.get('/thing-:id', indexPage);
     app.get('/things-:sort', function(req, res, next) {
         res.format({
             'text/html': indexPage,
@@ -25,7 +26,6 @@ module.exports = function(app) {
     });
 
     var getThingsData = function(req, res, next){
-//        var sort = req.query.sort || 'auto';
         var sort = req.params.sort || 'auto';
 
         if(sort=='auto'){
@@ -76,6 +76,17 @@ module.exports = function(app) {
             logger.debug('Created deal: ' + deal.id);
             logger.debug(deal);
             res.json(200, deal);
+        });
+    });
+
+    app.get('/thing/:id', function(req, res) {
+        Thing.findOne({'_id': req.params.id}, function(err, doc) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, doc);
         });
     });
 
