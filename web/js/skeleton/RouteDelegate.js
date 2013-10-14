@@ -8,7 +8,8 @@ function(_, View) {
         view: null,
         field: 'current',
         bubbleView: null, //if null, use view's parent view
-        bubbleEvent: 'switch'
+        bubbleEvent: 'switch',
+        navigateEvent: 'navigate'
     };
 
     _.extend(RouteDelegate.prototype, {
@@ -39,18 +40,26 @@ function(_, View) {
                 console.warn('There is no reactTrigger configured in the routing view');
             }
         },
-        route: function(name){
-            this.view.model.set(this.field, name);
+        route: function(){
+            this.view.model.set(this.field, arguments);
         },
         onRoute: function(model, route, options){
-            //React the links or buttons when routing
             var previousRoute = model.previous(this.field);
-            this.reactTrigger(previousRoute, route);
-            //Trigger parent routing event (which make subview switched)
-            this.bubbleView.model.trigger(this.bubbleEvent, previousRoute, route);
+            var from = previousRoute==null ? [] : previousRoute;
+            var to = route==null ? [] : route;
+
+
+            //React the links or buttons when routing
+            this.reactTrigger(from, to);
+
+            //Trigger bubble view a navigating event (which make subview switched)
+            this.bubbleView.trigger(this.navigateEvent, to);
+
+            //Trigger bubble view a switching event (which make subview switched)
+            this.bubbleView.model.trigger(this.bubbleEvent, from[0], to[0]);
         },
         reactTrigger: function(previousRoute, route){
-            console.debug('Routing from ' + previousRoute + ' to ' + route);
+            console.info('Routing from ' + previousRoute + ' to ' + route);
         }
     });
 

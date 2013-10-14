@@ -4,6 +4,7 @@ function(_, bb, $, Router) {
         initialize: function(options){
             _.extend(this, options);
             _.defaults(this, View.defaults);
+            this.children = {};
             this._bindRoutes();
             this.configure.apply(this, arguments);
             if(this.prerendered){
@@ -65,9 +66,9 @@ function(_, bb, $, Router) {
                 else{
                     var v = this;
                     this.model.fetch({
-                        success: function(model, resp, options){
-                            v.doRender();
-                        }
+//                        success: function(model, resp, options){
+//                            v.doRender();
+//                        }
                     });
                 }
             }
@@ -128,8 +129,8 @@ function(_, bb, $, Router) {
         isHidden: function(){return this.hidden;}
     });
     View.defaults = {
-        routes: {},
-        children: {},
+        routes: null, //{}
+        children: null, //{}
         parent: null,
         hidden: false,
         prerendered: true,

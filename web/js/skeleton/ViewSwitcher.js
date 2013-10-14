@@ -16,7 +16,6 @@ function(_, bb, $) {
     };
     _.extend(ViewSwitcher.prototype, bb.Events, {
         switchSubView: function(previous, current){
-            console.debug(previous + ' -> ' + current);
             if(previous){
                 this.hide(previous);
             }

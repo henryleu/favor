@@ -1,13 +1,11 @@
 define(['jQuery', 'skeleton'], function($, sk) {
-    //TODO:
     var WaterfallView = sk.View.extend({
         templateName: 'waterfall',
         events: {
             "focus .thing": "onFocus",
             "mouseenter .thing": "onFocus",
             "mouseover .thing": "onFocus",
-            "mouseleave": "onUnfocus",
-            'click div.thing': 'onTrigger'
+            "mouseleave": "onUnfocus"
         },
         configure: function() {
             var me = this;
@@ -88,8 +86,6 @@ define(['jQuery', 'skeleton'], function($, sk) {
        onDelegateEvents: function(){
             this.$('.thing').on('mouseenter', this.onMouseIn);
             this.$('.thing').on('mouseleave', this.onMouseOut);
-        },
-        onTrigger: function(e) {
         }
     });
 

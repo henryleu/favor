@@ -30,7 +30,7 @@ define(['Underscore', 'jQuery'], function(_, $) {
             var me = this;
             var loadTemplate = function(index) {
                 var name = names[index];
-                console.debug('Loading view template: ' + name);
+                console.info('Loading view template: ' + name);
                 $.get( me.prefix + '/' + name + '.html', function(data) {
                     templates[name] = _.template(data);
                     index++;

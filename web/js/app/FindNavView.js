@@ -4,7 +4,8 @@ function($, sk) {
         vid: 'find-nav',
         templateName: 'find-nav',
         routes: {
-            "things-:sort": "switchSort"
+            "things-:sort": "switchSort",
+            "thing-:id": "viewThing"
         },
         events: {
             'click #navHandle': 'controlNav'
@@ -16,16 +17,21 @@ function($, sk) {
             });
         },
         reactTrigger: function(previous, current){
-            this.$el.find('a[data-value='+previous+']').removeClass('active');
-            this.$el.find('a[data-value='+current+']').addClass('active');
+            this.$el.find('a[data-value='+previous[0]+']').removeClass('active');
+            this.$el.find('a[data-value='+current[0]+']').addClass('active');
         },
         switchSort: function(sort){
             this.getParent().getParent().getChild('header').routeDelegate.route('find');
-            this.getParent().show();
+            this.getParent().show(); //TODO
             this.routeDelegate.route(sort);
         },
+        viewThing: function(thingId){
+            this.getParent().getParent().getChild('header').routeDelegate.route('find');
+            this.getParent().show(); //TODO
+            this.routeDelegate.route('showcase', thingId);
+        },
         afterRender: function() {
-            if('/find'==window.location.pathname){
+            if('/find'==window.location.pathname){ //TODO: take care of hash (/#find)
                 this.switchSort('auto');
             }
         },

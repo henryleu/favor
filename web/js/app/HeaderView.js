@@ -66,8 +66,8 @@ function(_, $, sk, Analytics) {
             }
         },
         reactTrigger: function(previous, current){
-            this.activateMenu(previous, false);
-            this.activateMenu(current, true);
+            this.activateMenu(previous[0], false);
+            this.activateMenu(current[0], true);
         },
         activateMenu: function(id, active){
             if(active){

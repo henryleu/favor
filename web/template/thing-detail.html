@@ -1,0 +1,59 @@
+<div class="row-fluid"><div class="container-fluid thing-detail">
+
+    <%
+    var metaDefaults = {
+    views: 0,
+    likes: 0,
+    owns: 0,
+    deals: 0
+    };
+    var meta = _.defaults(input.meta||{}, metaDefaults);
+    %>
+    <div class="row-fluid">
+        <nav><div>
+            <div class="pull-left"><a><i class="icon-th icon-2x"></i></a></div>
+            <h3 class="text-center"><%=input.sDesc%></h3>
+        </div></nav>
+    </div>
+    <div class="row-fluid">
+        <div class="row-fluid">
+            <div class="span8 text-left">
+                <div class="">
+                    <img src="<%=input.image%>" class="img-rounded span12 previewImage">
+                </div>
+            </div>
+            <div class="span4 text-left">
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span8 text-left">
+                <div class="row-fluid">
+                    <p><%=input.lDesc%></p>
+                    <p>想了解更多信息么？<br>你可以<a href="javascript: window.open('<%=input.dUrl%>');"><i class="icon-share"> 转到交易网站</i></a>，或者<a><i class="icon-comment"> 联系<%=input.updBy%></i></a>。</p>
+                </div>
+            </div>
+            <div class="span4 text-left">
+                <div class="text-center">
+                    <ul class="inline">
+                        <li><span class="btn-static-noborder color-blue"><i class="icon-eye-open icon-2x" title="看过" alt="看过"> <%=meta.views%></i></span></li>
+                        <% if (input.liked == true) { %>
+                        <li><span class="btn-static-noborder color-blue"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=meta.likes%></i></span></li>
+                        <% } else { %>
+                        <li><a class="btn btn-link floatButton" id="likeDeal"><i class="icon-heart icon-2x" title="喜欢" alt="喜欢"> <%=meta.likes%></i></a></li>
+                        <% }
+                        if (input.owned == true) { %>
+                        <li><span class="btn-static-noborder color-blue"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=meta.owns%></i></span></li>
+                        <% } else { %>
+                        <li><a class="btn btn-link floatButton" id="ownDeal"><i class="icon-check icon-2x" title="拥有" alt="拥有"> <%=meta.owns%></i></a></li>
+                        <% } %>
+                        <li><span class="btn-static-noborder color-blue"><i class="icon-shopping-cart icon-2x" title="成交" alt="成交"> <%=meta.deals%></i></span></li>
+                    </ul>
+                    <p>本信息由 <%=input.crtBy%> 创建于 <%=input.crtOn%>，由 <%=input.updBy%> 更新于 <%=input.updOn%>。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+    </div>
+
+</div></div>

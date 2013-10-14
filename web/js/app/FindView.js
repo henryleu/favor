@@ -1,13 +1,19 @@
-define(['jQuery', 'skeleton', './FindNavModel', './FindNavView', './FlowCtrlModel', './FlowCtrlView', './ThingsAuto', './ThingsAutoView', './ThingsNew', './ThingsNewView', './ThingsHot', './ThingsHotView'],
-function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, ThingsAuto, ThingsAutoView, ThingsNew, ThingsNewView, ThingsHot, ThingsHotView) {
+define(['jQuery', 'skeleton', './FindNavModel', './FindNavView', './FlowCtrlModel', './FlowCtrlView', './Showcase', './ShowcaseView', './ThingsAuto', './ThingsAutoView', './ThingsNew', './ThingsNewView', './ThingsHot', './ThingsHotView'],
+function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, Showcase, ShowcaseView, ThingsAuto, ThingsAutoView, ThingsNew, ThingsNewView, ThingsHot, ThingsHotView) {
     var FindView = sk.View.extend({
         vid: 'find',
         templateName: 'find',
-        getSubViewId: function(modelName){
-            return 'things-' + modelName;
+        getSubViewId: function(name){
+            if(name=='showcase'){
+                return name;
+            }
+            else{
+                return 'things-' + name;
+            }
         },
         configure: function() {
-            this.model.addChild('auto', FlowCtrlModel);
+            //The flow controls view on the right bottom
+            this.model.addChild('flowCtrl', FlowCtrlModel);
             var flowCtrlView = new FlowCtrlView({
                 model: FlowCtrlModel,
                 hidden: false,
@@ -15,6 +21,18 @@ function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, ThingsAu
             });
             this.addChild(flowCtrlView);
 
+            //The Showcase view which control thing detail view
+            var showcase = new Showcase({});
+            this.model.addChild('showcase', showcase);
+            var showcaseView = new ShowcaseView({
+                model: showcase,
+                parent: this,
+                hidden: true,
+                prerendered: true
+            });
+            this.addChild(showcaseView);
+
+            //The Thing collection view which is recommended automatically
             var subModel, subView;
             subModel = new ThingsAuto();
             this.model.addChild('auto', subModel);
@@ -25,6 +43,7 @@ function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, ThingsAu
             });
             this.addChild(subView);
 
+            //The Thing collection view which is newest (order by time)
             subModel = new ThingsNew();
             this.model.addChild('new', subModel);
             subView = new ThingsNewView({
@@ -34,6 +53,7 @@ function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, ThingsAu
             });
             this.addChild(subView);
 
+            //The Thing collection view which is hottest (order by like)
             subModel = new ThingsHot();
             this.model.addChild('hot', subModel);
             subView = new ThingsHotView({
@@ -47,28 +67,24 @@ function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, ThingsAu
             this.viewSwitcher = new sk.ViewSwitcher({
                 view: this,
                 switchSubView: function(previous, current){
+                    console.info(previous +' -> '+ current);
                     var prevCard = me.getChild(me.getSubViewId(previous));
                     if(prevCard){
                         prevCard.hide();
                     }
                     var curCard = me.getChild(me.getSubViewId(current));
                     if(curCard){
-                        if(curCard.model.fetched){
-                            if(curCard.rendered){
-                                curCard.show();
-                            }
-                            else{
-                                curCard.doRender().show();
-                            }
+                        if(current=='showcase'){
+                            curCard.render(true).show();
                         }
                         else{
-                            curCard.model.fetch();
-                            curCard.show();
+                            curCard.render(true).show();
                         }
                     }
                 }
             });
 
+            //The vertical flow navigation view on the left
             this.model.addChild('nav', FindNavModel);
             var navView = new FindNavView({
                 vid: 'nav',
@@ -77,6 +93,11 @@ function($, sk, FindNavModel, FindNavView, FlowCtrlModel, FlowCtrlView, ThingsAu
                 parent: this
             });
             this.addChild(navView);
+
+            /*
+             * bind all events
+             */
+
         },
         afterRender: function() {
         },

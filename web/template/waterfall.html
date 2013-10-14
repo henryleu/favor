@@ -40,10 +40,12 @@
         <div class="thing">
             <div class="thing-inner">
                 <input type="hidden" id="thingId" value="<%=item._id%>">
+                <a href="/thing-<%=item._id%>">
                 <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
                 <div class="top-img-padding"></div>
                 <div class="prev"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
                 <div class="bottom-img-padding"></div>
+                </a>
                 <div class="desc"><%= item.lDesc%></div>
                 <div class="meta"><ul class="inline text-center">
                     <li><i class="icon-eye-open"> <%=meta.views%></i></li>
