@@ -42,11 +42,12 @@ function($, $custom, sk, HeaderModel, HeaderView, HomeModel, HomeView, FindModel
             this.addChild(findView);
 
             //Configure share
-            this.model.addChild('share', ShareModel);
+            var shareModel = new ShareModel();
+            this.model.addChild('share', shareModel);
             var shareView = new ShareView({
                 hidden: true,
                 parent: this,
-                model: ShareModel
+                model: shareModel
             });
             this.addChild(shareView);
 

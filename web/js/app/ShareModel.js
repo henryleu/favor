@@ -1,6 +1,5 @@
 define(['skeleton'], function(sk) {
-    var model = new sk.Model({
-        idAttribute: '_id',
+    var model = sk.Model.extend({
         urlRoot: '/deal'
     });
     return model;

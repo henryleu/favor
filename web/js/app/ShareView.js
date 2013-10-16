@@ -126,6 +126,7 @@ function($, sk) {
                         $('.alert-error').find('span').html('您可以选择其他图片再试。');
                         $('.alert-error').show();
                     } else {
+                        $('#imageURLContainer').removeClass('error');
                         $('.alert-error').hide();
                         var imageURL = imageServer + result.url;
                         $('.previewImage').attr('src', imageURL);
