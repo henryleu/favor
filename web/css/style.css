@@ -699,7 +699,7 @@ div.preview {
   position: relative;
   overflow: hidden;
   margin: 1em;
-  padding: 4px;
+  padding: 1em;
   line-height: 20px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
@@ -710,7 +710,6 @@ div.preview {
   -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
   transition: all 0.2s ease-in-out;
-  padding: 1em;
 }
 div.preview > h4 {
   text-align: center;
@@ -722,7 +721,32 @@ div.preview > h4 {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-div.preview img {
+div.preview > img {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+div.previewSmall {
+  background: white;
+  *display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 0em;
+  padding: 2px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
+  border-radius: 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px;
+  transition: all 0.2s ease-in-out;
+}
+div.previewSmall > img {
   cursor: pointer;
   display: block;
   width: 100%;

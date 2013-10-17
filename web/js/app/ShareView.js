@@ -1,5 +1,5 @@
-define(['jQuery', 'skeleton'],
-function($, sk) {
+define(['jQuery', 'skeleton', 'Bootstrap'],
+function($, sk, bs) {
     //upload server setting for jquery-file-upload, no longer used.
 //    var uploadServer = 'http://115.28.3.7';
 
@@ -25,6 +25,7 @@ function($, sk) {
             'mouseleave .floatButton': 'onMouseleaveButton',
             'click #changeImageMode': 'changeImageMode',
             'click .previewImage': 'uploadLocalImage',
+            'click #import': 'onImport',
             'click #saveImageLinkSetting': 'saveImageLinkSetting',
             'click #publishDealInfo': 'publishDealInfo',
             'click #updateDealInfo': 'updateDealInfo',
@@ -282,6 +283,9 @@ function($, sk) {
             this.model.id = dealId;
             this.syncMethod = 'read';
             this.model.fetch();
+        },
+        onImport: function() {
+            $('#myModal').modal('show');
         }
     });
 
