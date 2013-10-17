@@ -1,20 +1,22 @@
 var User = require('../source/models/User').model;
-var mongoose = require('../lib/mongoose');
-var logger = require('../lib/logging').logger;
+var mongoose = require('../source/commons/mongoose');
+var logger = require('../source/commons/logging').logger;
 var list = require('./mocks/users');
 
 exports.setUp = function(done){
-    done();
+    setTimeout(function(){done();}, 500);
 };
 exports.tearDown = function(done){
-    mongoose.disconnect(function(err){
-        if(err) {
-            logger.error(err);
-            return;
-        }
-        logger.info('mongoose is disconnected');
-    });
-    done();
+    setTimeout(function(){
+        mongoose.disconnect(function(err){
+            if(err) {
+                logger.error(err);
+                return;
+            }
+            logger.info('mongoose is disconnected');
+        });
+        done();
+    }, 500);
 };
 exports.testAddUser = function(test){
     var length = list.length;
@@ -28,7 +30,7 @@ exports.testAddUser = function(test){
                 logger.error('Fail to save user: '+err);
             }
             else{
-                logger.info('succeed to save user ' + user.username);
+                logger.debug('succeed to save user ' + user.username);
             }
         });
     }

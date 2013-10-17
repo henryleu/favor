@@ -1,9 +1,9 @@
-var mongoose = require('../../lib/mongoose');
-var SchemaBuilder = require('./Common').SchemaBuilder;
+var mongoose = require('../commons/mongoose');
+var DomainBuilder = require('./common/DomainBuilder');
 var Comment = require('./Comment').schema;
-var schema = SchemaBuilder
-    .i()
-    .withBase()
+var schema = DomainBuilder
+    .i('Deal')
+    .withBasis()
     .withCreatedBy()
     .withCreatedOn()
     .withUpdatedBy()
@@ -42,4 +42,4 @@ var schema = SchemaBuilder
     .build();
 
 module.exports.schema = schema;
-module.exports.model = mongoose.model('Deal', schema);
+module.exports.model = mongoose.model(schema.name, schema);

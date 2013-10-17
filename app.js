@@ -3,8 +3,8 @@ var express = require('express')
     , path = require('path')
     , engine = require('ejs-locals')
     , settings = require('./settings')
-    , security = require('./lib/security')
-    , asseton = require('./lib/asseton');
+    , authenticate = require('./source/middlewares/authenticate')
+    , contexton = require('./source/middlewares/contexton');
 
 var app = module.exports = express();
 
@@ -18,26 +18,24 @@ app.set('views', __dirname + '/source/views');
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 
-var logging = require('./lib/logging');
+var logging = require('./source/commons/logging');
 var logger = logging.logger;
 app.use(logging.applogger);
 app.use(express.compress());
+app.use(express.query());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(settings.secretKey));
-app.use(require('./lib/session')(express)); //set session middle-ware
+app.use(require('./source/middlewares/session')(express)); //set session middle-ware
 
 // routing
-app.use(security); //security checking including auto-sign-up and authentication
+app.use(authenticate); //security checking including auto-sign-up and authentication
+app.use(contexton); //context loading including request id, session id, user id, and so on.
 
 var mode = app.get('env') || 'development';
 if ('development' == mode) {
     app.use('/public', express.static(path.join(__dirname, 'public')));
     app.use('/web', express.static(path.join(__dirname, 'web')));
-    app.use(asseton.development());
-}
-if ('production' == mode) {
-    app.use(asseton.production());
 }
 require('./source/routes')(app);
 

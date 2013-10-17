@@ -1,4 +1,4 @@
-define(['Spa', 'jQuery'], function(spa, $) {
+ define(['Spa', 'jQuery'], function(spa, $) {
     //upload server setting for jquery-file-upload, no longer used.
 //    var uploadServer = 'http://115.28.3.7';
 

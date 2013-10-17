@@ -137,7 +137,7 @@ module.exports = function(grunt) {
                 }
             },
             js: {
-                files: ['web/js/*.js'],
+                files: ['web/js/*.js', 'web/js/*/*.js'],
                 tasks: ['requirejs:js'],
                 options: {
                     nospawn: true,
