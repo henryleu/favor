@@ -1,3 +1,22 @@
+.split-left {
+  border-left: 1px solid #e5e5e5;
+  margin-left: 2px;
+}
+.split-right {
+  border-right: 1px solid #e5e5e5;
+  margin-right: 2px;
+}
+.split-top {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 2px;
+}
+.split-bottom {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 2px;
+}
+.main-header {
+  display: block;
+}
 .frame {
   margin: 8px 2px;
   padding: 2px;
@@ -94,4 +113,121 @@
   display: none;
   height: 20px;
   margin-bottom: 10px;
+}
+.tabs.fixed {
+  position: fixed;
+  top: 40px;
+  left: 260px;
+}
+.tabs > div {
+  width: 60px;
+  height: 60px;
+}
+.showcase {
+  margin: 0px;
+  padding: 0px;
+}
+.showcase .thing-header {
+  margin: 10px;
+  vertical-align: middle;
+}
+.showcase .thing-footer {
+  margin-top: 10px;
+  margin-bottom: 100px;
+}
+.showcase .thing {
+  margin: 10px;
+  background-color: white;
+}
+.showcase .thing-header h3 {
+  font-size: 20px;
+}
+.showcase .thing-header .nav {
+  margin: 10px;
+  vertical-align: middle;
+}
+.snapshot {
+  position: relative;
+  margin: 0 auto;
+}
+.snapshot .image {
+  position: relative;
+  text-align: center;
+}
+.snapshot .image img {
+  position: relative;
+  width: 100%;
+}
+.snapshot .wrap {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+}
+.snapshot .wrap > div {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+}
+.snapshot .wrap span {
+  margin: 5px 0px;
+  padding: 5px;
+  white-space: nowrap;
+}
+.snapshot .wrap span .text {
+  display: inline;
+  font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.snapshot .wrap span .icon {
+  display: inline;
+  overflow: hidden;
+}
+.snapshot:hover .wrap,
+.snapshot:focus .wrap {
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+}
+.snapshot .wrap span:hover .icon,
+.snapshot .wrap span:focus .icon,
+.snapshot .wrap span.visited .icon {
+  color: orange;
+  cursor: pointer;
+}
+.snapshot .wrap span.visited:hover .text,
+.snapshot .wrap span.visited:focus .text {
+  color: orange;
+  cursor: pointer;
+}
+.showcase .thumbnails > li {
+  box-sizing: border-box;
+  display: block;
+  width: 120px;
+  height: 80px;
+  margin: 3px 3px;
+  float: left;
+}
+.showcase .thumbnail img {
+  width: 120px;
+  height: 80px;
+}
+.showcase .desc {
+  margin: 10px 10px;
+}
+.showcase .status {
+  margin: 10px 10px;
+}
+.showcase .actions {
+  margin-left: -25px;
+}
+.showcase .actions ul {
+  list-style-type: none;
+  margin: 10px 0px;
+}
+.showcase .actions ul li {
+  margin: 10px 0px;
 }
