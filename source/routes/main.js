@@ -1,5 +1,7 @@
 var logger = require('../commons/logging').logger;
+var util = require('util');
 var Thing = require('../models/Thing').model;
+var UserService = require('../services/UserService');
 var ThingService = require('../services/ThingService');
 
 module.exports = function(app) {
@@ -9,7 +11,21 @@ module.exports = function(app) {
     var indexPage = function(req, res, next) {
         asseton(req, res);
         var input = {};
-        res.render('index', input);
+        var user = req.user;
+        if(req.user.isNew){
+//            input.user = JSON.stringify(user);
+            input.user = user;
+            res.render('index', input);
+        }
+        else{
+            var uid = req.user.id;
+            UserService.loadMeta(uid, function(err, meta ){
+                user.meta = meta;
+//                input.user = JSON.stringify(user);
+                input.user = user;
+                res.render('index', input);
+            })
+        }
     };
     app.get('/',      indexPage);
     app.get('/find',  indexPage);
@@ -64,6 +80,90 @@ module.exports = function(app) {
     };
     app.get('/things', getThingsData);
 
+    app.get('/thing/:id', function(req, res) {
+        Thing.findOne({'_id': req.params.id}, function(err, doc) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, doc);
+        });
+    });
+
+    var thingActions = {
+        'star': true,
+        'unstar': true,
+        'like': true,
+        'unlike': true
+    }
+    app.get('/thing/:id/:action', function(req, res) {
+        var thingId = req.params.id;
+        var uid = req.user.id;
+        var action = req.params.action;
+        logger.debug(util.format('User [%s] %ss thing [%s]', uid, action, thingId));
+        if(!thingActions[action]){
+            res.json(500, {error: 'API /thing/'+uid+'/'+action + ' is not supported'});
+            return;
+        }
+        ThingService[action](uid, thingId, function(err, affected) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, {});//TODO: return a standard envelop
+        });
+    });
+/*
+    app.get('/thing/:id/star', function(req, res) {
+        var thingId = req.params.id;
+        ThingService.star(req.user.utoken, thingId, function(err, affected) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, {});//TODO: return a standard envelop
+        });
+    });
+
+    app.get('/thing/:id/unstar', function(req, res) {
+        var thingId = req.params.id;
+        ThingService.unstar(req.user.utoken, thingId, function(err, affected) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, {});//TODO: return a standard envelop
+        });
+    });
+
+    app.get('/thing/:id/like', function(req, res) {
+        var thingId = req.params.id;
+        ThingService.like(req.user.utoken, thingId, function(err, affected) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, {});//TODO: return a standard envelop
+        });
+    });
+
+    app.get('/thing/:id/unlike', function(req, res) {
+        var thingId = req.params.id;
+        ThingService.unlike(req.user.utoken, thingId, function(err, affected) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, {});//TODO: return a standard envelop
+        });
+    });
+*/
     app.post('/deal', function(req, res) {
         var postInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug(postInfo);
@@ -76,17 +176,6 @@ module.exports = function(app) {
             logger.debug('Created deal: ' + deal.id);
             logger.debug(deal);
             res.json(200, deal);
-        });
-    });
-
-    app.get('/thing/:id', function(req, res) {
-        Thing.findOne({'_id': req.params.id}, function(err, doc) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, doc);
         });
     });
 
@@ -146,39 +235,6 @@ module.exports = function(app) {
             }
             logger.debug('Deleted deal: ' + req.params.id);
             res.json(200, {'_id': req.params.id});
-        })
-    });
-
-    app.get('/recommendDeals', function(req, res) {
-        Thing.find().sort({'meta.views': -1, 'meta.likes': -1, 'meta.owns': -1, 'meta.deals': -1}).exec(function(err, docs) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, docs);
-        })
-    });
-
-    app.get('/newestDeals', function(req, res) {
-        Thing.find().sort({'updOn': -1}).limit(5).exec(function(err, docs) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, docs);
-        })
-    });
-
-    app.get('/hottestDeals', function(req, res) {
-        Thing.find().sort({'meta.views': -1}).limit(5).exec(function(err, docs) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, docs);
         })
     });
 

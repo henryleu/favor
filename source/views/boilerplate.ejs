@@ -21,6 +21,7 @@
     <script>
         window.appConfig = window.appConfig || {};
         window.appConfig.mode = '<%=asset.mode%>';
+        window.user = <%-JSON.stringify(user)%>;
     </script>
     <script src="<%=asset.mainJs%>" data-main="<%=asset.configJs%>"></script>
     <%-scripts%>
@@ -71,7 +72,7 @@
                 </ul>
                 <ul class="nav pull-right">
                     <li class="">
-                        <a href="user" class="link" set="user"><i class="icon-user"></i> <%=user.id %></a>
+                        <a href="user" class="link" set="user"><i class="icon-user"></i> <%=user.displayName%></a>
                     </li>
                     <li class="message">
                         <a class="link"><i class="icon-envelope"></i></a>
