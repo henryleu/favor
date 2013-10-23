@@ -5,7 +5,11 @@ var logger = require('../commons/logging').logger;
 var userKey = function(utoken){
     return 'utoken:' + utoken;
 };
-var userProps = ['id', 'lFlg', 'stt', 'utoken', 'username', 'email', 'liked', 'owned'];
+var userStarsKey = function(utoken){
+    return 'utoken:' + utoken + ':stars';
+};
+
+var userProps = ['id', 'lFlg', 'stt', 'utoken', 'username', 'displayName', 'email', 'liked', 'owned'];
 
 var User = {
     load: function(utoken, callback){
