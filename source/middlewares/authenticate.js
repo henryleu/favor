@@ -59,7 +59,7 @@ var setupContext = function(req, res, user){
     logger.debug('User [' + user.id + '] is requesting ' + req.originalUrl);
 };
 var setUserAuthenticated = function(next, req, res, user){
-    req.session.user = user; //TODO: remove session later soon
+//    req.session.user = user; //TODO: remove session later soon
     logger.debug('User [' + user.id + '] is signed in ');
     setupContext(req, res, user);
     next();
