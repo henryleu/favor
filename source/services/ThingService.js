@@ -1,4 +1,5 @@
 var UserKv = require('../kvs/User');
+var UserMetaKv = require('../kvs/UserMeta');
 var Thing = require('../models/Thing').model;
 var settings = require('../../settings');
 var crypto = require('crypto');
@@ -90,6 +91,44 @@ var ThingService = {
                     break;
             }
         })
+    },
+    star: function(utoken, thingId, callback){
+        UserMetaKv.star(utoken, thingId, function(err, affected){
+            if (err) {
+                callback(err);
+                return;
+            }
+//            logger.debug('thing ' + thingId + ' has been starred ' + stars + ' times');
+            Thing.star(thingId, utoken, callback);
+        });
+    },
+    unstar: function(utoken, thingId, callback){
+        UserMetaKv.unstar(utoken, thingId, function(err, affected){
+            if (err) {
+                callback(err);
+                return;
+            }
+//            logger.debug('thing ' + thingId + ' has been starred ' + stars + ' times');
+            Thing.unstar(thingId, utoken, callback);
+        });
+    },
+    like: function(utoken, thingId, callback){
+        UserMetaKv.like(utoken, thingId, function(err, affected){
+            if (err) {
+                callback(err);
+                return;
+            }
+            Thing.like(thingId, utoken, callback);
+        });
+    },
+    unlike: function(utoken, thingId, callback){
+        UserMetaKv.unlike(utoken, thingId, function(err, affected){
+            if (err) {
+                callback(err);
+                return;
+            }
+            Thing.unlike(thingId, utoken, callback);
+        });
     }
 };
 module.exports = ThingService;
