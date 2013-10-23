@@ -10,8 +10,9 @@ var schema = DomainBuilder
     .withProperties({
         utoken: {type: String}
         , stt: {type: String, enum: UserState.values(), required: true}
-        , username: {type: String, default: '匿名'}
-        , email: {type: String}
+        , username: {type: String, default: ''}
+        , displayName: {type: String, default: '匿名'}
+        , email: {type: String, default: ''}
     })
     .build();
 
