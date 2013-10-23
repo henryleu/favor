@@ -1,4 +1,5 @@
 var mongoose = require('../commons/mongoose');
+var logger = require('../commons/logging').logger;
 var DomainBuilder = require('./common/DomainBuilder');
 var Comment = require('./Comment').schema;
 var schema = DomainBuilder
@@ -35,6 +36,7 @@ var schema = DomainBuilder
         //the highly-frequently changed information which will be maintained in redis later
         , "meta": {
             "views":  {type: Number, default: 0} //value of how many times user view it
+            , "stars":   {type: Number, default: 0} //value of how many users star/collect it
             , "likes":  {type: Number, default: 0} //value of how many users like it
             , "owns":   {type: Number, default: 0} //value of how many users have owned it now matter where they bought from
             , "deals":  {type: Number, default: 0} //value of how many deals users have bought it from this site
@@ -42,6 +44,38 @@ var schema = DomainBuilder
         , "comments": [Comment]
     })
     .build();
+
+    var metaAction = function (prop, incOp) {
+        var metaProp = 'meta.'+prop;
+        var update = { $inc: {}};
+        update.$inc[metaProp] = incOp ? 1 : -1;
+        return function (thingId, uid, callback){
+            this.findByIdAndUpdate(
+                thingId,
+                update,
+                {select:[metaProp]},
+                function(err, thing){
+                    if(err){
+                        logger.error(err);
+                        callback(err);
+                        return;
+                    }
+                    logger.debug(thing);
+                    if(thing){
+                        callback(null, thing.meta[prop]);
+                    }
+                    else{
+                        callback(null, 0);
+                    }
+                }
+            );
+        }
+    };
+
+    schema.static('star', metaAction('stars', true));
+    schema.static('unstar', metaAction('stars', false));
+    schema.static('like', metaAction('likes', true));
+    schema.static('unlike', metaAction('likes', false));
 
 module.exports.schema = schema;
 module.exports.model = mongoose.model(schema.name, schema);
