@@ -1,6 +1,7 @@
 var User = require('../models/User').model;
-var UserKv = require('../kvs/User');
 var UserState = require('../models/common/enums').UserState;
+var UserKv = require('../kvs/User');
+var UserMetaKv = require('../kvs/UserMeta');
 var settings = require('../../settings');
 var crypto = require('crypto');
 var logger = require('../commons/logging').logger;
@@ -36,6 +37,9 @@ var UserService = {
                 callback(new Error('Fail to create anonymous user: ' + err), null);
             }
         });
+    },
+    loadMeta: function(uid, callback){
+        UserMetaKv.getMeta(uid, callback);
     }
 };
 module.exports = UserService;
