@@ -1,4 +1,4 @@
-<div class="row-fluid"><div class="container-fluid waterfall">
+<div class="row-fluid"><div class="offset2 span9"><div class="container-fluid waterfall">
 
 <%
     //Init an array to hold N lines of items which the coming items are divided into
@@ -29,7 +29,7 @@
         var itemIndex = 0;
         var itemLen = line.length;
 %>
-    <div class="span4 lane"><ul>
+    <div class="lane"><ul>
 <%
         //Loop items in a line to generate a lane
         for(var itemIndex=0; itemIndex<itemLen; itemIndex++){
@@ -41,11 +41,9 @@
             <div class="thing-inner">
                 <input type="hidden" id="thingId" value="<%=item._id%>">
                 <a href="/thing-<%=item._id%>">
-                <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
-                <div class="top-img-padding"></div>
                 <div class="prev"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
-                <div class="bottom-img-padding"></div>
                 </a>
+                <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
                 <div class="desc"><%= item.lDesc%></div>
                 <div class="meta"><ul class="inline text-center">
                     <li><i class="icon-eye-open"> <%=meta.views%></i></li>
@@ -64,4 +62,4 @@
     }
 %>
 
-</div></div>
+</div></div></div>

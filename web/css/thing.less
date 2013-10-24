@@ -18,42 +18,34 @@
   display: block;
 }
 .frame{
-  margin: 8px 2px;
-  padding: 2px;
+  margin: 0px 0px 12px 0px;
+  padding: 0px;
   border: 0px;
 
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
-  -moz-box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
-  box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
 }
 .frame.focus{
-  margin: 6px 1px;
-  padding: 2px;
-  border: #009add dashed 2px;
-}
-.top-img-padding{
-  margin-bottom: 30px;
-}
-.bottom-img-padding{
-  margin-bottom: 30px;
+  margin: 10px 5px;
+  padding: 0px;
+  border: #009add dashed 0px;
 }
 .thing {
   position: relative;
+//  width: 236px;
   margin: 0px;
-  padding: 5px;
-  background: white;
+  padding: 0px;
   border: 0px;
+  background: white;
 
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
   -webkit-box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
   -moz-box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
   box-shadow: rgba(0,0,0,0.1) 1px 1px 10px;
@@ -65,8 +57,10 @@
   padding: 0px;
 }
 .lane {
-  margin: 0px;
+  margin: 10px 6px;
   padding: 0px;
+  float: left;
+  box-sizing: border-box;
 }
 .lane ul, .lane ol {
   list-style: none;
@@ -78,9 +72,9 @@
   padding: 0px;
 }
 .lane .thing-inner {
-  width: 324px;
-  min-width: 324;
-  max-width: 324;
+  width: 236px;
+//  min-width: 324;
+//  max-width: 324;
 }
 .lane .thing-inner > a {
   display: table-cell;
@@ -97,8 +91,8 @@
 //  white-space: nowrap;
 }
 .lane .thing-inner img{
-  text-align: center;
-  width: 324px;
+  text-align: left;
+  width: 236px;
   height: auto;
   margin: 0px;
   border: 0px;
@@ -110,6 +104,8 @@
 .lane .thing-inner div.desc{
   display: none;
   height: 40px;
+  margin-left: 6px;
+  margin-right: 6px;
   margin-bottom: 10px;
 }
 .lane .thing-inner div.meta{
