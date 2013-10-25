@@ -151,22 +151,31 @@
   position: relative;
   width: 100%;
 }
-.snapshot .wrap {
+.wrap {
   position: absolute;
-  opacity: 0;
   width: 100%;
   left: 0px;
   top: 0px;
 }
 .snapshot .wrap > div {
   position: absolute;
-  right: 10px;
+  right: 15px;
   top: 15px;
 }
 .snapshot .wrap span {
-  margin: 5px 0px;
-  padding: 5px;
+  display: inline-block;
+  opacity: 0;
+  height: 32px;
+  margin: 0px;
+  padding: 8px;
   white-space: nowrap;
+  color: white;
+  background-color: rgba(74, 74, 74, 0.4);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
 }
 .snapshot .wrap span .text {
   display: inline;
@@ -178,22 +187,22 @@
   display: inline;
   overflow: hidden;
 }
-.snapshot:hover .wrap,
-.snapshot:focus .wrap {
+.snapshot:hover .wrap span,
+.snapshot:focus .wrap span {
   opacity: 1;
   transition: opacity 0.4s ease-in-out;
   -moz-transition: opacity 0.4s ease-in-out;
   -webkit-transition: opacity 0.4s ease-in-out;
 }
-.snapshot .wrap span:hover .icon,
-.snapshot .wrap span:focus .icon,
-.snapshot .wrap span.visited .icon {
-  color: orange;
+.wrap span:hover .icon,
+.wrap span:focus .icon,
+.wrap span.visited .icon {
+  color: #0088cc;
   cursor: pointer;
 }
-.snapshot .wrap span.visited:hover .text,
-.snapshot .wrap span.visited:focus .text {
-  color: orange;
+.wrap span.visited:hover .text,
+.wrap span.visited:focus .text {
+  color: #0088cc;
   cursor: pointer;
 }
 .showcase .thumbnails > li {
@@ -223,4 +232,41 @@
 }
 .showcase .actions ul li {
   margin: 10px 0px;
+}
+.lane .wrap > div {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.lane .wrap span {
+  display: inline-block;
+  opacity: 0;
+  height: 22px;
+  margin: 0px;
+  padding: 3px;
+  white-space: nowrap;
+  color: white;
+  background-color: rgba(74, 74, 74, 0.4);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+.lane .wrap span .text {
+  display: inline;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.lane .wrap span .icon {
+  display: inline;
+  overflow: hidden;
+}
+.lane .thing:hover .wrap span,
+.lane .thing:focus .wrap span {
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
 }

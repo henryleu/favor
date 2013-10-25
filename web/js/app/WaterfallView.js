@@ -2,19 +2,107 @@ define(['jQuery', 'skeleton'], function($, sk) {
     var WaterfallView = sk.View.extend({
         templateName: 'waterfall',
         events: {
+            "click .lane .wrap span#like": "onLike"
+
 //            "focus .thing": "onFocus",
 //            "mouseenter .thing": "onFocus",
 //            "mouseover .thing": "onFocus",
 //            "mouseleave": "onUnfocus"
         },
         configure: function() {
+            var userMeta = window.user && window.user.meta ? window.user.meta : {stars:{},likes:{}};
+
             var me = this;
             this.listenTo(this.model, 'sync', function(model, res, options) {
                 if(options.action=='read'){
                     me.model.fetched = true;
+
+                    var len = me.model.length;
+                    for(var i=0; i<len; i++){
+                        var thing = me.model.at(i);
+                        var thingId = thing.id;
+                        var stared = userMeta.stars[thingId]?true:false;
+                        var liked = userMeta.likes[thingId]?true:false;
+//                thing.set('istar', stared);
+//                this.listenTo(thing, 'change:istar', this.doStar, this);
+                        thing.set('ilike', liked);
+                        me.listenTo(thing, 'change:ilike', me.doLike, me);
+                    }
                     me.doRender();
                 }
             });
+        },
+        getTarget: function(el, selector){
+            var $el = $(el);
+            return $el.is(selector) ? $el : $el.parents(selector);
+        },
+        onLike: function(e){
+            var $el = this.getTarget(e.target, '.lane .wrap span#like');
+            var thingId = $el.parent().parent().parent().find('#thingId').val();
+            var thing = this.model.get(thingId);
+            thing.set('ilike', !thing.get('ilike'));
+        },
+        doLike: function(model, value, options){
+            var $el = this.$('.lane .thing input[value='+ model.id +']');
+            var $el = $el.parent().find('span#like');
+            var visited = value;
+            var id = model.id;
+            var apiUrl = '/thing/' + id + (visited ? '/like' : '/unlike');
+            $.get(apiUrl, function() {
+                console.debug('succeed: ' + apiUrl);
+                //TODO:
+            })
+                .fail(function() {
+                    console.error('failed: ' + apiUrl);
+                    //TODO:
+                });
+
+            var meta = model.toJSON().meta;
+            var likes = meta.likes;
+            likes = !likes ? 0 : likes;
+            if(visited){
+                ++likes;
+                $el.addClass('visited');
+                $el.find('.text').html(' ('+likes + ')');
+            }
+            else{
+                likes = --likes<=0 ? 0 : likes;
+                $el.removeClass('visited');
+                if(likes===0){
+                    $el.find('.text').html('');
+                }
+                else{
+                    $el.find('.text').html(' ('+likes + ')');
+                }
+            }
+            meta.likes = likes;
+            model.set('meta', meta);
+        },
+        onStar: function(e){
+            this.model.set('istar', !this.model.get('istar'));
+        },
+        doStar: function(model, value, options){
+            var $el = this.$('.showcase .actions a#star');
+            var active = value;
+            var id = model.id;
+            var apiUrl = '/thing/' + id + (active ? '/star' : '/unstar');
+            $.get(apiUrl, function() {
+                console.debug('succeed: ' + apiUrl);
+                //TODO:
+            })
+                .fail(function() {
+                    console.error('failed: ' + apiUrl);
+                    //TODO:
+                });
+
+            if(active){
+                $el.addClass('active');
+                $el.find('i').removeClass('icon-star-empty').addClass('icon-star');
+            }
+            else{
+                $el.removeClass('active');
+                $el.find('i').removeClass('icon-star').addClass('icon-star-empty');
+            }
         },
         focus: function($el){
             if(!this.theFocus){
