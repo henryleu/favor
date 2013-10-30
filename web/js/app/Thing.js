@@ -15,11 +15,19 @@ define(['jQuery', 'skeleton'], function($, sk) {
             this.fetched = true;
             var userMeta = this.user.meta;
             var thingId = this.id;
-            var stared = userMeta.stars[thingId]?true:false;
+//            var stared = userMeta.stars[thingId]?true:false;
             var liked = userMeta.likes[thingId]?true:false;
-//            this.set('istar', stared);
+//            this.set('stared', stared);
             this.set('liked', liked);
-            console.info(this.id + ' liked: ' + liked);
+
+            //Revise meta properties: likes, stars, etc.
+            var meta = this.get('meta');
+            var likes = meta.likes;
+            if(!likes || likes < 0){
+                likes = liked ? 1 : 0;
+            }
+            meta.likes = likes;
+
             this.trigger('load', this);
         },
         toggleLike: function(liked){
