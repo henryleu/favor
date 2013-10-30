@@ -51,12 +51,7 @@ var UserMeta = {
                 return;
             }
 
-            if(result==1){
-                callback(null, result);
-            }
-            else{
-                callback(new Error('Fail to let user ['+uid+'] unstar thing ['+thingId+']: '), 0);
-            }
+            callback(null, result);
         });
     },
     countLikes: function(uid, callback){
@@ -100,12 +95,7 @@ var UserMeta = {
                 return;
             }
 
-            if(result==1){
-                callback(null, result);
-            }
-            else{
-                callback(new Error('Fail to let user ['+uid+'] unlike thing ['+thingId+']: '), 0);
-            }
+            callback(null, result);
         });
     },
     getMeta: function(uid, callback){
