@@ -26,12 +26,6 @@ require.config({
         'JST': {
             exports: 'JST'
         }
-//        'Util': {
-//            deps: ['jQuery']
-//        },
-//        'UpaiUpload': {
-//            deps: ['jQuery', 'Base64', 'Cryptojs/md5']
-//        }
     },
     packages: ["skeleton", "misc", "config", "app"],
     paths: {
@@ -47,14 +41,7 @@ require.config({
         Base64: '../../public/components/js-base64/base64',
         JST: '../../public/build/js/templates',
         jQueryCustom: 'jquery.custom'
-//        Spa: 'backbone-spa',
-//        Flowbar: 'flowbar',
-//        Favor: 'favor',
-//        Util: 'util',
-//        UpaiUpload: 'upai-upload'
-//        App: 'app'
     },
-//    deps: ['App', 'Util', 'UpaiUpload'],
     deps: ['app', 'misc'],
     callback: function(){
     },
