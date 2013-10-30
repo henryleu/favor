@@ -3,59 +3,52 @@ define(['jQuery', 'skeleton'], function($, sk) {
         vid: 'thing-detail',
         templateName: 'thing-detail',
         events: {
-            "click .snapshot .wrap span#like": "onLike",
+            "click .snapshot .wrap span#like": "onToggleLike",
             "click .showcase .actions a#star": "onStar"
         },
         configure: function() {
+            this.ensureUser();
             var me = this;
-            this.listenTo(this.model, 'sync', function(model, res, options) {
-                if(options.action=='read'){
-                    me.model.fetched = true;
-                    me.doRender();
-                }
+            this.listenTo(this.model, 'load', function(model) {
+                me.doRender();
             });
-            var userMeta = window.user && window.user.meta ? window.user.meta : {stars:{},likes:{}};
-            var thingId = this.model.id;
-            var stared = userMeta.stars[thingId]?true:false;
-            var liked = userMeta.likes[thingId]?true:false;
 
-            this.model.set('istar', stared);
             this.listenTo(this.model, 'change:istar', this.doStar, this);
-
-            this.model.set('ilike', liked);
-            this.listenTo(this.model, 'change:ilike', this.doLike, this);
+            this.listenTo(this.model, 'change:liked', this.onRefreshLike, this);
+        },
+        ensureUser: function() {
+            window.user = window.user || {};
+            window.user.meta = window.user.meta || {stars:{},likes:{}};
+            this.user = window.user;
         },
         getTarget: function(el, selector){
             var $el = $(el);
             return $el.is(selector) ? $el : $el.parents(selector);
         },
-        onLike: function(e){
-            this.model.set('ilike', !this.model.get('ilike'));
-        },
-        doLike: function(model, value, options){
-            var $el = this.$('.snapshot .wrap span#like');
-            var visited = value;
-            var id = model.id;
-            var apiUrl = '/thing/' + id + (visited ? '/like' : '/unlike');
+        onToggleLike: function(e){
+            var $el = this.getTarget(e.target, '.snapshot .wrap span#like');
+            if($el.length==0) return;
+            var liked = !this.model.get('liked');
+            this.model.toggleLike(liked);
+            var me = this;
+            var apiUrl = '/thing/' + this.model.id + (liked ? '/like' : '/unlike');
             $.get(apiUrl, function() {
-                console.debug('succeed: ' + apiUrl);
-                //TODO:
             })
             .fail(function() {
                 console.error('failed: ' + apiUrl);
-                //TODO:
+                me.model.toggleLike(!liked);
             });
-
-            var meta = this.model.toJSON().meta;
+        },
+        onRefreshLike: function(model, value, options){
+            var $el = this.$('.snapshot .wrap span#like');
+            var meta = this.model.get('meta');
+            var liked = value;
             var likes = meta.likes;
-            likes = !likes ? 0 : likes;
-            if(visited){
-                ++likes;
+            if(liked){
                 $el.addClass('visited');
                 $el.find('.text').html(' ('+likes + ')');
             }
             else{
-                likes = --likes<=0 ? 0 : likes;
                 $el.removeClass('visited');
                 if(likes===0){
                     $el.find('.text').html('');
@@ -64,8 +57,6 @@ define(['jQuery', 'skeleton'], function($, sk) {
                     $el.find('.text').html(' ('+likes + ')');
                 }
             }
-            meta.likes = likes;
-            this.model.set('meta', meta);
         },
         onStar: function(e){
             this.model.set('istar', !this.model.get('istar'));
