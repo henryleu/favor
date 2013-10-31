@@ -115,55 +115,7 @@ module.exports = function(app) {
             res.json(200, {});//TODO: return a standard envelop
         });
     });
-/*
-    app.get('/thing/:id/star', function(req, res) {
-        var thingId = req.params.id;
-        ThingService.star(req.user.utoken, thingId, function(err, affected) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, {});//TODO: return a standard envelop
-        });
-    });
 
-    app.get('/thing/:id/unstar', function(req, res) {
-        var thingId = req.params.id;
-        ThingService.unstar(req.user.utoken, thingId, function(err, affected) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, {});//TODO: return a standard envelop
-        });
-    });
-
-    app.get('/thing/:id/like', function(req, res) {
-        var thingId = req.params.id;
-        ThingService.like(req.user.utoken, thingId, function(err, affected) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, {});//TODO: return a standard envelop
-        });
-    });
-
-    app.get('/thing/:id/unlike', function(req, res) {
-        var thingId = req.params.id;
-        ThingService.unlike(req.user.utoken, thingId, function(err, affected) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            res.json(200, {});//TODO: return a standard envelop
-        });
-    });
-*/
     app.post('/deal', function(req, res) {
         var postInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug(postInfo);
