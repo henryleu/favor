@@ -39,6 +39,10 @@
                                 <i class="icon icon-thumbs-up-alt icon-2x" title="喜欢" alt="喜欢"></i>
                                 <label class="text"><%=meta.likes==0?'': ' ('+meta.likes+')'%></label>
                             </span>
+                            <span id="star" class="<%=input.starred?'visited':''%>">
+                                <i class="icon <%=input.starred?'icon-star':'icon-star-empty'%> icon-2x" title="收藏" alt="收藏"></i>
+                                <label class="text"><%=meta.stars==0?'': ' ('+meta.stars+')'%></label>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -79,9 +83,6 @@
         <div class="span2">
             <div class="actions">
             <ul>
-                <li>
-                    <a class="btn <%=input.istar?'active':''%>" id="star"><i class="<%=input.istar?'icon-star':'icon-star-empty'%> icon-large"> 收藏</i></a>
-                </li>
                 <li>
                     <a class="btn" id="share"><i class="icon-share icon-large"> 分享</i></a>
                 </li>
