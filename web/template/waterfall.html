@@ -54,15 +54,17 @@
                                 <label class="text"><%=meta.stars==0?'': ' ('+meta.stars+')'%></label>
                             </span>
                     </div>
+                    <!--
+                    <div class="action-bar">
+                            <span id="like" class="<%=item.liked?'visited':''%>">
+                                <i class="icon icon-thumbs-up-alt icon-large" title="喜欢" alt="喜欢"></i>
+                                <label class="text"><%=meta.likes==0?'': ' ('+meta.likes+')'%></label>
+                            </span>
+                    </div>
+                    -->
                 </div>
                 <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
                 <div class="desc"><%= item.lDesc%></div>
-                <div class="meta"><ul class="inline text-center">
-                    <li><i class="icon-eye-open"> <%=meta.views%></i></li>
-                    <li><i class="icon-heart"> <%=meta.likes%></i></li>
-                    <li><i class="icon-check"> <%=meta.owns%></i></li>
-                    <li><i class="icon-shopping-cart"> <%=meta.deals%></i></li>
-                    </ul></div>
             </div>
         </div>
         </div></li>
