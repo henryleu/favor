@@ -3,9 +3,8 @@ define(['jQuery', 'skeleton'], function($, sk) {
         vid: 'thing-detail',
         templateName: 'thing-detail',
         events: {
-            "click .snapshot .wrap span#like": "onToggleLike",
-            "click .snapshot .wrap span#star": "onToggleStar",
-            "click .showcase .actions a#star": "onToggleStar"
+            "click .showcase .acton span#like": "onToggleLike",
+            "click .showcase .acton span#star": "onToggleStar"
         },
         configure: function() {
             this.ensureUser();
@@ -27,7 +26,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             return $el.is(selector) ? $el : $el.parents(selector);
         },
         onToggleLike: function(e){
-            var $el = this.getTarget(e.target, '.snapshot .wrap span#like');
+            var $el = this.getTarget(e.target, '.showcase .acton span#like');
             if($el.length==0) return;
             var liked = !this.model.get('liked');
             this.model.toggleLike(liked);
@@ -41,7 +40,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             });
         },
         onRefreshLike: function(model, value, options){
-            var $el = this.$('.snapshot .wrap span#like');
+            var $el = this.$('.showcase .acton span#like');
             var meta = this.model.get('meta');
             var liked = value;
             var likes = meta.likes;
@@ -56,7 +55,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             $el.find('.text').html(likes===0 ? '' : likes);
         },
         onToggleStar: function(e){
-            var $el = this.getTarget(e.target, '.snapshot .wrap span#star');
+            var $el = this.getTarget(e.target, '.showcase .acton span#star');
             if($el.length==0) return;
             var starred = !this.model.get('starred');
             this.model.toggleStar(starred);
@@ -70,8 +69,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             });
         },
         onRefreshStar: function(model, value, options){
-//            var $el = this.$('.showcase .actions a#star');
-            var $el = this.$('.snapshot .wrap span#star');
+            var $el = this.$('.showcase .acton span#star');
             var meta = this.model.get('meta');
             var starred = value;
             var stars = meta.stars;

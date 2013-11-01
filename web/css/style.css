@@ -680,6 +680,14 @@ button:focus.cystal-button img {
   text-decoration: none;
   background-color: #999999;
 }
+a.flow-ctrl:link,
+a.flow-ctrl:active,
+a.flow-ctrl:focus,
+a.flow-ctrl:hover,
+a.flow-ctrl:visited {
+  cursor: default;
+  text-decoration: none;
+}
 .flow-ctrl span {
   display: block;
   width: 60px;

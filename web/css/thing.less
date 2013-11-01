@@ -1,6 +1,6 @@
 @card-width: 236px;
-@wrap-bg-color: rgba(74, 74, 74, 0.6);
-@wrap-active-color: white;//rgb(0, 136, 204);
+@acton-bg-color: rgba(74, 74, 74, 0.6);
+@acton-active-color: white;//rgb(0, 136, 204);
 .round-border{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -18,11 +18,20 @@
   padding: 0px;
   border:  0px;
 }
+.transition-opacity{
+  transition: opacity .4s ease-in-out;
+  -webkit-transition: opacity .4s ease-in-out;
+  -moz-transition: opacity .4s ease-in-out;
+  -o-transition: opacity .4s ease-in-out;
+  -ms-transition: opacity .4s ease-in-out;
+}
 .fade-in{
   opacity: 1;
-  transition: opacity .4s ease-in-out;
-  -moz-transition: opacity .4s ease-in-out;
-  -webkit-transition: opacity .4s ease-in-out;
+  .transition-opacity;
+}
+.fade-out{
+  opacity: 0;
+  .transition-opacity;
 }
 .transition-filter{
   transition: filer .4s ease-in-out;
@@ -92,17 +101,17 @@
   float: none;
   .thin-box;
 }
-.wrap{
+.acton{
   position: relative;
   cursor: pointer;
 }
-.wrap span{
+.acton span{
   color: white;
 }
-.wrap span:hover,
-.wrap span:focus,
-.wrap span.active {
-  color: @wrap-active-color;
+.acton span:hover,
+.acton span:focus,
+.acton span.active {
+  color: @acton-active-color;
 }
 .lane {
   margin: 10px 6px;
@@ -125,15 +134,6 @@
   text-align: center;
   vertical-align: middle;
 }
-.lane .thing-inner h4 {
-  text-align: center;
-  margin: 0px;
-  font-size: 14px;
-  overflow: hidden;
-  color: #777;
-  text-overflow: ellipsis;
-//  white-space: nowrap;
-}
 .lane .thing-inner img{
   text-align: left;
   width: @card-width;
@@ -149,45 +149,58 @@
 .lane .thing-inner div.image{
   margin-bottom: 0px;
 }
+.lane .thing-inner .acton{
+  width:  100%;
+  height: 25px;
+  margin-top: -25px;
+  background-color: @acton-bg-color;
+  opacity: 0;
+  .transition-opacity;
+}
+.lane .thing-inner:hover .acton,
+.lane .thing-inner:focus .acton{
+  .fade-in;
+}
+.lane .thing-inner .acton span{
+  display: inline-block;
+  float: right;
+  height: 22px;
+  margin:  0px 0px 0px 0px;
+  padding: 2px;
+  white-space: nowrap;
+  .round-border;
+}
+.lane .thing-inner .acton span .icon{
+  display: inline-block;
+  overflow: hidden;
+  width: 17px;
+  font-size: 14px;
+}
+.lane .thing-inner .acton span .text{
+  display: inline-block;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  vertical-align: top;
+  width: 20px;
+  margin: 0px;
+  line-height: 22px;
+}
+.lane .thing-inner h4 {
+  text-align: center;
+  margin: 0px;
+  width: 100%;
+  font-size: 14px;
+  overflow: hidden;
+  color: #777;
+  text-overflow: ellipsis;
+  //  white-space: nowrap;
+}
 .lane .thing-inner div.desc{
   display: none;
   height: 40px;
   margin: 0px 6px 10px;
 }
-.lane .thing-inner .wrap{
-  opacity: 0;
-  width:  100%;
-  height: 25px;
-  margin-top: -25px;
-  background-color: @wrap-bg-color;
-}
-.lane .thing-inner:hover .wrap,
-.lane .thing-inner:focus .wrap{
-  .fade-in;
-}
-.lane .thing-inner .wrap span{
-  display: inline-block;
-  float: right;
-  height: 22px;
-  width:  60px;
-  margin:  0px;
-  padding: 3px;
-  white-space: nowrap;
-  .round-border;
-}
-.lane .thing-inner .wrap span .text{
-  display: inline;
-  overflow: hidden;
-  font-size: 14px;
-  white-space: nowrap;
-}
-.lane .thing-inner .wrap span .icon{
-  display: inline;
-  overflow: hidden;
-}
-
-
-
 
 
 
@@ -232,36 +245,40 @@
   width:  100%;
 }
 
-
-.showcase .thing-inner .wrap{
+.showcase .thing-inner .acton{
   position: absolute;
-  width:  80px;
+  width:  70px;
   right: 15px;
   top: 15px;
-  background-color: @wrap-bg-color;
+  background-color: @acton-bg-color;
+  opacity: 0.7;
+  .transition-opacity;
 }
-.showcase .thing-inner:hover .wrap,
-.showcase .thing-inner:focus .wrap{
+.showcase .thing-inner:hover .acton,
+.showcase .thing-inner:focus .acton{
+  .fade-in;
 }
-.showcase .thing-inner .wrap span{
+.showcase .thing-inner .acton span{
   display: block;
   height: 32px;
   margin:  0px;
-  padding: 8px;
+  padding: 8px 10px;
   white-space: nowrap;
   color: white;
   .round-border
 }
-.showcase .thing-inner .wrap span .icon{
+.showcase .thing-inner .acton span .icon{
   display: inline-block;
   overflow: hidden;
   width: 30px;
 }
-.showcase .thing-inner .wrap span .text{
+.showcase .thing-inner .acton span .text{
   display: inline;
   font-size: 16px;
   overflow: hidden;
   white-space: nowrap;
+  vertical-align: top;
+  line-height: 32px;
 }
 
 

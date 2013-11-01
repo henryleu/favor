@@ -2,8 +2,8 @@ define(['jQuery', 'skeleton'], function($, sk) {
     var WaterfallView = sk.View.extend({
         templateName: 'waterfall',
         events: {
-            "click .lane .wrap span#like": "onToggleLike",
-            "click .lane .wrap span#star": "onToggleStar"
+            "click .lane .acton span#like": "onToggleLike",
+            "click .lane .acton span#star": "onToggleStar"
         },
         configure: function() {
             this.ensureUser();
@@ -32,7 +32,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             return $el.is(selector) ? $el : $el.parents(selector);
         },
         onToggleLike: function(e){
-            var $el = this.getTarget(e.target, '.lane .wrap span#like');
+            var $el = this.getTarget(e.target, '.lane .acton span#like');
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
             var liked = !thing.get('liked');
@@ -63,7 +63,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             $el.find('.text').html(likes===0 ? '' : likes);
         },
         onToggleStar: function(e){
-            var $el = this.getTarget(e.target, '.lane .wrap span#star');
+            var $el = this.getTarget(e.target, '.lane .acton span#star');
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
             var starred = !thing.get('starred');

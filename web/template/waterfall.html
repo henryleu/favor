@@ -43,14 +43,18 @@
                 <a href="/thing-<%=item._id%>">
                 <div class="image"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
                 </a>
-                <div class="wrap">
+                <div class="acton">
                     <div class="icons">
                             <span id="star" class="<%=item.starred?'active':''%>">
+                                <div class="icon">
                                 <i class="icon <%=item.starred?'icon-star':'icon-star-empty'%> icon-large" title="收藏" alt="收藏"></i>
+                                </div>
                                 &nbsp;<label class="text"><%= meta.stars===0 ? '': meta.stars%></label>
                             </span>
                             <span id="like" class="<%=item.liked?'active':''%>">
-                                <i class="icon <%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                <div class="icon">
+                                <i class="<%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                </div>
                                 &nbsp;<label class="text"><%= meta.likes===0 ? '' : meta.likes%></label>
                             </span>
                     </div>
