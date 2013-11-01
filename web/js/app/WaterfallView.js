@@ -53,20 +53,14 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var likes = meta.likes;
 
             if(liked){
-                $el.addClass('visited');
+                $el.addClass('active');
                 $el.find('i').removeClass('icon-thumbs-up-alt').addClass('icon-thumbs-up');
-                $el.find('.text').html(' ('+likes + ')');
             }
             else{
-                $el.removeClass('visited');
+                $el.removeClass('active');
                 $el.find('i').removeClass('icon-thumbs-up').addClass('icon-thumbs-up-alt');
-                if(likes===0){
-                    $el.find('.text').html('');
-                }
-                else{
-                    $el.find('.text').html(' ('+likes + ')');
-                }
             }
+            $el.find('.text').html(likes===0 ? '' : likes);
         },
         onToggleStar: function(e){
             var $el = this.getTarget(e.target, '.lane .wrap span#star');
@@ -90,20 +84,14 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var stars = meta.stars;
 
             if(starred){
-                $el.addClass('visited');
+                $el.addClass('active');
                 $el.find('i').removeClass('icon-star-empty').addClass('icon-star');
-                $el.find('.text').html(' ('+stars + ')');
             }
             else{
-                $el.removeClass('visited');
+                $el.removeClass('active');
                 $el.find('i').removeClass('icon-star').addClass('icon-star-empty');
-                if(stars===0){
-                    $el.find('.text').html('');
-                }
-                else{
-                    $el.find('.text').html(' ('+stars + ')');
-                }
             }
+            $el.find('.text').html(stars===0 ? '' : stars);
         }
     });
 

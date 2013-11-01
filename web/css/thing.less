@@ -38,7 +38,6 @@
   -o-filter: grayscale(40%);
   filter: grayscale(40%);
   filter: gray;
-
   .transition-filter;
 }
 .ungray {
@@ -48,7 +47,6 @@
   -o-filter: grayscale(0%);
   filter: grayscale(0%);
   filter: none;
-
   .transition-filter;
 }
 .split-left {
@@ -103,7 +101,7 @@
 }
 .wrap span:hover,
 .wrap span:focus,
-.wrap span.visited {
+.wrap span.active {
   color: @wrap-active-color;
 }
 .lane {
@@ -148,8 +146,7 @@
 .lane .thing-inner:focus img{
   .ungray;
 }
-
-.lane .thing-inner div.prev{
+.lane .thing-inner div.image{
   margin-bottom: 0px;
 }
 .lane .thing-inner div.desc{
@@ -157,33 +154,34 @@
   height: 40px;
   margin: 0px 6px 10px;
 }
-.lane .thing .wrap{
+.lane .thing-inner .wrap{
   opacity: 0;
   width:  100%;
   height: 25px;
   margin-top: -25px;
   background-color: @wrap-bg-color;
 }
-.lane .thing:hover .wrap,
-.lane .thing:focus .wrap{
+.lane .thing-inner:hover .wrap,
+.lane .thing-inner:focus .wrap{
   .fade-in;
 }
-.lane .thing .wrap span{
+.lane .thing-inner .wrap span{
   display: inline-block;
   float: right;
   height: 22px;
+  width:  60px;
   margin:  0px;
   padding: 3px;
   white-space: nowrap;
   .round-border;
 }
-.lane .thing .wrap span .text{
+.lane .thing-inner .wrap span .text{
   display: inline;
-  font-size: 14px;
   overflow: hidden;
+  font-size: 14px;
   white-space: nowrap;
 }
-.lane .thing .wrap span .icon{
+.lane .thing-inner .wrap span .icon{
   display: inline;
   overflow: hidden;
 }
@@ -234,13 +232,19 @@
   width:  100%;
 }
 
-.snapshot .wrap > div{
+
+.showcase .thing-inner .wrap{
   position: absolute;
+  width:  80px;
   right: 15px;
   top: 15px;
+  background-color: @wrap-bg-color;
 }
-.snapshot .wrap span{
-  display: inline-block;
+.showcase .thing-inner:hover .wrap,
+.showcase .thing-inner:focus .wrap{
+}
+.showcase .thing-inner .wrap span{
+  display: block;
   height: 32px;
   margin:  0px;
   padding: 8px;
@@ -248,26 +252,19 @@
   color: white;
   .round-border
 }
-.snapshot .wrap span .text{
+.showcase .thing-inner .wrap span .icon{
+  display: inline-block;
+  overflow: hidden;
+  width: 30px;
+}
+.showcase .thing-inner .wrap span .text{
   display: inline;
   font-size: 16px;
   overflow: hidden;
   white-space: nowrap;
 }
-.snapshot .wrap span .icon{
-  display: inline;
-  overflow: hidden;
-}
 
-.snapshot:hover .wrap,
-.snapshot:focus .wrap{
-  .fade-in;
-}
 
-.snapshot:hover .wrap span,
-.snapshot:focus .wrap span{
-  .fade-in
-}
 
 .showcase .thumbnails > li {
   box-sizing: border-box;
@@ -295,7 +292,6 @@
   list-style-type: none;
   margin:  10px 0px;
 }
-
 .showcase .actions ul li {
   margin:  10px 0px;
 }

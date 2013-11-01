@@ -41,22 +41,22 @@
             <div class="thing-inner">
                 <input type="hidden" id="thingId" value="<%=item._id%>">
                 <a href="/thing-<%=item._id%>">
-                <div class="prev"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
+                <div class="image"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
                 </a>
                 <div class="wrap">
                     <div class="icons">
-                            <span id="like" class="<%=item.liked?'visited':''%>">
-                                <i class="icon icon-thumbs-up-alt icon-large" title="喜欢" alt="喜欢"></i>
-                                <label class="text"><%=meta.likes==0?'': ' ('+meta.likes+')'%></label>
-                            </span>
-                            <span id="star" class="<%=item.starred?'visited':''%>">
+                            <span id="star" class="<%=item.starred?'active':''%>">
                                 <i class="icon <%=item.starred?'icon-star':'icon-star-empty'%> icon-large" title="收藏" alt="收藏"></i>
-                                <label class="text"><%=meta.stars==0?'': ' ('+meta.stars+')'%></label>
+                                &nbsp;<label class="text"><%= meta.stars===0 ? '': meta.stars%></label>
+                            </span>
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <i class="icon <%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                &nbsp;<label class="text"><%= meta.likes===0 ? '' : meta.likes%></label>
                             </span>
                     </div>
                     <!--
                     <div class="action-bar">
-                            <span id="like" class="<%=item.liked?'visited':''%>">
+                            <span id="like" class="<%=item.liked?'active':''%>">
                                 <i class="icon icon-thumbs-up-alt icon-large" title="喜欢" alt="喜欢"></i>
                                 <label class="text"><%=meta.likes==0?'': ' ('+meta.likes+')'%></label>
                             </span>
