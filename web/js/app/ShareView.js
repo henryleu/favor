@@ -141,24 +141,25 @@ function($, sk, bs) {
             } else {
                 this.$('.previewImage').attr('src', this.model.get('image'));
             }
+            this.$('.previewImageSmall').attr('src', 'http://favor-image.b0.upaiyun.com/share-alt-image.png');
         },
         onMouseoverButton: function(event) {
             $(event.currentTarget).removeClass('btn-link');
             $(event.currentTarget).addClass('btn-success');
-            if (this.usingLocalImage == true) {
-                $(event.currentTarget).html('图片链接');
-            } else {
-                $(event.currentTarget).html('本地图片');
-            }
+//            if (this.usingLocalImage == true) {
+//                $(event.currentTarget).html('图片链接');
+//            } else {
+//                $(event.currentTarget).html('本地图片');
+//            }
         },
         onMouseleaveButton: function(event) {
             $(event.currentTarget).removeClass('btn-success');
             $(event.currentTarget).addClass('btn-link');
-            if (this.usingLocalImage == true) {
-                $(event.currentTarget).html('本地图片');
-            } else {
-                $(event.currentTarget).html('图片链接');
-            }
+//            if (this.usingLocalImage == true) {
+//                $(event.currentTarget).html('本地图片');
+//            } else {
+//                $(event.currentTarget).html('图片链接');
+//            }
         },
         changeImageMode: function() {
             if (this.usingLocalImage == true) {
