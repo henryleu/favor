@@ -116,7 +116,7 @@ module.exports = function(app) {
         });
     });
 
-    app.post('/deal', function(req, res) {
+    app.post('/thing', function(req, res) {
         var postInfo = JSON.parse(JSON.stringify(req.body));
         logger.debug(postInfo);
         ThingService.create(postInfo, function(err, deal, numberAffected) {
@@ -131,20 +131,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/deal/:id', function(req, res) {
-        Thing.findOne({'_id': req.params.id}, function(err, foundDeal) {
-            if (err) {
-                logger.error(err);
-                res.json(500, err);
-                return;
-            }
-            logger.debug('Found deal: ' + foundDeal.id);
-            logger.debug(foundDeal);
-            res.json(200, foundDeal);
-        });
-    });
-
-    app.put('/deal/:id', function(req, res) {
+    app.put('/thing/:id', function(req, res) {
         var postInfo = JSON.parse(JSON.stringify(req.body));
         var thingId = req.params.id;
         var user = req.user;
@@ -178,7 +165,7 @@ module.exports = function(app) {
         });
     });
 
-    app.delete('/deal/:id', function(req, res) {
+    app.delete('/thing/:id', function(req, res) {
         Thing.remove({'_id': req.params.id}, function(err) {
             if (err) {
                 logger.error(err);
