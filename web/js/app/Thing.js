@@ -6,6 +6,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             this.ensureUser();
             this.on('sync', this.onSync, this);
         },
+        //TODO: Do it in app module, not here
         ensureUser: function() {
             window.user = window.user || {};
             window.user.meta = window.user.meta || {stars:{},likes:{}};
@@ -55,7 +56,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             }
             else{
                 likes = --likes<=0 ? 0 : likes;
-                delete userMeta[this.id];
+                userMeta[this.id] = null;
             }
             meta.likes = likes;
 
@@ -76,7 +77,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             }
             else{
                 stars = --stars<=0 ? 0 : stars;
-                delete userMeta[this.id];
+                userMeta[this.id] = null;
             }
             meta.stars = stars;
 
