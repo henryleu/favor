@@ -29,8 +29,8 @@ var UserService = {
 
             if(affected==1){
                 var doc = result.toObject({getters: true});
-                doc.liked = '{}';
-                doc.owned = '{}';
+                doc.liked = '{}'; //TODO: delete it
+                doc.owned = '{}'; //TODO: delete it
                 UserKv.save(doc, callback);
             }
             else{

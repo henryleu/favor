@@ -10,7 +10,12 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
             ,"home": "home"
             ,"user": "user"
         },
+        ensureUser: function() {
+            window.user = window.user || {};
+            window.user.meta = window.user.meta || {crts:{},stars:{},likes:{}};
+        },
         configure: function(){
+            this.ensureUser();
             this.viewSwitcher = new sk.ViewSwitcher({view: this});
 
             //Configure collection

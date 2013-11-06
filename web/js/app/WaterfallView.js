@@ -6,7 +6,6 @@ define(['jQuery', 'skeleton'], function($, sk) {
             "click .lane .acton span#star": "onToggleStar"
         },
         configure: function() {
-            this.ensureUser();
             var me = this;
             this.listenTo(this.model, 'sync', function(model, res, options) {
                 if(options.action=='read'){
@@ -21,11 +20,6 @@ define(['jQuery', 'skeleton'], function($, sk) {
                     me.doRender();
                 }
             });
-        },
-        ensureUser: function() {
-            window.user = window.user || {};
-            window.user.meta = window.user.meta || {stars:{},likes:{}};
-            this.user = window.user;
         },
         getTarget: function(el, selector){
             var $el = $(el);

@@ -1,6 +1,10 @@
 var redis = require('../commons/redis');
 var logger = require('../commons/logging').logger;
 
+var userCreatesKey = function(uid){
+    return 'user:' + uid + ':crts';
+};
+
 var userStarsKey = function(uid){
     return 'user:' + uid + ':stars';
 };
@@ -10,6 +14,50 @@ var userLikesKey = function(uid){
 };
 
 var UserMeta = {
+    countCreates: function(uid, callback){
+        var key = userCreatesKey(uid);
+        redis.hlen(key, function(err, result){
+            if(err){
+                logger.error('Fail to get the length of creates of user ['+uid+']: ' + err);
+                callback(err, 0);
+                return;
+            }
+            callback(null, result);
+        });
+    },
+    create: function(uid, thingId, callback){
+        var key = userCreatesKey(uid);
+        var now = new Date(); //TODO: use time factory to get now time
+        var obj = {};
+        obj[thingId] = now.getTime();
+
+        redis.hmset(key, obj, function(err, result){
+            if(err){
+                logger.error('Fail to let user ['+uid+'] create thing ['+thingId+']: ' + err);
+                callback(err, 0);
+                return;
+            }
+
+            if(result=='OK'){
+                callback(null, 1);
+            }
+            else{
+                callback(new Error('Fail to let user ['+uid+'] create thing [' + thingId + ']'), 0);
+            }
+        });
+    },
+    uncreate: function(uid, thingId, callback){
+        var key = userCreatesKey(uid);
+        redis.hdel(key, thingId, function(err, result){
+            if(err){
+                logger.error('Fail to let user ['+uid+'] uncreate thing ['+thingId+']: ' + err);
+                callback(err, 0);
+                return;
+            }
+
+            callback(null, result);
+        });
+    },
     countStars: function(uid, callback){
         var key = userStarsKey(uid);
         redis.hlen(key, function(err, result){
@@ -23,7 +71,7 @@ var UserMeta = {
     },
     star: function(uid, thingId, callback){
         var key = userStarsKey(uid);
-        var now = new Date(); //TODO: uee time factory to get now time
+        var now = new Date(); //TODO: use time factory to get now time
         var obj = {};
         obj[thingId] = now.getTime();
 
@@ -67,7 +115,7 @@ var UserMeta = {
     },
     like: function(uid, thingId, callback){
         var key = userLikesKey(uid);
-        var now = new Date(); //TODO: uee time factory to get now time
+        var now = new Date(); //TODO: use time factory to get now time
         var obj = {};
         obj[thingId] = now.getTime();
 
@@ -99,9 +147,11 @@ var UserMeta = {
         });
     },
     getMeta: function(uid, callback){
+        var crtsKey = userCreatesKey(uid);
         var starsKey = userStarsKey(uid);
         var likesKey = userLikesKey(uid);
         redis.multi()
+            .hgetall(crtsKey)
             .hgetall(starsKey)
             .hgetall(likesKey)
             .exec(function (err, replies) {
@@ -112,8 +162,9 @@ var UserMeta = {
                 }
 
                 var meta = {};
-                meta.stars = replies[0] || {};
-                meta.likes = replies[1] || {};
+                meta.crts = replies[0] || {};
+                meta.stars = replies[1] || {};
+                meta.likes = replies[2] || {};
                 callback(null, meta);
             });
     }

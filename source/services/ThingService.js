@@ -7,12 +7,20 @@ var logger = require('../commons/logging').logger;
 
 var ThingService = {
     create: function(postInfo, callback) {
-        var newThing = new Thing();
-        newThing.image = postInfo.image;
-        newThing.sDesc = postInfo.sDesc;
-        newThing.lDesc = postInfo.lDesc;
-        newThing.dUrl = postInfo.dUrl;
-        newThing.save(callback);
+        var newThing = new Thing(postInfo);
+        var uid = postInfo.crtBy;
+        newThing.save(function(err, doc, numberAffected){
+            if (err) {
+                callback(err);
+                return;
+            }
+            if(numberAffected){
+                UserMetaKv.create(uid, doc.id, callback);
+            }
+            else{
+                callback(new Error('Fail to create Thing by user ' + uid));
+            }
+        });
     },
     update: function(postInfo, user, thingId, callback) {
         Thing.findOne({'_id': thingId}, function(err, oldThing) {

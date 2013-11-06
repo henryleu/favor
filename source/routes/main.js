@@ -115,6 +115,8 @@ module.exports = function(app) {
 
     app.post('/thing', function(req, res) {
         var postInfo = JSON.parse(JSON.stringify(req.body));
+        var uid = req.user.id;
+        postInfo.crtBy = uid;
         logger.debug(postInfo);
         ThingService.create(postInfo, function(err, deal, numberAffected) {
             if (err) {

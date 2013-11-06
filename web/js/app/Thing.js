@@ -3,18 +3,11 @@ define(['jQuery', 'skeleton'], function($, sk) {
         name: 'Thing',
         urlRoot: '/thing',
         configure: function(){
-            this.ensureUser();
             this.on('sync', this.onSync, this);
-        },
-        //TODO: Do it in app module, not here
-        ensureUser: function() {
-            window.user = window.user || {};
-            window.user.meta = window.user.meta || {stars:{},likes:{}};
-            this.user = window.user;
         },
         onSync: function(){
             this.fetched = true;
-            var userMeta = this.user.meta;
+            var userMeta = window.user.meta;
             var thingId = this.id;
 
             //Init liked properties
@@ -44,7 +37,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
         toggleLike: function(liked){
             var meta = this.get('meta');
             var likes = meta.likes;
-            var userMeta = this.user.meta;
+            var userMeta = window.user.meta;
 
             /*
              * Update Thing.meta.likes and user.meta.likes
@@ -65,7 +58,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
         toggleStar: function(starred){
             var meta = this.get('meta');
             var stars = meta.stars;
-            var userMeta = this.user.meta;
+            var userMeta = window.user.meta;
 
             /*
              * Update Thing.meta.stars and user.meta.stars
