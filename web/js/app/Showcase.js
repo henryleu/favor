@@ -10,7 +10,7 @@ define(['skeleton', './Thing'], function(sk, Thing) {
         },
         getCurrent: function(){
             if(this.collection){
-                var cur = this.collection.get(this.currentId);
+                var cur = this.collection.getChild('things').get(this.currentId);
                 if(!cur) {
                     return this.thing;
                 }

@@ -65,11 +65,7 @@ function(_, bb, $, Router) {
                 }
                 else{
                     var v = this;
-                    this.model.fetch({
-//                        success: function(model, resp, options){
-//                            v.doRender();
-//                        }
-                    });
+                    this.model.fetch({});
                 }
             }
             else{
@@ -87,6 +83,7 @@ function(_, bb, $, Router) {
                     input = model.toJSON();
                 }
             }
+//console.log(input);
             this.$el.html(this.evaluateTemplate( {input: input, id: this.getId()} ))
             this.afterRender();
             this.rendered = true;

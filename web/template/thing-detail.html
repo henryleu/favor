@@ -1,26 +1,15 @@
-<div class="row-fluid"><div class="container-fluid showcase">
-
+<div class="offset0 span12 showcase">
+    <div class="container-fluid"><div class="row-fluid"><div class="offset2 span8">
 <%
     var metaDefaults = {views: 0, likes: 0, owns: 0, deals: 0};
     var meta = _.defaults(input.meta||{}, metaDefaults);
 %>
-
-    <div class="row-fluid">
-
-        <div class="span2">
-            <!--
-            <div class="tabs fixed">
-                <div class="">产品</div>
-                <div class="">评论</div>
-            </div>
-            -->
-        </div>
-        <div class="span8 thing split-left split-right"><div class="thing-inner">
+        <div class="thing split-left split-right"><div class="thing-inner">
             <div class="row-fluid split-bottom">
                 <nav><div class="thing-header">
                     <div class="span3 nav">
                         <a  class="btn"><i class="icon-chevron-left icon-large"></i></a>
-                        <a href="/things-auto" class="btn"><i class="icon-th icon-large"></i></a>
+                        <a href="/things-index" class="btn"><i class="icon-th icon-large"></i></a>
                         <a  class="btn"><i class="icon-chevron-right icon-large"></i></a>
                     </div>
                     <div class="span8">
@@ -69,8 +58,7 @@
             </div>
 -->
 
-            <div class="row-fluid vpad">
-            </div>
+            <div class="row-fluid vpad"></div>
             <div class="row-fluid">
                 <div class="desc">
                 <p><%=input.lDesc%></p>
@@ -85,19 +73,7 @@
             <div class="row-fluid thing-footer"></div>
 
         </div></div>
-        <div class="span2">
-            <div class="actions hide">
-            <ul>
-                <li>
-                    <a class="btn" id="share"><i class="icon-share icon-large"> 分享</i></a>
-                </li>
-                <li>
-                    <a class="btn" id="comment"><i class="icon-comment icon-large"> 评论</i></a>
-                </li>
-            </ul>
-            </div>
-        </div>
-    </div>
     <div class="row-fluid vpad"></div>
     <div class="row-fluid vpad"></div>
-</div></div>
+    </div></div></div>
+</div>

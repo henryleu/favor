@@ -1,10 +1,8 @@
 define(['jQuery', 'skeleton'],
 function($, sk) {
-    //upload server setting for jquery-file-upload, no longer used.
-//    var uploadServer = 'http://115.28.3.7';
-
+    //TODO: what does it mean? "upload server setting for jquery-file-upload, no longer used."
     //image server URL of UpaiYun
-    var imageServer = 'http://favor-image.b0.upaiyun.com';
+    var imageServer = 'http://favor-image.b0.upaiyun.com'; //TODO: get it from config object
 
     var ShareView = sk.View.extend({
         vid: 'share',

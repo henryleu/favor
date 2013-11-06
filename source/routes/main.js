@@ -13,27 +13,24 @@ module.exports = function(app) {
         var input = {};
         var user = req.user;
         if(req.user.isNew){
-//            input.user = JSON.stringify(user);
             input.user = user;
-            res.render('index', input);
+            res.render('layout', input);
         }
         else{
             var uid = req.user.id;
             UserService.loadMeta(uid, function(err, meta ){
                 user.meta = meta;
-//                input.user = JSON.stringify(user);
                 input.user = user;
-                res.render('index', input);
+                res.render('layout', input);
             })
         }
     };
     app.get('/',      indexPage);
-    app.get('/find',  indexPage);
     app.get('/share', indexPage);
-    app.get('/forum', indexPage);
-    app.get('/about', indexPage);
+    app.get('/home', indexPage);
     app.get('/user', indexPage);
     app.get('/thing-:id', indexPage);
+    app.get('/things-', indexPage);
     app.get('/things-:sort', function(req, res, next) {
         res.format({
             'text/html': indexPage,

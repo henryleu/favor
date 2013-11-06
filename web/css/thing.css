@@ -87,6 +87,11 @@
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: 2px;
 }
+.main-frame {
+  display: inline-block;
+  width: 100%;
+  margin: 0px;
+}
 .main-header {
   display: block;
 }
@@ -374,4 +379,13 @@
 }
 .showcase .actions ul li {
   margin: 10px 0px;
+}
+.fixed-nav {
+  position: fixed;
+  width: 250px;
+  height: 100%;
+  top: 10px;
+  left: 20px;
+  bottom: 0px;
+  z-index: 1030;
 }

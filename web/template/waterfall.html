@@ -1,5 +1,5 @@
-<div class="row-fluid"><div class="offset2 span9"><div class="container-fluid waterfall">
-
+<div class="offset0 span12 waterfall">
+    <div class="container-fluid"><div class="row-fluid"><div class="offset2 span9">
 <%
     //Init an array to hold N lines of items which the coming items are divided into
     var lineCount = 3; //the N
@@ -29,14 +29,16 @@
         var itemIndex = 0;
         var itemLen = line.length;
 %>
-    <div class="lane"><ul>
+    <div class="lane">
+    <ul>
 <%
         //Loop items in a line to generate a lane
         for(var itemIndex=0; itemIndex<itemLen; itemIndex++){
             var item = line[itemIndex];
             var meta = _.defaults(item.meta||{}, metaDefaults);
 %>
-        <li><div class="frame">
+        <li>
+        <div class="frame">
         <div class="thing">
             <div class="thing-inner">
                 <input type="hidden" id="thingId" value="<%=item._id%>">
@@ -71,13 +73,15 @@
                 <div class="desc"><%= item.lDesc%></div>
             </div>
         </div>
-        </div></li>
+        </div>
+        </li>
 <%
         }
 %>
-    </ul></div>
+    </ul>
+    </div>
 <%
     }
 %>
-
-</div></div></div>
+    </div></div></div>
+</div>

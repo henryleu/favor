@@ -1,12 +1,12 @@
-define(['jQuery', 'skeleton', './AppModel', './AppView'],
-function($, sk, AppModel, AppView) {
+define(['jQuery', 'skeleton', './MainApp', './MainAppView'],
+function($, sk, MainApp, MainAppView) {
     var Favor = sk.Spa.extend({
         configure: function(){
-            this.model = AppModel;
-            this.view = new AppView({
-                model: AppModel
+            this.model = MainApp;
+            this.view = new MainAppView({
+                model: MainApp
             });
-            $('.main-body').replaceWith(this.view.el);
+            $('body section > div > div[data-view-id=main]').replaceWith(this.view.el);
         }
     });
 

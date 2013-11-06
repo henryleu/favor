@@ -3,31 +3,14 @@ define(['jQuery', 'skeleton', './ThingDetailView'], function($, sk, ThingDetailV
         vid: 'showcase',
         templateName: 'showcase',
         configure: function() {
-            this.listenTo(this.parent, 'navigate', this.setThing, this);
-        },
-        render: function(force){
-            if(!this.rendered){
-                this.doRender();
-            }
-            if(this.current == this.model.getCurrent()){
-                return this;
-            }
-            this.removeThing().renderThing();
-            return this;
-        },
-        setThing: function(params){
-            var route = params[0];
-            var thingId = params[1];
-            if(route=='showcase'){
-                this.model.setCurrentId(thingId);
-            }
-            else{
-                var col = this.model.getParent().getChild(route);
-                this.model.setCollection(col);
-            }
         },
         removeThing: function(){
-//            console.info('remove thing detail view');
+            var detailView = this.getChild('thing-detail');
+            if(detailView){
+                detailView.undelegateEvents();
+                detailView.remove();
+            }
+
             return this;
         },
         renderThing: function(){
@@ -39,14 +22,25 @@ define(['jQuery', 'skeleton', './ThingDetailView'], function($, sk, ThingDetailV
                 prerendered: false
             });
             this.addChild(thingDetailView);
+
             if(fetched){
                 thingDetailView.doRender();
-                this.doRender();
             }
             else{
                 thing.fetch();
-                this.doRender();
             }
+            this.doRender();
+
+            return this;
+        },
+        showThing: function(id){
+            //Set current thing from collection or from scratch
+            this.model.setCurrentId(id);
+            if(this.current == this.model.getCurrent()){
+                return this;
+            }
+            this.removeThing().renderThing();
+
             return this;
         }
     });

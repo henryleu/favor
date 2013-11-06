@@ -59,7 +59,7 @@ function(_, View) {
             this.bubbleView.model.trigger(this.bubbleEvent, from[0], to[0]);
         },
         reactTrigger: function(previousRoute, route){
-            console.info('Routing from ' + previousRoute + ' to ' + route);
+            //console.info('Routing from ' + previousRoute + ' to ' + route);
         }
     });
 

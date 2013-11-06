@@ -1,8 +1,8 @@
 define(['jQuery', 'skeleton','./Thing'], function($, sk, Thing) {
-    var ThingsAuto = sk.Collection.extend({
+    var ThingsCollection = sk.Collection.extend({
         model: Thing,
-        name: 'ThingsAuto',
+        name: 'ThingsCollection',
         url: '/things-auto'
     });
-    return ThingsAuto;
+    return ThingsCollection;
 });
