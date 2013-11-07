@@ -1,5 +1,5 @@
-define(['jQuery', 'skeleton', './ThingsCollection', './WaterfallView'],
-function($, sk, ThingsCollection, WaterfallView) {
+define(['jQuery', 'skeleton', './ThingsCollection', './WaterfallView', './CollectionState', './CollectionFlowView'],
+function($, sk, ThingsCollection, WaterfallView, CollectionState, CollectionFlowView) {
     var CollectionView = sk.View.extend({
         vid: 'collection',
         templateName: 'collection',
@@ -12,6 +12,13 @@ function($, sk, ThingsCollection, WaterfallView) {
                 model: things
             });
             this.addChild(waterfallView);
+
+            var state = new CollectionState();
+            this.model.addChild('state', state);
+            var flowView = new CollectionFlowView({
+                model: state
+            });
+            this.addChild(flowView);
         },
         isFetched: function(){
             return this.model.getChild('things').fetched;

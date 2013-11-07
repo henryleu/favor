@@ -22,6 +22,13 @@
   -o-transition: opacity 0.4s ease-in-out;
   -ms-transition: opacity 0.4s ease-in-out;
 }
+.transition-all {
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+}
 .fade-in {
   opacity: 1;
   transition: opacity 0.4s ease-in-out;
@@ -388,4 +395,65 @@
   left: 20px;
   bottom: 0px;
   z-index: 1030;
+}
+.flowctrls {
+  position: fixed;
+  opacity: 0.6;
+  width: 60px;
+  top: 300px;
+  right: 200px;
+  transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+}
+.flowctrls:hover {
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+}
+.flowctrls a,
+.flowctrls a:link,
+.flowctrls a:active,
+.flowctrls a:focus,
+.flowctrls a:hover,
+.flowctrls a:visited {
+  cursor: pointer;
+  text-decoration: none;
+}
+.flowctrls span {
+  display: block;
+  width: 60px;
+  height: 45px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 7px;
+  font-size: 44px;
+  text-align: center;
+  color: #eeeeee;
+  background-color: rgba(74, 74, 74, 0.6);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+}
+.flowctrls a.disabled span {
+  cursor: default;
+  color: #a3a3a3;
+  background-color: #bbbbbb;
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
 }

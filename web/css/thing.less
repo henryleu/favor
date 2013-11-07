@@ -25,6 +25,13 @@
   -o-transition: opacity .4s ease-in-out;
   -ms-transition: opacity .4s ease-in-out;
 }
+.transition-all{
+  transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -ms-transition: all .4s ease-in-out;
+}
 .fade-in{
   opacity: 1;
   .transition-opacity;
@@ -329,4 +336,49 @@
   left: 20px;
   bottom: 0px;
   z-index: 1030;
+}
+
+.flowctrls{
+  position:fixed;
+  opacity: 0.6;
+  width:60px;
+  top:300px;
+  right:200px;
+  .transition-opacity;
+}
+.flowctrls:hover{
+  opacity: 1;
+  .transition-opacity;
+}
+
+.flowctrls a,
+.flowctrls a:link,
+.flowctrls a:active,
+.flowctrls a:focus,
+.flowctrls a:hover,
+.flowctrls a:visited
+{
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.flowctrls span{
+  display:block;
+  width:60px;
+  height:45px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 7px;
+  font-size:44px;
+  text-align:center;
+  color:#eeeeee;
+  background-color: @acton-bg-color;
+  .round-border;
+  .transition-all;
+}
+.flowctrls a.disabled span{
+  cursor: default;
+  color:#a3a3a3;
+  background-color:#bbbbbb;
+  .transition-all;
 }
