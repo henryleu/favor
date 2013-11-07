@@ -162,7 +162,7 @@ var UserMeta = {
                 }
 
                 var meta = {};
-                meta.crts = replies[0] || {};
+                meta.creates = replies[0] || {};
                 meta.stars = replies[1] || {};
                 meta.likes = replies[2] || {};
                 callback(null, meta);

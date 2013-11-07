@@ -18,6 +18,10 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var starred = userMeta.stars[thingId]?true:false;
             this.set('starred', starred);
 
+            //Init starred properties
+            var deletable = userMeta.creates[thingId]?true:false;
+            this.set('deletable', deletable);
+
             //Revise meta properties: likes, stars, etc.
             var meta = this.get('meta');
             var likes = meta.likes;
@@ -53,7 +57,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             }
             meta.likes = likes;
 
-            this.set('liked', liked); //Update Thing.liked
+            this.set('liked', liked);
         },
         toggleStar: function(starred){
             var meta = this.get('meta');
@@ -74,7 +78,22 @@ define(['jQuery', 'skeleton'], function($, sk) {
             }
             meta.stars = stars;
 
-            this.set('starred', starred); //Update Thing.starred
+            this.set('starred', starred);
+        },
+        delete: function(deleted){
+            var userMeta = window.user.meta;
+
+            /*
+             * Update Thing.meta.stars and user.meta.stars
+             */
+            if(deleted){
+                userMeta[this.id] = null;
+            }
+            else{
+                userMeta[this.id] = true; //TODO: use true instead of created time, mind it later if it leads error
+            }
+
+            this.set('deletable', !deleted);
         }
     });
     return Thing;

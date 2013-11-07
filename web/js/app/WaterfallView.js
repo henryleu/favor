@@ -3,7 +3,9 @@ define(['jQuery', 'skeleton'], function($, sk) {
         templateName: 'waterfall',
         events: {
             "click .lane .acton span#like": "onToggleLike",
-            "click .lane .acton span#star": "onToggleStar"
+            "click .lane .acton span#star": "onToggleStar",
+            "click .lane .acton span#delete": "onDelete",
+            "click .lane .acton span#clone": "onAdd"
         },
         configure: function() {
             var me = this;
@@ -20,6 +22,8 @@ define(['jQuery', 'skeleton'], function($, sk) {
                     me.doRender();
                 }
             });
+            this.listenTo(this.model, 'remove', this.onRemoveItem, this);
+            this.listenTo(this.model, 'add', this.onAddItem, this);
         },
         getTarget: function(el, selector){
             var $el = $(el);
@@ -86,6 +90,42 @@ define(['jQuery', 'skeleton'], function($, sk) {
                 $el.find('i').removeClass('icon-star').addClass('icon-star-empty');
             }
             $el.find('.text').html(stars===0 ? '' : stars);
+        },
+        onDelete: function(e){
+            var $el = this.getTarget(e.target, '.lane .acton span#delete');
+            var thingId = $el.parent().parent().parent().find('#thingId').val();
+            var thing = this.model.get(thingId);
+            thing.destroy({
+                success: function(model, response) {
+                    alert('success');
+                },
+                error: function(model, response) {
+                    alert('error');
+                }
+            });
+        },
+        onAdd: function(e){
+            var $el = this.getTarget(e.target, '.lane .acton span#clone');
+            var thingId = $el.parent().parent().parent().find('#thingId').val();
+            var thing = this.model.get(thingId);
+            var apiUrl = '/thing/' + thingId + '/clone';
+            $.get(apiUrl, function() {
+                console.info('success: ' + apiUrl);
+            })
+            .fail(function() {
+                console.error('failed: ' + apiUrl);
+            });
+        },
+        onRemoveItem: function(model, collection, options){
+            //TODO: stopListening removed model
+            this.stopListening(model);
+            //TODO: remove the item in the view
+            console.log(model);
+        },
+        onAddItem: function(model, collection, options){
+            //TODO: listenTo added model
+            //TODO: remove the item in the view
+            console.log(model);
         }
     });
 

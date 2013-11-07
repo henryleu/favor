@@ -92,7 +92,8 @@ module.exports = function(app) {
         'star': true,
         'unstar': true,
         'like': true,
-        'unlike': true
+        'unlike': true,
+        'clone': true
     }
     app.get('/thing/:id/:action', function(req, res) {
         var thingId = req.params.id;
@@ -165,15 +166,25 @@ module.exports = function(app) {
     });
 
     app.delete('/thing/:id', function(req, res) {
-        Thing.remove({'_id': req.params.id}, function(err) {
+        var uid = req.user.id;
+        var thingId = req.params.id;
+        ThingService.delete(uid, thingId, function(err) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
                 return;
             }
-            logger.debug('Deleted deal: ' + req.params.id);
-            res.json(200, {'_id': req.params.id});
-        })
+            res.json(200, {'_id': uid});
+        });
+//        Thing.remove({'_id': req.params.id}, function(err) {
+//            if (err) {
+//                logger.error(err);
+//                res.json(500, err);
+//                return;
+//            }
+//            logger.debug('Deleted deal: ' + req.params.id);
+//            res.json(200, {'_id': req.params.id});
+//        })
     });
 
     app.get('/upaireturn', function(req, res) {

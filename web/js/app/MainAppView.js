@@ -12,7 +12,7 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
         },
         ensureUser: function() {
             window.user = window.user || {};
-            window.user.meta = window.user.meta || {crts:{},stars:{},likes:{}};
+            window.user.meta = window.user.meta || {creates:{},stars:{},likes:{}};
         },
         configure: function(){
             this.ensureUser();
