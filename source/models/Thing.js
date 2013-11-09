@@ -72,10 +72,20 @@ var schema = DomainBuilder
         }
     };
 
+    schema.method('clone', function (uid) {
+        var hostObject = this.toObject({getters: true});
+        var M = schema.model();
+        var cloned = new M(hostObject);
+        cloned.autoId(true);
+        cloned.autoUpdatedOn(cloned.autoCreatedOn(new Date()));
+        cloned.autoUpdatedBy(cloned.autoCreatedBy(uid));
+        return cloned;
+    });
+
     schema.static('star', metaAction('stars', true));
     schema.static('unstar', metaAction('stars', false));
     schema.static('like', metaAction('likes', true));
     schema.static('unlike', metaAction('likes', false));
 
 module.exports.schema = schema;
-module.exports.model = mongoose.model(schema.name, schema);
+module.exports.model = schema.model(true);
