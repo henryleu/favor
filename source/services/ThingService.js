@@ -42,11 +42,7 @@ ThingService.clone = function(uid, thingId, callback) {
             callback(err);
             return;
         }
-        var clonedThing = new Thing(thing.toJSON);
-        clonedThing.crtBy = uid;
-        clonedThing._id = null;
-        clonedThing.autoId();
-        ThingService.create(clonedThing, callback);
+        ThingService.create(thing.clone(uid).toObject(), callback);
     });
 };
 ThingService.update = function(postInfo, user, thingId, callback) {
