@@ -22,7 +22,7 @@ var plugin = new SchemaPlugin({
         //Add a save method's Preprocessor for rank auto-generating
         schema.pre('save', function (next) {
             this.autoRank();
-            next()
+            next();
         });
 
         //Add a instance method to ensure rank: generate, set and return rank

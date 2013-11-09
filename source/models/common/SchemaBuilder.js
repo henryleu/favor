@@ -68,6 +68,16 @@ SchemaBuilder.prototype.withOptions = function(options){
 SchemaBuilder.prototype.build = function(){
     var schema = new Schema(this.properties, this.options);
     schema.name = this.name;
+    schema.model = function(register){
+        var model = null;
+        if(register){
+            model = mongoose.model(this.name, this);
+        }
+        else{
+            model = mongoose.model(this.name);
+        }
+        return model;
+    };
     for(var prop in this.usePlugins){
         if(this.properties[prop]){
             throw new Error('property ' + prop + ' is duplicatedly defined and conflicts with Plugin ' + SchemaBuilder.plugins[prop].name);

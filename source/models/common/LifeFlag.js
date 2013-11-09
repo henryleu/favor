@@ -17,7 +17,7 @@ var plugin = new SchemaPlugin({
             if(!this[prop]){
                 this[prop] = lifeFlagEnum.Active;
             }
-            next()
+            next();
         });
     }
 });

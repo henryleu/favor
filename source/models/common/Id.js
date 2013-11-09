@@ -34,13 +34,13 @@ var plugin = new SchemaPlugin({
         //Add a save method's Preprocessor for id auto-generating
         schema.pre('save', function (next) {
             this.autoId();
-            next()
+            next();
         });
 
         //Add a instance method to ensure id: generate, set and return id
         var prop = this.prop;
-        schema.method('autoId', function () {
-            if(!this[prop]){
+        schema.method('autoId', function (force) {
+            if(force || !this[prop]){
                 this[prop] = schema.idGenerator.next().toId();
             }
             return this[prop];

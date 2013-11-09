@@ -14,7 +14,7 @@ var plugin = new SchemaPlugin({
         //Add a save method's Preprocessor for updatedBy auto-populating with current user
         schema.pre('save', function (next) {
             this.autoUpdatedBy();
-            next()
+            next();
         });
 
         /*
@@ -22,8 +22,13 @@ var plugin = new SchemaPlugin({
          * get it from current context, then set and return it.
          */
         var prop = this.prop;
-        schema.method('autoUpdatedBy', function () {
-            this[prop] = context.userId;
+        schema.method('autoUpdatedBy', function (uid) {
+            if(uid){
+                this[prop] = uid;
+            }
+            else if(!this[prop]){
+                this[prop] = context.userId;
+            }
             return this[prop];
         });
     }
