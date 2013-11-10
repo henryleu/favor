@@ -1,0 +1,80 @@
+.round-border {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+.shadow-box {
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px;
+}
+.thin-box {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+.transition-opacity {
+  transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+}
+.transition-all {
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+}
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+}
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+}
+.transition-filter {
+  transition: filer 0.4s ease-in-out;
+  -webkit-transition: -webkit-filter 0.4s ease-in-out;
+  -moz-transition: -moz-filter 0.4s ease-in-out;
+  -o-transition: -o-filter 0.4s ease-in-out;
+  -ms-transition: -ms-filter 0.4s ease-in-out;
+}
+.gray {
+  -webkit-filter: grayscale(40%);
+  -moz-filter: grayscale(40%);
+  -ms-filter: grayscale(40%);
+  -o-filter: grayscale(40%);
+  filter: grayscale(40%);
+  filter: gray;
+  transition: filer 0.4s ease-in-out;
+  -webkit-transition: -webkit-filter 0.4s ease-in-out;
+  -moz-transition: -moz-filter 0.4s ease-in-out;
+  -o-transition: -o-filter 0.4s ease-in-out;
+  -ms-transition: -ms-filter 0.4s ease-in-out;
+}
+.ungray {
+  -webkit-filter: grayscale(0%);
+  -moz-filter: grayscale(0%);
+  -ms-filter: grayscale(0%);
+  -o-filter: grayscale(0%);
+  filter: grayscale(0%);
+  filter: none;
+  transition: filer 0.4s ease-in-out;
+  -webkit-transition: -webkit-filter 0.4s ease-in-out;
+  -moz-transition: -moz-filter 0.4s ease-in-out;
+  -o-transition: -o-filter 0.4s ease-in-out;
+  -ms-transition: -ms-filter 0.4s ease-in-out;
+}

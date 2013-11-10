@@ -3,4 +3,5 @@
 @import url('../../public/components/font-awesome/css/font-awesome.css');
 @import url('../../public/components/jquery-file-upload/css/jquery.fileupload-ui.css');
 @import url('./style.css');
+@import url('./navigator.css');
 @import url('./thing.css');

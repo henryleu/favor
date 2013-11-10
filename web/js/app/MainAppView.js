@@ -18,16 +18,6 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
             this.ensureUser();
             this.viewSwitcher = new sk.ViewSwitcher({view: this});
 
-            //Configure collection
-            var navigator = new Navigator();
-            navigator.fetched = true;
-            this.model.addChild('navigator', navigator);
-            var navigatorView = new NavigatorView({
-                model: navigator,
-                parent: this
-            });
-            this.addChild(navigatorView);
-
             //Configure user main view
             Home.fetched = true;
             this.model.addChild('home', Home);
@@ -40,6 +30,7 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
 
             //Configure user main view
             var user = new User();
+            user.init(window.user);
             user.fetched = true;
             this.model.addChild('user', user);
             var userView = new UserView({
@@ -48,6 +39,16 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
                 parent: this
             });
             this.addChild(userView);
+
+            //Configure navigator
+            var navigator = new Navigator();
+            navigator.fetched = true;
+            this.model.addChild('navigator', navigator);
+            var navigatorView = new NavigatorView({
+                model: navigator,
+                parent: this
+            });
+            this.addChild(navigatorView);
 
             this.routeDelegate = new sk.RouteDelegate({
                 view: this,

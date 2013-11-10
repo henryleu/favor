@@ -18,7 +18,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var starred = userMeta.stars[thingId]?true:false;
             this.set('starred', starred);
 
-            //Init starred properties
+            //Init deletable properties
             var deletable = userMeta.creates[thingId]?true:false;
             this.set('deletable', deletable);
 
