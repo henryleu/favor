@@ -5,25 +5,31 @@ define(['jQuery', 'skeleton'], function($, sk) {
             "click .lane .acton span#like": "onToggleLike",
             "click .lane .acton span#star": "onToggleStar",
             "click .lane .acton span#delete": "onDelete",
-            "click .lane .acton span#clone": "onAdd"
+            "click .lane .acton span#clone": "onClone"
         },
         configure: function() {
+            this.listenTo(this.model, 'add', this.onItemAdded, this);
+            this.listenTo(this.model, 'remove', this.onItemRemoved, this);
+
             var me = this;
             this.listenTo(this.model, 'sync', function(model, res, options) {
                 if(options.action=='read'){
                     me.model.fetched = true;
-                    var len = me.model.length;
-                    for(var i=0; i<len; i++){
-                        var thing = me.model.at(i);
-                        thing.onSync();
-                        me.listenTo(thing, 'change:liked', me.onRefreshLike, me);
-                        me.listenTo(thing, 'change:starred', me.onRefreshStar, me);
-                    }
                     me.doRender();
                 }
             });
-            this.listenTo(this.model, 'remove', this.onRemoveItem, this);
-            this.listenTo(this.model, 'add', this.onAddItem, this);
+            this.listenTo(this.model, 'add', this.onAddThing, this);
+            this.listenTo(this.model, 'remove', this.onRemoveThing, this);
+        },
+        onItemAdded: function(model, collection, options){
+            model.onSync();
+            this.listenTo(model, 'change:liked', this.onRefreshLike, this);
+            this.listenTo(model, 'change:starred', this.onRefreshStar, this);
+            console.log(model.get('sDesc') + ' is added');
+        },
+        onItemRemoved: function(model, collection, options){
+            this.stopListening(model);
+            console.log(model.get('sDesc') + ' is removed');
         },
         getTarget: function(el, selector){
             var $el = $(el);
@@ -97,14 +103,14 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var thing = this.model.get(thingId);
             thing.destroy({
                 success: function(model, response) {
-                    alert('success');
+                    console.info('success');
                 },
                 error: function(model, response) {
-                    alert('error');
+                    console.error('error');
                 }
             });
         },
-        onAdd: function(e){
+        onClone: function(e){
             var $el = this.getTarget(e.target, '.lane .acton span#clone');
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
@@ -116,16 +122,12 @@ define(['jQuery', 'skeleton'], function($, sk) {
                 console.error('failed: ' + apiUrl);
             });
         },
-        onRemoveItem: function(model, collection, options){
-            //TODO: stopListening removed model
-            this.stopListening(model);
-            //TODO: remove the item in the view
-            console.log(model);
+        onAddThing: function(model, collection, options){
+            //TODO  add the thing dom
         },
-        onAddItem: function(model, collection, options){
-            //TODO: listenTo added model
-            //TODO: remove the item in the view
-            console.log(model);
+        onRemoveThing: function(model, collection, options){
+            var $el = this.$('.lane .thing input[value='+ model.id +']');
+            var $el = $el.parent().parent().parent().parent().remove();
         }
     });
 

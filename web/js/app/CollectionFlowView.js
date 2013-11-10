@@ -4,6 +4,7 @@ function(_, $, sk) {
         vid: 'collection-flow',
         templateName: 'collection-flow',
         events: {
+            'click .refresh': 'refresh',
             'click .gotoTop': 'gotoTop'
         },
         configure: function(){
@@ -22,7 +23,8 @@ function(_, $, sk) {
                 }
             });
         },
-        afterRender: function() {
+        refresh: function(e) {
+            this.getParent().refresh();
         },
         gotoTop: function(e){
             $("html,body").animate({scrollTop:"0px"},200);

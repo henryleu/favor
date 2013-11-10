@@ -51,6 +51,15 @@ console.log('things is to fetch');
                 }
 console.log('things has been fetched');
             }
+        },
+        refresh: function(){
+            var params = {};
+            var things = this.model.getChild('things');
+            if(!this.lastCollect){
+                this.lastCollect = 'auto';
+            }
+            params.sort = this.lastCollect;
+            things.fetch(params);
         }
     });
 
