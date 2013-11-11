@@ -1,4 +1,4 @@
-define(['jQuery', 'skeleton'], function($, sk) {
+define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
     var WaterfallView = sk.View.extend({
         templateName: 'waterfall',
         events: {
@@ -101,14 +101,11 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var $el = this.getTarget(e.target, '.lane .acton span#delete');
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
-            thing.delete(true);
             thing.destroy({
                 success: function(model, response) {
-                    console.info('success');
+                    UserHolder.get().delete(thingId);
                 },
                 error: function(model, response) {
-                    thing.delete(false);
-                    console.error('error');
                 }
             });
         },
@@ -117,8 +114,8 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
             var apiUrl = '/thing/' + thingId + '/clone';
-            $.get(apiUrl, function() {
-                console.info('success: ' + apiUrl);
+            $.get(apiUrl, function(a, b, c) {
+                console.log(a);
             })
             .fail(function() {
                 console.error('failed: ' + apiUrl);

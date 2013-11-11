@@ -104,13 +104,13 @@ module.exports = function(app) {
             res.json(500, {error: 'API /thing/'+uid+'/'+action + ' is not supported'});
             return;
         }
-        ThingService[action](uid, thingId, function(err, affected) {
+        ThingService[action](uid, thingId, function(err, result) {
             if (err) {
                 logger.error(err);
                 res.json(500, err);
                 return;
             }
-            res.json(200, {});//TODO: return a standard envelop
+            res.json(200, result);//TODO: return a standard envelop
         });
     });
 
