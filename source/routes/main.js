@@ -110,7 +110,7 @@ module.exports = function(app) {
                 res.json(500, err);
                 return;
             }
-            res.json(200, result);//TODO: return a standard envelop
+            res.json(200, {result: result});//TODO: return a standard envelop
         });
     });
 

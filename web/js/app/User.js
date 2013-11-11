@@ -10,7 +10,7 @@ define(['skeleton'], function(sk) {
         create: function(id){
             this.get('meta').creates[id] = new Date().getTime();
             var creates = this.get('creates');
-            this.set('creates', ++creates);j
+            this.set('creates', ++creates);
         },
         delete: function(id){
             this.get('meta').creates[id] = null;
