@@ -1,4 +1,4 @@
-define(['jQuery', 'skeleton'], function($, sk) {
+define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
     var Thing = sk.Model.extend({
         name: 'Thing',
         urlRoot: '/thing',
@@ -7,20 +7,21 @@ define(['jQuery', 'skeleton'], function($, sk) {
         },
         onSync: function(){
             this.fetched = true;
-            var userMeta = window.user.meta;
+//            var userMeta = UserHolder.get().get('meta');
+            var user = UserHolder.get();
             var thingId = this.id;
 
-            //Init liked properties
-            var liked = userMeta.likes[thingId]?true:false;
+            //Init liked property for view
+            var liked = user.liked(thingId);
             this.set('liked', liked);
 
-            //Init starred properties
-            var starred = userMeta.stars[thingId]?true:false;
+            //Init starred property for view
+            var starred = user.starred(thingId);
             this.set('starred', starred);
 
-            //Init deletable properties
-            var deletable = userMeta.creates[thingId]?true:false;
-            this.set('deletable', deletable);
+            //Init owned property for view
+            var owned = user.created(thingId);
+            this.set('owned', owned);
 
             //Revise meta properties: likes, stars, etc.
             var meta = this.get('meta');
@@ -32,7 +33,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
 
             var stars = meta.stars;
             if(!stars || stars < 0){
-                stars = stars ? 1 : 0;
+                stars = starred ? 1 : 0;
             }
             meta.stars = stars;
 
@@ -41,7 +42,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
         toggleLike: function(liked){
             var meta = this.get('meta');
             var likes = meta.likes;
-            var userMeta = window.user.meta;
+            var user = UserHolder.get();
 
             /*
              * Update Thing.meta.likes and user.meta.likes
@@ -49,11 +50,11 @@ define(['jQuery', 'skeleton'], function($, sk) {
             likes = (!likes || likes < 0) ? 0 : likes;
             if(liked){
                 ++likes;
-                userMeta[this.id] = new Date().getTime();
+                user.like(this.id);
             }
             else{
                 likes = --likes<=0 ? 0 : likes;
-                userMeta[this.id] = null;
+                user.unlike(this.id);
             }
             meta.likes = likes;
 
@@ -62,7 +63,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
         toggleStar: function(starred){
             var meta = this.get('meta');
             var stars = meta.stars;
-            var userMeta = window.user.meta;
+            var user = UserHolder.get();
 
             /*
              * Update Thing.meta.stars and user.meta.stars
@@ -70,30 +71,30 @@ define(['jQuery', 'skeleton'], function($, sk) {
             stars = (!stars || stars < 0) ? 0 : stars;
             if(starred){
                 ++stars;
-                userMeta[this.id] = new Date().getTime();
+                user.star(this.id);
             }
             else{
                 stars = --stars<=0 ? 0 : stars;
-                userMeta[this.id] = null;
+                user.unstar(this.id);
             }
             meta.stars = stars;
 
             this.set('starred', starred);
         },
         delete: function(deleted){
-            var userMeta = window.user.meta;
+            var user = UserHolder.get();
 
             /*
              * Update Thing.meta.stars and user.meta.stars
              */
             if(deleted){
-                userMeta[this.id] = null;
+                user.delete(this.id);
             }
             else{
-                userMeta[this.id] = true; //TODO: use true instead of created time, mind it later if it leads error
+                user.create(this.id);
             }
 
-            this.set('deletable', !deleted);
+            this.set('owned', !deleted);
         }
     });
     return Thing;

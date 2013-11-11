@@ -101,11 +101,13 @@ define(['jQuery', 'skeleton'], function($, sk) {
             var $el = this.getTarget(e.target, '.lane .acton span#delete');
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
+            thing.delete(true);
             thing.destroy({
                 success: function(model, response) {
                     console.info('success');
                 },
                 error: function(model, response) {
+                    thing.delete(false);
                     console.error('error');
                 }
             });

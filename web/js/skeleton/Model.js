@@ -57,7 +57,7 @@ define(['Underscore', 'Backbone', './Skeleton'], function(_, bb, Skeleton) {
         var result = null;
         result = bb.History.extend.apply(this, arguments);
         result = bb.History.extend.apply(result, [{}, bb.Events]);
-        result.prototype.name = arguments[0].name;
+//        result.prototype.name = arguments[0].name; //TODO: figure out another solution to retro model's name
         return result;
     };
 

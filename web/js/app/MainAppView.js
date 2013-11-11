@@ -1,8 +1,11 @@
 define(['jQuery', 'jQueryCustom', 'skeleton'
+    , './UserHolder'
     , './Navigator', './NavigatorView'
     , './Home', './HomeView'
     , './User', './UserView'],
-function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserView) {
+function($, $custom, sk,
+         UserHolder,
+         Navigator, NavigatorView, Home, HomeView, User, UserView) {
     var MainView = sk.View.extend({
         templateName: 'main',
         routes: {
@@ -10,12 +13,7 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
             ,"home": "home"
             ,"user": "user"
         },
-        ensureUser: function() {
-            window.user = window.user || {};
-            window.user.meta = window.user.meta || {creates:{},stars:{},likes:{}};
-        },
         configure: function(){
-            this.ensureUser();
             this.viewSwitcher = new sk.ViewSwitcher({view: this});
 
             //Configure user main view
@@ -29,12 +27,9 @@ function($, $custom, sk, Navigator, NavigatorView, Home, HomeView, User, UserVie
             this.addChild(homeView);
 
             //Configure user main view
-            var user = new User();
-            user.init(window.user);
-            user.fetched = true;
-            this.model.addChild('user', user);
+            this.model.addChild('user', UserHolder.get());
             var userView = new UserView({
-                model: user,
+                model: UserHolder.get(),
                 hidden: true,
                 parent: this
             });
