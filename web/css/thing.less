@@ -316,3 +316,106 @@
   background-color:#bbbbbb;
   .transition-all;
 }
+
+
+.list {
+  margin: 10px 0px;
+  padding: 0px;
+  float: left;
+  box-sizing: border-box;
+}
+.list ul, .list ol {
+  list-style: none;
+  .thin-box;
+}
+.list ul > li{
+  .thin-box;
+}
+.list .frame {
+  border-top: #e5e5e5 solid 1px;
+  border: 0;
+  margin: 2px;
+}
+.list .thing-inner {
+}
+.list .thing-inner a {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+.list .thing-inner img{
+  text-align: center;
+//  width: @card-width;
+  height: auto;
+  min-height: 100px;
+  max-height: 200px;
+  .thin-box;
+  .gray;
+}
+.list .thing-inner:hover img,
+.list .thing-inner:focus img{
+  .ungray;
+}
+.list .thing-inner div.image{
+  display:table-cell;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+.list .thing-inner .acton{
+  position: absolute;
+  width:  100%;
+  height: 25px;
+  right: 0px;
+  top: 0px;
+  margin: 0px;
+//  background-color: @acton-bg-color;
+  opacity: 1;
+  .transition-opacity;
+}
+.list .thing-inner:hover .acton,
+.list .thing-inner:focus .acton{
+  .fade-in;
+}
+.list .thing-inner .acton span{
+  display: inline-block;
+  float: right;
+  height: 22px;
+  margin:  0px 0px 0px 0px;
+  padding: 2px;
+  color:  #777;
+  white-space: nowrap;
+  .round-border;
+}
+.list .thing-inner .acton span .icon{
+  display: inline-block;
+  overflow: hidden;
+  width: 19px;
+  font-size: 14px;
+}
+.list .thing-inner .acton span .text{
+  display: inline-block;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  vertical-align: top;
+  width: 20px;
+  margin: 0px;
+  line-height: 22px;
+}
+.list .thing-inner h4 {
+  text-align: left;
+  margin: 0px;
+  width: 70%;
+  font-size: 14px;
+  overflow: hidden;
+  color: #777;
+  text-overflow: ellipsis;
+  //  white-space: nowrap;
+}
+.list .thing-inner div.desc{
+  display: none;
+  height: 40px;
+  margin: 0px 6px 10px;
+}

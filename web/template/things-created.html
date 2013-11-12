@@ -1,0 +1,95 @@
+<div class="offset0 span12 list">
+    <div class="container-fluid"><div class="row-fluid"><div class="offset2 span8">
+<%
+    //Make a default meta object
+    var metaDefaults = {
+        views: 0,
+        likes: 0,
+        owns: 0,
+        deals: 0
+    };
+    var list = input;
+    var listLen = input.length;
+%>
+    <ul>
+<%
+        //Loop items in a line to generate a lane
+        for(var itemIndex=0; itemIndex<listLen; itemIndex++){
+            var item = list[itemIndex];
+            var meta = _.defaults(item.meta||{}, metaDefaults);
+%>
+        <li>
+        <div class="frame">
+        <div class="thing">
+            <div class="thing-inner">
+                <input type="hidden" id="thingId" value="<%=item._id%>">
+                <!--<div class="container-fluid">-->
+                    <div class="row-fluid">
+
+                <div class="span3">
+                    <a href="thing-<%=item._id%>">
+                    <div class="image"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
+                    </a>
+                </div>
+                <div class="span9">
+                    <div class="acton">
+                        <div class="icons">
+                    <!--
+                    -->
+                            <span id="star" class="<%=item.starred?'active':''%>">
+                                <div class="icon">
+                                    <i class="icon <%=item.starred?'icon-star':'icon-star-empty'%> icon-large" title="收藏" alt="收藏"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.stars===0 ? '': meta.stars%></label>
+                            </span>
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <div class="icon">
+                                    <i class="<%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.likes===0 ? '' : meta.likes%></label>
+                            </span>
+                            <span id="delete" class="">
+                                <div class="icon">
+                                    <i class="icon icon-trash icon-large" title="删除" alt="删除"></i>
+                                </div>
+                                &nbsp;<label class="text"></label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
+                    <div class="desc"><%= item.lDesc%></div>
+                    <!--
+                    <div class="acton bottom">
+                        <div class="icons">
+                            <span id="star" class="<%=item.starred?'active':''%>">
+                                <div class="icon">
+                                    <i class="icon <%=item.starred?'icon-star':'icon-star-empty'%> icon-large" title="收藏" alt="收藏"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.stars===0 ? '': meta.stars%></label>
+                            </span>
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <div class="icon">
+                                    <i class="<%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.likes===0 ? '' : meta.likes%></label>
+                            </span>
+                        </div>
+                    </div>
+                    -->
+
+                </div>
+
+                </div>
+                <!--</div>-->
+            </div>
+        </div>
+        </div>
+        </li>
+<%
+        }
+%>
+    </ul>
+
+    </div></div></div>
+</div>

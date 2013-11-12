@@ -63,7 +63,7 @@ function($, $custom, sk,
         user: function(){
             this.model.set('module', 'user');
             this.routeDelegate.route('user');
-//            this.getChild('user').index();
+            this.getChild('user').index();
         },
         afterRender: function(){
         }

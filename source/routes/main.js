@@ -26,9 +26,7 @@ module.exports = function(app) {
         }
     };
     app.get('/',      indexPage);
-    app.get('/share', indexPage);
     app.get('/home', indexPage);
-    app.get('/user', indexPage);
     app.get('/thing-:id', indexPage);
     app.get('/things-', indexPage);
     app.get('/things-:sort', function(req, res, next) {
@@ -37,6 +35,11 @@ module.exports = function(app) {
             'application/json': getThingsData
         });
     });
+    app.get('/user', indexPage);
+    app.get('/share', indexPage);
+    app.get('/user-profile', indexPage);
+    app.get('/user-creates', indexPage);
+    app.get('/user-stars', indexPage);
 
     var getThingsData = function(req, res, next){
         var sort = req.params.sort || 'auto';
