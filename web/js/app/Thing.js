@@ -19,9 +19,9 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
             var starred = user.starred(thingId);
             this.set('starred', starred);
 
-            //Init owned property for view
-            var owned = user.created(thingId);
-            this.set('owned', owned);
+            //Init created property for view
+            var created = user.created(thingId);
+            this.set('created', created);
 
             //Revise meta properties: likes, stars, etc.
             var meta = this.get('meta');
@@ -94,7 +94,7 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
                 user.create(this.id);
             }
 
-            this.set('owned', !deleted);
+            this.set('created', !deleted);
         }
     });
     return Thing;
