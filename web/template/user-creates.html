@@ -1,0 +1,101 @@
+<div class="offset0 span12 waterfall">
+    <div class="container-fluid"><div class="row-fluid"><div class="offset2 span9">
+<%
+    //Init an array to hold N lines of items which the coming items are divided into
+    var lineCount = 3; //the N
+    var lineIndex = 0;
+    var lines = new Array(lineCount);
+    for(lineIndex=0; lineIndex<lineCount; lineIndex++){
+        lines[lineIndex] = [];
+    }
+
+    //Rearrange/divide coming items to N lines
+    _.each(input, function(item, index) {
+        lineIndex = index%lineCount;
+        lines[lineIndex].push(item);
+    });
+
+    //Make a default meta object
+    var metaDefaults = {
+        views: 0,
+        likes: 0,
+        owns: 0,
+        deals: 0
+    };
+
+    //Loop lines to generate lanes
+    for(lineIndex=0; lineIndex<lineCount; lineIndex++){
+        var line = lines[lineIndex];
+        var itemIndex = 0;
+        var itemLen = line.length;
+%>
+    <div class="lane">
+    <ul>
+<%
+        //Loop items in a line to generate a lane
+        for(var itemIndex=0; itemIndex<itemLen; itemIndex++){
+            var item = line[itemIndex];
+            var meta = _.defaults(item.meta||{}, metaDefaults);
+%>
+        <li>
+        <div class="frame">
+        <div class="thing">
+            <div class="thing-inner">
+                <input type="hidden" id="thingId" value="<%=item._id%>">
+                <a href="/thing-<%=item._id%>">
+                <div class="image"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
+                </a>
+                <div class="acton">
+                    <div class="icons">
+                            <span id="star" class="<%=item.starred?'active':''%>">
+                                <div class="icon">
+                                <i class="icon <%=item.starred?'icon-star':'icon-star-empty'%> icon-large" title="收藏" alt="收藏"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.stars===0 ? '': meta.stars%></label>
+                            </span>
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <div class="icon">
+                                <i class="<%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.likes===0 ? '' : meta.likes%></label>
+                            </span>
+                        <%if(item.owned){%>
+                            <span id="delete" class="">
+                                <div class="icon">
+                                    <i class="icon icon-trash icon-large" title="删除" alt="删除"></i>
+                                </div>
+                                &nbsp;<label class="text"></label>
+                            </span>
+                            <span id="clone" class="">
+                                <div class="icon">
+                                    <i class="icon icon-copy icon-large" title="克隆" alt="克隆"></i>
+                                </div>
+                                &nbsp;<label class="text"></label>
+                            </span>
+                        <%}%>
+                    </div>
+                    <!--
+                    <div class="action-bar">
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <i class="icon icon-thumbs-up-alt icon-large" title="喜欢" alt="喜欢"></i>
+                                <label class="text"><%=meta.likes==0?'': ' ('+meta.likes+')'%></label>
+                            </span>
+                    </div>
+                    -->
+                </div>
+                <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
+                <div class="desc"><%= item.lDesc%></div>
+            </div>
+        </div>
+        </div>
+        </li>
+<%
+        }
+%>
+    </ul>
+    </div>
+<%
+    }
+%>
+    </div></div></div>
+</div>
