@@ -3,7 +3,6 @@ define(['jQuery', 'skeleton','./Thing', './ThingsPuller', './Repository', './Use
     var ThingsCreated = sk.Collection.extend({
         model: Thing,
         name: 'ThingsCreated',
-//        url: '/things-auto',
         configure: function(){
             this.puller = new ThingsPuller();
         },
