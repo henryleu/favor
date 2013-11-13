@@ -1,11 +1,11 @@
-define(['jQuery', 'skeleton', './ShareModel', './ShareView', './Collection', './MyCreatesView'],
+define(['jQuery', 'skeleton', './ShareModel', './ShareView', './Collection', './MyPostsView'],
 function($, sk, ShareModel, ShareView, Collection, MyCreatesView) {
     var UserView = sk.View.extend({
         vid: 'my',
         templateName: 'my',
         routes: {
             "my-profile": "profile"
-            , "my-creates": "creates"
+            , "my-posts": "posts"
             , "my-stars": "stars"
         },
         configure: function(){
@@ -66,18 +66,18 @@ function($, sk, ShareModel, ShareView, Collection, MyCreatesView) {
         index: function(){
             var current = this.model.get('current');
             if(!current){
-                this.routeDelegate.route('my-creates');
-                this.getChild('my-creates').index();
+                this.routeDelegate.route('my-posts');
+                this.getChild('my-posts').index();
             }
         },
         profile: function(sort){
             this.getParent().my();
             this.routeDelegate.route('my-profile');
         },
-        creates: function(sort){
+        posts: function(sort){
             this.getParent().my();
-            this.routeDelegate.route('my-creates');
-            this.getChild('my-creates').index();
+            this.routeDelegate.route('my-posts');
+            this.getChild('my-posts').index();
         },
         stars: function(id){
             this.getParent().my();

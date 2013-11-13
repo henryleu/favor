@@ -38,7 +38,7 @@ module.exports = function(app) {
     app.get('/my', indexPage);
     app.get('/share', indexPage);
     app.get('/my-profile', indexPage);
-    app.get('/my-creates', indexPage);
+    app.get('/my-posts', indexPage);
     app.get('/my-stars', indexPage);
 
     var getThingsData = function(req, res, next){
