@@ -8,6 +8,7 @@ define(['jQuery', 'skeleton','./Thing', './ThingsPuller', './Repository', './Use
             this.puller = new ThingsPuller();
         },
         pull: function(options){
+            var me = this;
             var my =  UserHolder.get();
             var creates = my.get('meta').creates;
             var toAdd = [];
@@ -17,7 +18,7 @@ define(['jQuery', 'skeleton','./Thing', './ThingsPuller', './Repository', './Use
                     continue;
                 }
 
-                var m = Repository.get(creates[id]);
+                var m = Repository.get(this.model.name, id);
                 if(m){
                     toAdd.push(m);
                 }
@@ -28,7 +29,6 @@ define(['jQuery', 'skeleton','./Thing', './ThingsPuller', './Repository', './Use
 
 console.log(toAdd.length + ' things have pulled and existed in repo');
 console.log(toAdd);
-            var me = this;
             if(toLoad.length>0){
 console.log(toLoad.length + ' things need to be pulled');
 console.log(toLoad);

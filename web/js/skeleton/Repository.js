@@ -14,23 +14,26 @@ function(_, bb) {
             if(model.length){
                 var len = model.length;
                 var col = model;
-                var M = col.model;
+                var Model = col.model;
                 var toReplace = {};
                 for(var i=0; i<len; i++){
                     var m = col.at(i);
                     if(m){
-                        var cacheModel = this.get(m.name, m.id);
+                        var cacheModel = this.get(Model.name, m.id);
                         if(cacheModel){
                             cacheModel.set(m.attributes);
                             toReplace[i] = cacheModel;
+                            console.log(cacheModel);
                         }
                         else{
-                            this.put(m.name, m.id, m);
+                            this.put(Model.name, m.id, m);
                         }
                     }
                 }
 
                 //Replace the existed items in the just fetched collection
+                console.log('toReplace');
+                console.log(toReplace);
                 for(var i in toReplace){
                     var item = toReplace[i];
                     col.replace(i, toReplace[i]);
