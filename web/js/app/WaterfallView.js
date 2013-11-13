@@ -25,11 +25,9 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
             model.onSync();
             this.listenTo(model, 'change:liked', this.onRefreshLike, this);
             this.listenTo(model, 'change:starred', this.onRefreshStar, this);
-            console.log(model.get('sDesc') + ' is added');
         },
         onItemRemoved: function(model, collection, options){
             this.stopListening(model);
-            console.log(model.get('sDesc') + ' is removed');
         },
         getTarget: function(el, selector){
             var $el = $(el);

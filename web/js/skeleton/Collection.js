@@ -37,6 +37,9 @@ define(['Underscore', 'Backbone', './Skeleton'], function(_, bb, Skeleton) {
             }
             mediator.trigger('sync', model, resp, options);
         },
+        replace: function(index, model) {
+            this.models[index] = model;
+        },
         getParent: function(){return this.parent;},
         setParent: function(parent){this.parent = parent;return this;}
     });
