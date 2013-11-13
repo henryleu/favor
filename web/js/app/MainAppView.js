@@ -9,7 +9,7 @@ function($, $custom, sk,
         routes: {
             "": "home"
             ,"home": "home"
-            ,"user": "user"
+            ,"my": "my"
         },
         configure: function(){
             this.viewSwitcher = new sk.ViewSwitcher({view: this});

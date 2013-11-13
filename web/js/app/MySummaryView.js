@@ -8,11 +8,11 @@ function($, sk) {
             this.listenTo(this.model, 'change:stars', this.changeStars, this);
         },
         changeCreates: function(model, value, options){
-            var $el = this.$('.user .summary #creates span.text');
+            var $el = this.$('.my .summary #creates span.text');
             $el.text(value);
         },
         changeStars: function(model, value, options){
-            var $el = this.$('.user .summary #stars span.text');
+            var $el = this.$('.my .summary #stars span.text');
             $el.text(value);
         }
     });

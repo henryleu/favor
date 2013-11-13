@@ -78,19 +78,19 @@
   -o-transition: -o-filter 0.4s ease-in-out;
   -ms-transition: -ms-filter 0.4s ease-in-out;
 }
-.user .summary.well {
+.my .summary.well {
   margin: 10px 0px;
   padding: 5px;
   height: 50px;
 }
-.user .summary ul {
+.my .summary ul {
   list-style-type: none;
   margin: 0px 0px;
 }
-.user .summary ul li {
+.my .summary ul li {
   margin: 0px 0px;
 }
-.user .summary div {
+.my .summary div {
   display: inline-block;
   float: left;
   text-align: center;
@@ -99,7 +99,7 @@
   margin: 0px 15px 0px 15px;
   padding: 2px;
 }
-.user .summary span {
+.my .summary span {
   display: block;
   float: left;
   text-align: center;
@@ -107,14 +107,14 @@
   padding: 2px;
   white-space: nowrap;
 }
-.user .summary span.icon {
+.my .summary span.icon {
   display: block;
   font-size: 14px;
   width: 20px;
   padding: 2px;
   overflow: hidden;
 }
-.user .summary span.text {
+.my .summary span.text {
   display: inline-block;
   overflow: hidden;
   font-size: 12px;
