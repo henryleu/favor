@@ -28,14 +28,7 @@ module.exports = function(app) {
     app.get('/',      indexPage);
     app.get('/home', indexPage);
     app.get('/thing-:id', indexPage);
-    app.get('/things-', indexPage);
-    app.get('/things-:sort', function(req, res, next) {
-        res.format({
-            'text/html': indexPage,
-            'application/json': getThingsData
-        });
-    });
-    app.get('/my', indexPage);
+    app.get('/user', indexPage);
     app.get('/share', indexPage);
     app.get('/my-profile', indexPage);
     app.get('/my-posts', indexPage);
@@ -78,8 +71,25 @@ module.exports = function(app) {
             res.json(200, []);
         }
     };
-    app.get('/things', getThingsData);
-
+    app.get('/things-list', function(req, res, next) {
+        var ids = req.query.ids;
+        console.log(ids);
+        var idList = ids? ids.split('-') : [];
+        Thing.list(idList, function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
+        });
+    });
+    app.get('/things-:sort', function(req, res, next) {
+        res.format({
+            'text/html': indexPage,
+            'application/json': getThingsData
+        });
+    });
     app.get('/thing/:id', function(req, res) {
         Thing.findOne({'_id': req.params.id}, function(err, doc) {
             if (err) {
@@ -179,15 +189,6 @@ module.exports = function(app) {
             }
             res.json(200, {'_id': uid});
         });
-//        Thing.remove({'_id': req.params.id}, function(err) {
-//            if (err) {
-//                logger.error(err);
-//                res.json(500, err);
-//                return;
-//            }
-//            logger.debug('Deleted deal: ' + req.params.id);
-//            res.json(200, {'_id': req.params.id});
-//        })
     });
 
     app.get('/upaireturn', function(req, res) {

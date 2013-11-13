@@ -21,39 +21,40 @@ function($, sk, ThingsCreated, ThingsCreatedView, CollectionState, CollectionFlo
         isFetched: function(){
             return this.model.getChild('things').fetched;
         },
+        isPulled: function(){
+            return this.model.getChild('things').pulled;
+        },
         index: function(){
-            if(!this.isFetched()){
+            if(!this.isPulled()){
                 var things = this.model.getChild('things');
-                var params = {sort:'auto'};
-                things.fetch(params);
-                this.lastCollect = params.sort;
-            }
-            else{
+//                var params = {sort:'auto'};
+//                things.fetch(params);
+                things.pull();
             }
         },
-        collect: function(params){
-            var sort = params.sort;
-            var things = this.model.getChild('things');
-            if(this.lastCollect!=sort){
-                things.fetch({sort: sort});
-                this.lastCollect = sort;
-            }
-            else{
-                sort = 'auto';
-                if(!things.fetched){
-                    things.fetch({sort: sort});
-                    this.lastCollect = sort;
-                }
-            }
-        },
+//        collect: function(params){
+//            var sort = params.sort;
+//            var things = this.model.getChild('things');
+//            if(this.lastCollect!=sort){
+//                things.fetch({sort: sort});
+//                things.pull();
+//            }
+//            else{
+//                sort = 'auto';
+//                if(!things.fetched){
+//                    things.fetch({sort: sort});
+//                }
+//            }
+//        },
         refresh: function(){
             var params = {};
             var things = this.model.getChild('things');
-            if(!this.lastCollect){
-                this.lastCollect = 'auto';
-            }
-            params.sort = this.lastCollect;
-            things.fetch(params);
+//            if(!this.lastCollect){
+//                this.lastCollect = 'auto';
+//            }
+//            params.sort = this.lastCollect;
+//            things.fetch(params);
+            things.pull();
         }
     });
 

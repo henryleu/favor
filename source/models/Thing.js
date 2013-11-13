@@ -82,6 +82,25 @@ var schema = DomainBuilder
         return cloned;
     });
 
+    schema.static('list', function (ids, callback) {
+        return this.find(
+            {
+                _id: {
+                    $in: ids
+                }
+            },
+            function(err, docs){
+                if(err){
+                    logger.error(err);
+                    callback(err);
+                    return;
+                }
+                logger.debug(docs);
+                callback(null, docs);
+            }
+        );
+    });
+
     schema.static('star', metaAction('stars', true));
     schema.static('unstar', metaAction('stars', false));
     schema.static('like', metaAction('likes', true));

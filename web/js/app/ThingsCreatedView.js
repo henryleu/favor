@@ -13,12 +13,15 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
             this.listenTo(this.model, 'remove', this.onItemRemoved, this);
 
             var me = this;
-            this.listenTo(this.model, 'sync', function(model, res, options) {
-                if(options.action=='read'){
-                    me.model.fetched = true;
-                    me.doRender();
-                }
+            this.listenTo(this.model, 'pull', function(model, res, options) {
+                me.doRender();
             });
+//            this.listenTo(this.model, 'sync', function(model, res, options) {
+//                if(options.action=='read'){
+//                    me.model.fetched = true;
+//                    me.doRender();
+//                }
+//            });
             this.listenTo(this.model, 'add', this.onAddThing, this);
             this.listenTo(this.model, 'remove', this.onRemoveThing, this);
         },
