@@ -1,12 +1,12 @@
-define(['jQuery', 'skeleton', './ShareModel', './ShareView', './Collection', './UserCreatesView'],
-function($, sk, ShareModel, ShareView, Collection, UserCreatesView) {
+define(['jQuery', 'skeleton', './ShareModel', './ShareView', './Collection', './MyCreatesView'],
+function($, sk, ShareModel, ShareView, Collection, MyCreatesView) {
     var UserView = sk.View.extend({
-        vid: 'user',
-        templateName: 'user',
+        vid: 'my',
+        templateName: 'my',
         routes: {
-            "user-profile": "profile"
-            , "user-creates": "creates"
-            , "user-stars": "stars"
+            "my-profile": "profile"
+            , "my-creates": "creates"
+            , "my-stars": "stars"
         },
         configure: function(){
             //Configure share
@@ -38,12 +38,12 @@ function($, sk, ShareModel, ShareView, Collection, UserCreatesView) {
             var collection = new Collection();
             collection.fetched = true;
             this.model.addChild('collection', collection);
-            var userCreatesView = new UserCreatesView({
+            var myCreatesView = new MyCreatesView({
                 model: collection,
                 hidden: true,
                 parent: this
             });
-            this.addChild(userCreatesView);
+            this.addChild(myCreatesView);
 
             this.routeDelegate = new sk.RouteDelegate({
                 view: this,
@@ -66,22 +66,22 @@ function($, sk, ShareModel, ShareView, Collection, UserCreatesView) {
         index: function(){
             var current = this.model.get('current');
             if(!current){
-                this.routeDelegate.route('user-creates');
-                this.getChild('user-creates').index();
+                this.routeDelegate.route('my-creates');
+                this.getChild('my-creates').index();
             }
         },
         profile: function(sort){
-            this.getParent().user();
-            this.routeDelegate.route('user-profile');
+            this.getParent().my();
+            this.routeDelegate.route('my-profile');
         },
         creates: function(sort){
-            this.getParent().user();
-            this.routeDelegate.route('user-creates');
-            this.getChild('user-creates').index();
+            this.getParent().my();
+            this.routeDelegate.route('my-creates');
+            this.getChild('my-creates').index();
         },
         stars: function(id){
-            this.getParent().user();
-            this.routeDelegate.route('user-stars');
+            this.getParent().my();
+            this.routeDelegate.route('my-stars');
 //            this.getChild('showcase').showThing(id);
         }
     });

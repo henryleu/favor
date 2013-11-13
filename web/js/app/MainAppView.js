@@ -1,11 +1,9 @@
 define(['jQuery', 'jQueryCustom', 'skeleton'
-    , './UserHolder'
     , './Navigator', './NavigatorView'
     , './Home', './HomeView'
-    , './User', './UserView'],
+    , './UserHolder', './MyView'],
 function($, $custom, sk,
-         UserHolder,
-         Navigator, NavigatorView, Home, HomeView, User, UserView) {
+         Navigator, NavigatorView, Home, HomeView, UserHolder, MyView) {
     var MainView = sk.View.extend({
         templateName: 'main',
         routes: {
@@ -27,13 +25,13 @@ function($, $custom, sk,
             this.addChild(homeView);
 
             //Configure user main view
-            this.model.addChild('user', UserHolder.get());
-            var userView = new UserView({
+            this.model.addChild('I', UserHolder.get());
+            var myView = new MyView({
                 model: UserHolder.get(),
                 hidden: true,
                 parent: this
             });
-            this.addChild(userView);
+            this.addChild(myView);
 
             //Configure navigator
             var navigator = new Navigator();
@@ -60,10 +58,10 @@ function($, $custom, sk,
                 this.getChild('home').index();
             }
         },
-        user: function(){
-            this.model.set('module', 'user');
-            this.routeDelegate.route('user');
-            this.getChild('user').index();
+        my: function(){
+            this.model.set('module', 'my');
+            this.routeDelegate.route('my');
+            this.getChild('my').index();
         },
         afterRender: function(){
         }

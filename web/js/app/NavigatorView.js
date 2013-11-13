@@ -1,5 +1,5 @@
-define(['jQuery', 'skeleton', './MainNavView', './UserSummaryView', './UserNavView'],
-function($, sk, MainNavView, UserSummaryView, UserNavView) {
+define(['jQuery', 'skeleton', './MainNavView', './MySummaryView', './MyNavView'],
+function($, sk, MainNavView, MySummaryView, MyNavView) {
     var NavigatorView = sk.View.extend({
         vid: 'navigator',
         templateName: 'navigator',
@@ -13,15 +13,15 @@ function($, sk, MainNavView, UserSummaryView, UserNavView) {
             });
             this.addChild(mainNavView);
 
-            var userSummaryView = new UserSummaryView({
-                model: this.model.getParent().getChild('user')
+            var mySummaryView = new MySummaryView({
+                model: this.model.getParent().getChild('I')
             });
-            this.addChild(userSummaryView);
+            this.addChild(mySummaryView);
 
-            var userNavView = new UserNavView({
-                model: this.model.getParent()
+            var myNavView = new MyNavView({
+                model: this.model.getParent().getChild('I')
             });
-            this.addChild(userNavView);
+            this.addChild(myNavView);
         },
         afterRender: function() {
         }

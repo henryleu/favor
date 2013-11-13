@@ -1,8 +1,8 @@
 define(['jQuery', 'skeleton'],
 function($, sk) {
-    var UserNavView = sk.View.extend({
-        vid: 'user-nav',
-        templateName: 'user-nav',
+    var MyNavView = sk.View.extend({
+        vid: 'my-nav',
+        templateName: 'my-nav',
         configure: function(){
 //            this.listenTo(this.model, 'change:creates', this.changeCreates, this);
 //            this.listenTo(this.model, 'change:stars', this.changeStars, this);
@@ -17,5 +17,5 @@ function($, sk) {
         }
     });
 
-    return UserNavView;
+    return MyNavView;
 });

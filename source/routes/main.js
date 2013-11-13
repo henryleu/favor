@@ -35,11 +35,11 @@ module.exports = function(app) {
             'application/json': getThingsData
         });
     });
-    app.get('/user', indexPage);
+    app.get('/my', indexPage);
     app.get('/share', indexPage);
-    app.get('/user-profile', indexPage);
-    app.get('/user-creates', indexPage);
-    app.get('/user-stars', indexPage);
+    app.get('/my-profile', indexPage);
+    app.get('/my-creates', indexPage);
+    app.get('/my-stars', indexPage);
 
     var getThingsData = function(req, res, next){
         var sort = req.params.sort || 'auto';

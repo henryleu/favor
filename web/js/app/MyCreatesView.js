@@ -1,8 +1,8 @@
 define(['jQuery', 'skeleton', './ThingsCreated', './ThingsCreatedView', './CollectionState', './CollectionFlowView'],
 function($, sk, ThingsCreated, ThingsCreatedView, CollectionState, CollectionFlowView) {
     var UserCreatesView = sk.View.extend({
-        vid: 'user-creates',
-        templateName: 'user-creates',
+        vid: 'my-creates',
+        templateName: 'my-creates',
         configure: function(){
             var things = new ThingsCreated();
             this.model.addChild('things', things);
