@@ -54,7 +54,9 @@ function($, $custom, sk,
         home: function(){
             this.model.set('module', 'home');
             this.routeDelegate.route('home');
-            if(window.location.pathname == '/home'){
+
+            //TODO think about hash: /# or /#home
+            if( window.location.pathname == '/' || window.location.pathname == '/home'){
                 this.getChild('home').index();
             }
         },

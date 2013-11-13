@@ -83,19 +83,18 @@ var schema = DomainBuilder
     });
 
     schema.static('list', function (ids, callback) {
+        if(!ids || ids.length==0){
+            callback(null, []);
+            return null;
+        }
         return this.find(
-            {
-                _id: {
-                    $in: ids
-                }
-            },
+            {_id: {$in: ids}},
             function(err, docs){
                 if(err){
                     logger.error(err);
                     callback(err);
                     return;
                 }
-                logger.debug(docs);
                 callback(null, docs);
             }
         );

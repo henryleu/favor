@@ -28,8 +28,9 @@ module.exports = function(app) {
     app.get('/',      indexPage);
     app.get('/home', indexPage);
     app.get('/thing-:id', indexPage);
-    app.get('/user', indexPage);
+    app.get('/things-:sort', indexPage);
     app.get('/share', indexPage);
+    app.get('/my', indexPage);
     app.get('/my-profile', indexPage);
     app.get('/my-posts', indexPage);
     app.get('/my-stars', indexPage);
@@ -71,9 +72,9 @@ module.exports = function(app) {
             res.json(200, []);
         }
     };
-    app.get('/things-list', function(req, res, next) {
+    app.get('/things/list', function(req, res, next) {
         var ids = req.query.ids;
-        console.log(ids);
+console.debug(ids);
         var idList = ids? ids.split('-') : [];
         Thing.list(idList, function(err, docs) {
             if (err) {
@@ -84,12 +85,14 @@ module.exports = function(app) {
             res.json(200, docs);
         });
     });
-    app.get('/things-:sort', function(req, res, next) {
-        res.format({
-            'text/html': indexPage,
-            'application/json': getThingsData
-        });
-    });
+    app.get('/things/:sort', getThingsData);
+
+//    app.get('/things/:sort', function(req, res, next) {
+//        res.format({
+//            'text/html': indexPage,
+//            'application/json': getThingsData
+//        });
+//    });
     app.get('/thing/:id', function(req, res) {
         Thing.findOne({'_id': req.params.id}, function(err, doc) {
             if (err) {
