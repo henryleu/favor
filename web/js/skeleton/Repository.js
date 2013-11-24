@@ -19,17 +19,17 @@ function(_, bb) {
                 var toResetLen = 0;
                 for(var i=0; i<len; i++){
                     var m = collection.at(i);
-                    if(m){
-                        var cacheModel = this.get(Model.name, m.id);
-                        if(cacheModel){
-                            cacheModel.set(m.attributes);
-                            ++toResetLen;
-                            toReset[i] = cacheModel;
-                        }
-                        else{
-                            toReset[i] = m;
-                            this.put(Model.name, m.id, m);
-                        }
+                    var cachedModel = this.get(Model.name, m.id);
+                    if(cachedModel){
+                        cachedModel.set(m.attributes);
+                        ++toResetLen;
+                        toReset[i] = cachedModel;
+                        cachedModel.trigger('update');
+                    }
+                    else{
+                        toReset[i] = m;
+                        this.put(Model.name, m.id, m);
+                        m.trigger('load');
                     }
                 }
 
@@ -41,6 +41,7 @@ function(_, bb) {
             }
             else{
                 this.put(model.name, model.id, model);
+                model.trigger('load');
             }
         },
         _onDelete: function(model, resp, options){

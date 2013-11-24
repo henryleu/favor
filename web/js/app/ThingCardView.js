@@ -1,6 +1,6 @@
-define(['Underscore','jQuery', 'skeleton', './UserHolder'], function(_, $, sk, UserHolder) {
+define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
     var WaterfallView = sk.View.extend({
-        templateName: 'waterfall',
+        templateName: 'card',
         events: {
             "click .lane .acton span#like": "onToggleLike",
             "click .lane .acton span#star": "onToggleStar",
@@ -25,6 +25,7 @@ define(['Underscore','jQuery', 'skeleton', './UserHolder'], function(_, $, sk, U
             this.listenTo(this.model, 'remove', this.onRemoveThing, this);
         },
         onItemAdded: function(model, collection, options){
+            model.onSync();
             this.listenTo(model, 'change:liked', this.onRefreshLike, this);
             this.listenTo(model, 'change:starred', this.onRefreshStar, this);
         },

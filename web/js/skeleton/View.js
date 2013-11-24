@@ -83,7 +83,7 @@ function(_, bb, $, Router) {
                     input = model.toJSON();
                 }
             }
-//console.log(input);
+
             this.$el.html(this.evaluateTemplate( {input: input, id: this.getId()} ))
             this.afterRender();
             this.rendered = true;

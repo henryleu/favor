@@ -3,9 +3,10 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
         name: 'Thing',
         urlRoot: '/thing',
         configure: function(){
-            this.on('sync', this.onSync, this);
+            this.on('load', this.onLoad, this);
+            this.on('update', this.onLoad, this);
         },
-        onSync: function(){
+        onLoad: function(){
             this.fetched = true;
             var user = UserHolder.get();
             var thingId = this.id;
@@ -35,8 +36,6 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
                 stars = starred ? 1 : 0;
             }
             meta.stars = stars;
-
-            this.trigger('load', this);
         },
         toggleLike: function(liked){
             var meta = this.get('meta');

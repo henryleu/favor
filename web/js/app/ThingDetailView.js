@@ -8,7 +8,7 @@ define(['jQuery', 'skeleton'], function($, sk) {
         },
         configure: function() {
             var me = this;
-            this.listenTo(this.model, 'load', function(model) {
+            this.listenTo(this.model, 'load update', function(model) {
                 me.doRender();
             });
 

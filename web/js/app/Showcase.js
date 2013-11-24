@@ -7,6 +7,7 @@ define(['skeleton', './Thing'], function(sk, Thing) {
         setCurrentId: function(id){
             this.currentId = id;
             this.thing.set('_id', id);
+            this.thing.fetched = false;
         },
         getCurrent: function(){
             if(this.collection){
