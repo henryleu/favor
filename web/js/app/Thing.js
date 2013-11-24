@@ -7,7 +7,6 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
         },
         onSync: function(){
             this.fetched = true;
-//            var userMeta = UserHolder.get().get('meta');
             var user = UserHolder.get();
             var thingId = this.id;
 

@@ -32,7 +32,7 @@ console.log(toAdd);
 console.log(toLoad.length + ' things need to be pulled');
 console.log(toLoad);
                 var puller = this.puller;
-                puller.pullList(toLoad, function(){
+                puller.list(toLoad, function(){
                     if(toAdd.length>0){
                         me.add(toAdd);
                     }

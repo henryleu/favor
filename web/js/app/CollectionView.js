@@ -1,11 +1,11 @@
-define(['jQuery', 'skeleton', './ThingsCollection', './WaterfallView', './CollectionState', './CollectionFlowView'],
-function($, sk, ThingsCollection, WaterfallView, CollectionState, CollectionFlowView) {
+define(['jQuery', 'skeleton', './ThingsCollected', './WaterfallView', './CollectionFlowView'],
+function($, sk, ThingsCollected, WaterfallView, CollectionFlowView) {
     var CollectionView = sk.View.extend({
         vid: 'collection',
         templateName: 'collection',
         lastCollect: null,
         configure: function(){
-            var things = new ThingsCollection();
+            var things = new ThingsCollected();
             this.model.addChild('things', things);
             var waterfallView = new WaterfallView({
                 vid: 'waterfall',
@@ -13,53 +13,32 @@ function($, sk, ThingsCollection, WaterfallView, CollectionState, CollectionFlow
             });
             this.addChild(waterfallView);
 
-            var state = new CollectionState();
-            this.model.addChild('state', state);
             var flowView = new CollectionFlowView({
-                model: state
+                model: things,
+                col: things
             });
             this.addChild(flowView);
         },
-        isFetched: function(){
-            return this.model.getChild('things').fetched;
+        isFulled: function(){
+            return this.model.getChild('things').pulled;
         },
         index: function(){
-            if(!this.isFetched()){
+            if(!this.isFulled()){
                 var things = this.model.getChild('things');
                 var params = {sort:'auto'};
-                things.fetch(params);
-                this.lastCollect = params.sort;
-console.log('things is to fetch');
-            }
-            else{
-console.log('things has been fetched');
+                var tags = ''; //TODO: get default
+                var stream = ''; //TODO: get default
+                things.find(tags, stream, 0);
             }
         },
-        collect: function(params){
-            var sort = params.sort;
+        collect: function(tags, stream, pageStart){
             var things = this.model.getChild('things');
-            if(this.lastCollect!=sort){
-                things.fetch({sort: sort});
-                this.lastCollect = sort;
-console.log('things is to fetch');
-            }
-            else{
-                sort = 'auto';
-                if(!things.fetched){
-                    things.fetch({sort: sort});
-                    this.lastCollect = sort;
-                }
-console.log('things has been fetched');
-            }
+            if(!pageStart) pageStart = 0;
+            things.find(tags, stream, pageStart);
         },
         refresh: function(){
-            var params = {};
             var things = this.model.getChild('things');
-            if(!this.lastCollect){
-                this.lastCollect = 'auto';
-            }
-            params.sort = this.lastCollect;
-            things.fetch(params);
+            things.refresh();
         }
     });
 

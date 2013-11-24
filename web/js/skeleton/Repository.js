@@ -11,32 +11,32 @@ function(_, bb) {
 
     _.extend(Repository.prototype, bb.Events, {
         _onRead: function(model, resp, options){
-            if(model.length){
-                var len = model.length;
-                var col = model;
-                var Model = col.model;
-                var toReplace = {};
+            if(model.models){
+                var len = model.models.length;
+                var collection = model;
+                var Model = collection.model;
+                var toReset = new Array(len);
+                var toResetLen = 0;
                 for(var i=0; i<len; i++){
-                    var m = col.at(i);
+                    var m = collection.at(i);
                     if(m){
                         var cacheModel = this.get(Model.name, m.id);
                         if(cacheModel){
                             cacheModel.set(m.attributes);
-                            toReplace[i] = cacheModel;
-                            console.log(cacheModel);
+                            ++toResetLen;
+                            toReset[i] = cacheModel;
                         }
                         else{
+                            toReset[i] = m;
                             this.put(Model.name, m.id, m);
                         }
                     }
                 }
 
                 //Replace the existed items in the just fetched collection
-                console.log('toReplace');
-                console.log(toReplace);
-                for(var i in toReplace){
-                    var item = toReplace[i];
-                    col.replace(i, toReplace[i]);
+                if(toResetLen){
+                    collection.reset(toReset, {silent: true});
+                    console.info(toResetLen + ' are updated in repository');
                 }
             }
             else{
@@ -59,7 +59,7 @@ function(_, bb) {
 
             var replaced =  region[id] ? true : false;
             region[id] = model;
-            console.log(name + ' ' + id + ' is put');
+            console.info(name + ' ' + id + ' is put');
             return replaced;
         },
         remove: function(name, id){
@@ -74,9 +74,6 @@ function(_, bb) {
             }
         }
     });
-
-    Repository.defaults = {
-    };
 
     return Repository;
 });

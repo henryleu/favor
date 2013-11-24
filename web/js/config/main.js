@@ -10,6 +10,11 @@ function(require) {
 
     var config = {
         mode: 'development', //by default, use development mode. it won't apply if mode is assigned
+        collection: {
+            defaultStream: 'auto',
+            initialPageSize: 10,
+            appendedPageSize: 10
+        },
         analytics: {
             trackerName: 'favor###',
             options: {

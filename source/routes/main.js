@@ -28,6 +28,7 @@ module.exports = function(app) {
     app.get('/',      indexPage);
     app.get('/home', indexPage);
     app.get('/thing-:id', indexPage);
+    app.get('/things-collect-(:tags)-(:stream)-(:pageStart)', indexPage);
     app.get('/things-:sort', indexPage);
     app.get('/share', indexPage);
     app.get('/my', indexPage);
@@ -84,6 +85,41 @@ console.debug(ids);
             }
             res.json(200, docs);
         });
+    });
+
+    //Supported sort types: auto(hot) and latest
+    var STREAM_TYPES = {
+        'auto': {'meta.stars': -1, 'meta.likes': -1, 'meta.views': -1},
+        'new' : {'updOn': -1}
+    };
+    app.get('/things/collect', function(req, res, next){
+        var stream = req.query.stream || 'auto';
+
+        var pageStart = Number(req.query.pageStart);
+        pageStart = !pageStart || pageStart<0 ? 0 : pageStart;
+
+        var pageSize = Number(req.query.pageSize) || 10;
+        pageSize = pageSize<0 ? 10 : pageSize>100 ? 100 : pageSize;
+
+        var tags = [];
+        if(req.query.tags){
+            tags = req.query.tags.split(':');
+        }
+
+        logger.debug({tags: tags, stream: stream, pageStart: pageStart, pageSize: pageSize});
+
+        Thing.find()
+            .sort(STREAM_TYPES[stream] || STREAM_TYPES.auto)
+            .skip(pageStart)
+            .limit(pageSize)
+            .exec(function(err, docs) {
+            if (err) {
+                logger.error(err);
+                res.json(500, err);
+                return;
+            }
+            res.json(200, docs);
+        })
     });
     app.get('/things/:sort', getThingsData);
 

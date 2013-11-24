@@ -3,7 +3,24 @@ define(['jQuery', 'skeleton','./Thing'], function($, sk, Thing) {
         model: Thing,
         name: 'ThingsPuller',
         url: '/things',
-        pullList: function(idList, callback){
+        collect: function(queryObject, callback){
+            var options = {
+                data: queryObject,
+                url:  '/things/collect',
+                success: function(){
+                    if(callback){
+                        callback(true);
+                    }
+                },
+                error: function(){
+                    if(callback){
+                        callback(false);
+                    }
+                }
+            };
+            this.fetch(options)
+        },
+        list: function(idList, callback){
             var options = {
                 data: {
                     ids: idList.join('-')

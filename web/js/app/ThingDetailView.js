@@ -7,7 +7,6 @@ define(['jQuery', 'skeleton'], function($, sk) {
             "click .showcase .acton span#star": "onToggleStar"
         },
         configure: function() {
-            this.ensureUser();
             var me = this;
             this.listenTo(this.model, 'load', function(model) {
                 me.doRender();
@@ -15,11 +14,6 @@ define(['jQuery', 'skeleton'], function($, sk) {
 
             this.listenTo(this.model, 'change:liked', this.onRefreshLike, this);
             this.listenTo(this.model, 'change:starred', this.onRefreshStar, this);
-        },
-        ensureUser: function() {
-            window.user = window.user || {};
-            window.user.meta = window.user.meta || {stars:{},likes:{}};
-            this.user = window.user;
         },
         getTarget: function(el, selector){
             var $el = $(el);

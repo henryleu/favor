@@ -11,12 +11,12 @@ function($, sk, ThingsCreated, ThingsCreatedView, CollectionState, CollectionFlo
             });
             this.addChild(thingsCreatedView);
 
-            var state = new CollectionState();
-            this.model.addChild('state', state);
-            var flowView = new CollectionFlowView({
-                model: state
-            });
-            this.addChild(flowView);
+//            var state = new CollectionState();
+//            this.model.addChild('state', state);
+//            var flowView = new CollectionFlowView({
+//                model: state
+//            });
+//            this.addChild(flowView);
         },
         isFetched: function(){
             return this.model.getChild('things').fetched;

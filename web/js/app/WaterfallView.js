@@ -1,4 +1,4 @@
-define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
+define(['Underscore','jQuery', 'skeleton', './UserHolder'], function(_, $, sk, UserHolder) {
     var WaterfallView = sk.View.extend({
         templateName: 'waterfall',
         events: {
@@ -12,11 +12,14 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
             this.listenTo(this.model, 'remove', this.onItemRemoved, this);
 
             var me = this;
-            this.listenTo(this.model, 'sync', function(model, res, options) {
-                if(options.action=='read'){
-                    me.model.fetched = true;
-                    me.doRender();
-                }
+            this.listenTo(this.model, 'pull', function(model, comings) {
+                console.log(comings.length + ' is pulled');
+                me.doRender();
+            });
+            this.listenTo(this.model, 'append', function(model, comings) {
+//                me.doRenderAppended(); //TODO
+                console.log(comings.length + ' is appended');
+                console.log(comings);
             });
             this.listenTo(this.model, 'add', this.onAddThing, this);
             this.listenTo(this.model, 'remove', this.onRemoveThing, this);
@@ -68,6 +71,9 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
             var $el = this.getTarget(e.target, '.lane .acton span#star');
             var thingId = $el.parent().parent().parent().find('#thingId').val();
             var thing = this.model.get(thingId);
+//            console.log('thing collection: ' + _.pluck(this.model.models, 'id').join(' - '));
+//            console.log('thing collection: ' + thingId);
+//            console.log(thing);
             var starred = !thing.get('starred');
             thing.toggleStar(starred);
             var apiUrl = '/thing/' + thingId + (starred ? '/star' : '/unstar');

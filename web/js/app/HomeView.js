@@ -7,7 +7,8 @@ function($, sk, Collection, CollectionView, Showcase, ShowcaseView) {
         templateName: 'home',
         routes: {
             "things-index": "collectIndex"
-            , "things-:sort": "collect"
+            , "things-collect-(:tags)-(:stream)-(:pageStart)": "collect"
+//            , "things-:sort": "collect"
             , "thing-:id": "detail"
         },
         configure: function(){
@@ -70,10 +71,11 @@ function($, sk, Collection, CollectionView, Showcase, ShowcaseView) {
             this.getChild('collection').index();
             console.log('took ' + (endTime-startTime));
         },
-        collect: function(sort){
+        collect: function(tags, stream, pageStart){
+console.log('tags: ' + tags + '| stream: ' + stream + ' | pageStart: ' + pageStart);
             this.getParent().home();
             this.routeDelegate.route('collection');
-            this.getChild('collection').collect({sort:sort});
+            this.getChild('collection').collect(tags, stream, pageStart);
         },
         detail: function(id){
             this.getParent().home();
