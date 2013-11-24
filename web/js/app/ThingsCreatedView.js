@@ -16,17 +16,10 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
             this.listenTo(this.model, 'pull', function(model, res, options) {
                 me.doRender();
             });
-//            this.listenTo(this.model, 'sync', function(model, res, options) {
-//                if(options.action=='read'){
-//                    me.model.fetched = true;
-//                    me.doRender();
-//                }
-//            });
             this.listenTo(this.model, 'add', this.onAddThing, this);
             this.listenTo(this.model, 'remove', this.onRemoveThing, this);
         },
         onItemAdded: function(model, collection, options){
-            model.onSync();
             this.listenTo(model, 'change:liked', this.onRefreshLike, this);
             this.listenTo(model, 'change:starred', this.onRefreshStar, this);
         },

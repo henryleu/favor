@@ -25,11 +25,12 @@ function(_, $, sk) {
 
                 var scrolledBottom = document.body.scrollHeight - scrolledTop - document.body.clientHeight;
                 if(scrolledBottom<beyondBottom){
-                    console.log('appending');//TODO: pagination
+//                    console.log('appending');//TODO: pagination
                     me.model.findMore();
                 }
             });
         },
+
         refresh: function(e) {
             this.getParent().refresh();
         },

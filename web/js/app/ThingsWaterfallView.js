@@ -1,68 +1,13 @@
-define(['Underscore','jQuery', 'skeleton', './UserHolder', './ThingCardView'], function(_, $, sk, UserHolder, ThingCardView) {
+define(['Underscore','jQuery', 'skeleton', './UserHolder'], function(_, $, sk, UserHolder) {
     var WaterfallView = sk.View.extend({
-        templateName: 'waterfall-lane',
-        prerendered: false,
+        templateName: 'waterfall',
         events: {
             "click .lane .acton span#like": "onToggleLike",
             "click .lane .acton span#star": "onToggleStar",
             "click .lane .acton span#delete": "onDelete",
             "click .lane .acton span#clone": "onClone"
         },
-        doRender: function() {
-            var input = {laneCount: this.laneCount};
-            this.$el.html(this.evaluateTemplate( {input: input, id: this.getId()} ))
-            this.afterRender();
-            this.rendered = true;
-
-            if(this.hidden) this.hide();
-            else this.show();
-
-            this.renderChildren();
-            this.afterRenderChildren();
-            return this;
-        },
-        renderChildren: function() {
-            this.renderCards(this.model.models);
-        },
-        doRenderAppended: function(comingModels) {
-            this.renderCards(comingModels);
-        },
-        renderCards: function(cards) {
-            var $el = this.$el.find('.lane ul');
-            var laneCount = this.laneCount;
-            var laneIndex = 0;
-            var laneFragments = new Array(laneCount);
-            for(var laneIndex = 0; laneIndex<laneCount; laneIndex++ ){
-                var fragment = document.createDocumentFragment();
-                laneFragments[laneIndex] = fragment;
-            }
-            laneIndex = 0;
-
-            var len = cards.length;
-            var card = null;
-            var cardView = null;
-            var cardVid = null;
-            for(var i = 0; i<len; i++){
-                laneIndex = i%laneCount;
-                card = cards[i];
-                cardVid = 'card-' + card.id;
-                cardView = new ThingCardView({
-                    vid: cardVid,
-                    model: card,
-                    prerendered: false
-                });
-                this.addChild(cardView);
-                cardView.doRender();
-                laneFragments[laneIndex].appendChild(cardView.el);
-            }
-
-            for(var laneIndex = 0; laneIndex<laneCount; laneIndex++ ){
-                var fragment = laneFragments[laneIndex];
-                $el[laneIndex].appendChild(fragment);
-            }
-        },
         configure: function() {
-            this.laneCount = 3; //TODO: configure it or figure it out automatically
             this.listenTo(this.model, 'add', this.onItemAdded, this);
             this.listenTo(this.model, 'remove', this.onItemRemoved, this);
 
@@ -72,7 +17,7 @@ define(['Underscore','jQuery', 'skeleton', './UserHolder', './ThingCardView'], f
                 me.doRender();
             });
             this.listenTo(this.model, 'append', function(model, comings) {
-                me.doRenderAppended(comings);
+//                me.doRenderAppended(); //TODO
                 console.log(comings.length + ' is appended');
                 console.log(comings);
             });

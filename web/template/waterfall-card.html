@@ -1,0 +1,62 @@
+<%
+    //Make a default meta object
+    var metaDefaults = {
+        stars: 0,
+        likes: 0,
+        views: 0
+    };
+    var item = input;
+    var meta = _.defaults(item.meta||{}, metaDefaults);
+%>
+        <li>
+        <div class="frame">
+        <div class="thing">
+            <div class="thing-inner">
+                <input type="hidden" id="thingId" value="<%=item._id%>">
+                <a href="/thing-<%=item._id%>">
+                <div class="image"><img alt="<%=item.sDesc%>" src="<%= item.image ? item.image + '' : 'javascript:' %>"></div>
+                </a>
+                <div class="acton">
+                    <div class="icons">
+                            <span id="star" class="<%=item.starred?'active':''%>">
+                                <div class="icon">
+                                <i class="icon <%=item.starred?'icon-star':'icon-star-empty'%> icon-large" title="收藏" alt="收藏"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.stars===0 ? '': meta.stars%></label>
+                            </span>
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <div class="icon">
+                                <i class="<%=item.liked?'icon-thumbs-up':'icon-thumbs-up-alt'%> icon-large" title="喜欢" alt="喜欢"></i>
+                                </div>
+                                &nbsp;<label class="text"><%= meta.likes===0 ? '' : meta.likes%></label>
+                            </span>
+                        <%if(item.created){%>
+                            <span id="delete" class="">
+                                <div class="icon">
+                                    <i class="icon icon-trash icon-large" title="删除" alt="删除"></i>
+                                </div>
+                                &nbsp;<label class="text"></label>
+                            </span>
+                            <span id="clone" class="">
+                                <div class="icon">
+                                    <i class="icon icon-copy icon-large" title="克隆" alt="克隆"></i>
+                                </div>
+                                &nbsp;<label class="text"></label>
+                            </span>
+                        <%}%>
+                    </div>
+                    <!--
+                    <div class="action-bar">
+                            <span id="like" class="<%=item.liked?'active':''%>">
+                                <i class="icon icon-thumbs-up-alt icon-large" title="喜欢" alt="喜欢"></i>
+                                <label class="text"><%=meta.likes==0?'': ' ('+meta.likes+')'%></label>
+                            </span>
+                    </div>
+                    -->
+                </div>
+                <h4 data-placement="bottom" data-toggle="tooltip" title="" data-original-title="<%=item.sDesc%>"><%=item.sDesc%></h4>
+                <div class="desc"><%= item.lDesc%></div>
+            </div>
+        </div>
+        </div>
+        </li>

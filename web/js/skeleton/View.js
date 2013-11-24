@@ -5,6 +5,7 @@ function(_, bb, $, Router) {
             _.extend(this, options);
             _.defaults(this, View.defaults);
             this.children = {};
+            this.childrenLength = 0;
             this._bindRoutes();
             this.configure.apply(this, arguments);
             if(this.prerendered){
@@ -46,13 +47,15 @@ function(_, bb, $, Router) {
         addChild: function(child){
             this.children[child.getId()] = child;
             child.setParent(this);
+            this.childrenLength++;
             return this;
         },
         removeChild: function(childId){
             if(this.children[childId]){
                 this.children[childId].setParent(null);
                 this.children[childId] = null;
-                delete this.children[childId];
+//                delete this.children[childId]; //set null is ok for deletion
+                this.childrenLength--;
             }
             return this;
         },
@@ -115,7 +118,9 @@ function(_, bb, $, Router) {
             return this;
         },
         renderChildren: function(){
-            _.each(this.children, this.renderChild, this);
+            if(this.childrenLength && this.childrenLength>0){
+                _.each(this.children, this.renderChild, this);
+            }
             return this;
         },
         afterRender: function(){},

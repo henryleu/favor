@@ -1,0 +1,18 @@
+<div class="offset0 span12 waterfall">
+    <div class="container-fluid"><div class="row-fluid"><div class="offset2 span9">
+<%
+    //Init an array to hold N lines of items which the coming items are divided into
+    var lineCount = input.laneCount; //the N
+    var lineIndex = 0;
+
+    //Loop lines to generate lanes
+    for(lineIndex=0; lineIndex < lineCount; lineIndex++){
+%>
+    <div class="lane">
+        <ul></ul>
+    </div>
+<%
+    }
+%>
+    </div></div></div>
+</div>
