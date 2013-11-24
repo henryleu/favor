@@ -59,6 +59,7 @@ console.log('pull requesting' );
                 }
                 requestObject.save();
                 me.touchEnd = puller.models.length < requestObject.params.pageSize;
+                me.trigger('touch-end', me.touchEnd);
                 me.reset([]);
                 me.add(puller.models);
                 me.pulled = true;
@@ -80,6 +81,7 @@ console.log('append requesting' );
                 }
                 requestObject.save();
                 me.touchEnd = puller.models.length < requestObject.params.pageSize;
+                me.trigger('touch-end', me.touchEnd);
                 me.add(puller.models);
                 me.appended = true;
                 me.trigger('append', me, puller.models);
@@ -126,6 +128,9 @@ console.log('append requesting' );
                 return ;
             }
             this.append(requestObject);
+        },
+        noMore: function(){
+            return this.touchEnd;
         }
     });
     return ThingsCollected;
