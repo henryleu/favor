@@ -1,5 +1,5 @@
-define(['jQuery', 'skeleton', 'config', './Thing', './ThingsPuller'],
-function($, sk, config, Thing, ThingsPuller) {
+define(['skeleton', 'config', './Thing', './ThingsPuller'],
+function(sk, config, Thing, ThingsPuller) {
 
     var RequestObject = function(params){
         this.params = params;

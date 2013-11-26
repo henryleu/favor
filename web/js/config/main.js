@@ -13,7 +13,8 @@ function(require) {
         collection: {
             defaultStream: 'auto',
             initialPageSize: 10,
-            appendedPageSize: 10
+            appendedPageSize: 10,
+            shortCardHeightValve: 200 //if lane's height diff is greater than it, needs extra compensation
         },
         analytics: {
             trackerName: 'favor###',
