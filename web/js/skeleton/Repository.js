@@ -36,7 +36,7 @@ function(_, bb) {
                 //Replace the existed items in the just fetched collection
                 if(toResetLen){
                     collection.reset(toReset, {silent: true});
-                    console.info(toResetLen + ' are updated in repository');
+                    console.log(toResetLen + ' are updated in repository');
                 }
             }
             else{
@@ -60,14 +60,14 @@ function(_, bb) {
 
             var replaced =  region[id] ? true : false;
             region[id] = model;
-            console.info(name + ' ' + id + ' is put');
+//            console.info(name + ' ' + id + ' is put');
             return replaced;
         },
         remove: function(name, id){
             var model = this.get(name, id);
             if(model){
                 this.data[name][id] = null;
-                console.log(name + ' ' + id + ' is removed');
+//                console.log(name + ' ' + id + ' is removed');
                 return true;
             }
             else{

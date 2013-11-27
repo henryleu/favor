@@ -20,7 +20,6 @@ function(sk, config, Thing, ThingsPuller) {
     var ThingsCollected = sk.Collection.extend({
         model: Thing,
         name: 'ThingsCollected',
-        url: '/things/auto',
         configure: function(){
             this.puller = new ThingsPuller();
             this.defaultStream = config.collection.defaultStream;
@@ -47,7 +46,6 @@ function(sk, config, Thing, ThingsPuller) {
         pull: function(requestObject){
             this.touchEnd = false;
             this.running = true;
-console.log('pull requesting' );
 
             var me = this;
             var puller = this.puller;
@@ -60,17 +58,19 @@ console.log('pull requesting' );
                 requestObject.save();
                 me.touchEnd = puller.models.length < requestObject.params.pageSize;
                 me.trigger('touch-end', me.touchEnd);
-                me.reset([]);
+                me.remove(me.models);
                 me.add(puller.models);
                 me.pulled = true;
-                me.trigger('pull', me, puller.models);
-                me.running = false;
+                puller.once('sync', function(){
+                    me.trigger('pull', me, puller.models);
+                    me.running = false;
+                });
             });
         },
         append: function(requestObject){
             this.touchEnd = false;
             this.running = true;
-console.log('append requesting' );
+
             var me = this;
             var puller = this.puller;
             puller.collect(requestObject.params, function(success){
@@ -84,8 +84,10 @@ console.log('append requesting' );
                 me.trigger('touch-end', me.touchEnd);
                 me.add(puller.models);
                 me.appended = true;
-                me.trigger('append', me, puller.models);
-                me.running = false;
+                puller.once('sync', function(){
+                    me.trigger('append', me, puller.models);
+                    me.running = false;
+                });
             });
         },
         find: function(tags, stream, pageStart){

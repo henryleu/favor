@@ -3,6 +3,7 @@ define(['jQuery', 'skeleton', './UserHolder'], function($, sk, UserHolder) {
         name: 'Thing',
         urlRoot: '/thing',
         configure: function(){
+            this.url = sk.Model.prototype.url.apply(this);
             this.on('load', this.onLoad, this);
             this.on('update', this.onLoad, this);
         },
