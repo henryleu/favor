@@ -1,5 +1,5 @@
-var idGenerator = require('../lib/id');
-
+var idGenerator = require('../source/commons/id');
+var rc = require('../source/commons/redis');
 exports.setUp = function(done){
     done();
 };
@@ -21,3 +21,19 @@ exports.testNext = function(test){
         test.done();
     }), 1000);
 };
+
+exports.testInc = function (test){
+    rc.set("inc",0)
+    for(var i=1;i<=10;i++){
+        rc.watch("inc-lock")
+        rc.get("inc",function(err,data){
+            var multi = rc.multi()
+            data++
+            multi.incr("inc-lock")
+            multi.set("inc",data)
+            multi.exec(function(err,replies){
+                console.log(replies)
+            })
+        })
+    }
+}

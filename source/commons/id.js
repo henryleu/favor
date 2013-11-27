@@ -33,8 +33,6 @@ var seq = new SequenceGenerator(
         initialValue: 0,
         step: 1000,
         bookStep: 500
-    },{
-        key: 'Deal'
     }]
 );
 seq.setup();
